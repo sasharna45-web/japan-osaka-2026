@@ -118,8 +118,8 @@
     }).join("");
 
     const timeBadge = place.time
-      ? `<span class="tag${place.fixed ? " hot" : ""}">${place.fixed ? "⏰ " : "🕒 "}${place.time}</span>`
-      : "";
+      ? `<span class="tag${place.fixed ? " hot fixed-tag" : ""}">${place.fixed ? "⏰ ФИКС · " : "🕒 "}${place.time}</span>`
+      : (place.fixed ? `<span class="tag hot fixed-tag">⏰ ФИКС</span>` : "");
 
     const durBadge = place.duration ? `<span class="tag">⏳ ${place.duration}</span>` : "";
 
@@ -142,7 +142,8 @@
 
   function dayCard(idx, position) {
     const day = TRIP.days[idx];
-    const node = el("div", "day reveal");
+    const hasFixed = (day.places || []).some(p => p.fixed);
+    const node = el("div", "day reveal" + (hasFixed ? " day--fixed" : ""));
     node.dataset.index = idx;
 
     const head = el("div", "day__head");
@@ -156,8 +157,12 @@
 
     const num = el("div", "day__num", `<b>${position + 1}</b><span>${day.weekday}</span>`);
 
+    const fixedBadge = hasFixed
+      ? `<span class="day__fixed-badge" title="Есть фиксированные брони / пункты">⏰ ФИКС</span>`
+      : "";
+
     const info = el("div", "day__info", `
-      <div class="day__date">${day.date}</div>
+      <div class="day__date">${day.date}${fixedBadge}</div>
       <div class="day__title">${day.title}</div>
       <div class="day__goal">${day.goal}</div>
     `);
