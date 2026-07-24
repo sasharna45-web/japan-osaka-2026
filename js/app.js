@@ -121,15 +121,20 @@
       ? `<span class="tag${place.fixed ? " hot" : ""}">${place.fixed ? "⏰ " : "🕒 "}${place.time}</span>`
       : "";
 
+    const durBadge = place.duration ? `<span class="tag">⏳ ${place.duration}</span>` : "";
+
+    const who = WHO[place.who] || WHO.both;
+    const whoBadge = `<span class="who-badge ${who.cls}">${who.emoji} ${who.label}</span>`;
+
     card.innerHTML = `
       <div class="place__top">
         <div class="place__emoji">${place.emoji || "📍"}</div>
         <div>
-          <div class="place__name">${place.name}</div>
+          <div class="place__name">${place.name} ${whoBadge}</div>
           <div class="place__desc">${place.desc || ""}</div>
         </div>
       </div>
-      <div class="place__tags">${timeBadge}${tagsHtml}</div>
+      <div class="place__tags">${timeBadge}${durBadge}${tagsHtml}</div>
     `;
     card.addEventListener("click", () => openModal(day, place));
     return card;
@@ -166,9 +171,30 @@
     head.append(reorder, num, info, load, chevron);
 
     const body = el("div", "day__body");
+    const bodyWrap = el("div", "day__body-wrap");
+
+    if (day.intro) {
+      bodyWrap.appendChild(el("p", "day__intro", `<span class="day__intro-ic">🗺️</span>${day.intro}`));
+    }
+
     const inner = el("div", "day__body-inner");
     day.places.forEach((p, pi) => inner.appendChild(placeCard(day, p, idx, pi)));
-    body.appendChild(inner);
+    bodyWrap.appendChild(inner);
+
+    if (day.options && day.options.length) {
+      const opt = el("div", "options");
+      opt.appendChild(el("div", "options__title", "🔀 На выбор / по желанию"));
+      const grid = el("div", "options__grid");
+      day.options.forEach(o => {
+        grid.appendChild(el("div", "opt",
+          `<div class="opt__emoji">${o.emoji || "•"}</div>
+           <div><div class="opt__title">${o.title}</div><div class="opt__text">${o.desc}</div></div>`));
+      });
+      opt.appendChild(grid);
+      bodyWrap.appendChild(opt);
+    }
+
+    body.appendChild(bodyWrap);
 
     head.addEventListener("click", () => {
       if (editing) return;
@@ -227,12 +253,16 @@
 
   function openModal(day, p) {
     const body = $("#modalBody");
+    const who = WHO[p.who] || WHO.both;
     const rows = [];
-    if (p.time)  rows.push(row(p.fixed ? "⏰" : "🕒", p.fixed ? "Забронировано" : "Время", p.time));
-    if (p.hours) rows.push(row("🕐", "Часы работы", p.hours));
-    if (p.price) rows.push(row("💴", "Цена", p.price));
-    if (p.food)  rows.push(row("🍜", "Поесть рядом", p.food));
-    if (p.tips)  rows.push(row("💡", "Совет", p.tips));
+    if (p.time)     rows.push(row(p.fixed ? "⏰" : "🕒", p.fixed ? "Забронировано" : "Время", p.time));
+    rows.push(row(who.emoji, "Для кого", who.label));
+    if (p.how)      rows.push(row("🚉", "Как добраться", p.how));
+    if (p.duration) rows.push(row("⏳", "Сколько времени", p.duration));
+    if (p.hours)    rows.push(row("🕐", "Часы работы", p.hours));
+    if (p.price)    rows.push(row("💴", "Цена", p.price));
+    if (p.food)     rows.push(row("🍜", "Поесть рядом", p.food));
+    if (p.tips)     rows.push(row("💡", "Совет", p.tips));
 
     const tags = (p.tags || []).map(t => {
       const i = interestMap[t];
