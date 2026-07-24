@@ -383,8 +383,10 @@
     const ids = collectClIds();
     const done = ids.filter(id => clState[id]).length;
     const pct = ids.length ? Math.round(done / ids.length * 100) : 0;
-    $("#clBarFill").style.width = pct + "%";
-    $("#clProgressLabel").textContent = `${done} из ${ids.length} выполнено · ${pct}%`;
+    const bar = $("#clBarFill");
+    const label = $("#clProgressLabel");
+    if (bar) bar.style.width = pct + "%";
+    if (label) label.textContent = `${done} из ${ids.length} выполнено · ${pct}%`;
   }
 
   function makeCheckItem(id, text) {
@@ -408,9 +410,10 @@
 
   function renderChecklist() {
     const wrap = $("#checklist-body");
+    if (!wrap || typeof CHECKLIST === "undefined") return;
     wrap.innerHTML = "";
     CHECKLIST.forEach((g, gi) => {
-      const group = el("div", "cl-group reveal");
+      const group = el("div", "cl-group");
       group.appendChild(el("div", `cl-step cl-step--${g.tone}`,
         `<span class="cl-step__tag">${g.step}</span>${g.title}`));
       const list = el("div", "cl-list");
@@ -428,7 +431,6 @@
       wrap.appendChild(group);
     });
     updateClProgress();
-    observeReveals();
   }
 
   // ======================= ЯПОНСКИЕ ФРАЗЫ =======================
@@ -437,6 +439,7 @@
   function renderPhrases() {
     const tabs = $("#phraseTabs");
     const grid = $("#phraseGrid");
+    if (!tabs || !grid || typeof PHRASES === "undefined") return;
     tabs.innerHTML = "";
     grid.innerHTML = "";
 
@@ -453,7 +456,7 @@
 
     const cat = PHRASES.find(c => c.key === activePhraseCat) || PHRASES[0];
     cat.cards.forEach(card => {
-      const node = el("button", "phrase-card reveal");
+      const node = el("button", "phrase-card");
       node.type = "button";
       node.innerHTML = `
         <div class="phrase-card__jp">${card.jp}</div>
@@ -464,7 +467,22 @@
       node.addEventListener("click", () => node.classList.toggle("open"));
       grid.appendChild(node);
     });
-    observeReveals();
+  }
+
+  // ======================= КАРТА (Leaflet) — безопасно =======================
+  function renderMapSafe() {
+    try {
+      if (typeof L === "undefined") {
+        const mapEl = $("#leafletMap");
+        if (mapEl) mapEl.innerHTML = "<p style='padding:20px;color:#a2a2ad;text-align:center'>Карта временно недоступна (нет сети или блокировка CDN).</p>";
+        return;
+      }
+      renderMap();
+    } catch (err) {
+      console.warn("Map failed:", err);
+      const mapEl = $("#leafletMap");
+      if (mapEl) mapEl.innerHTML = "<p style='padding:20px;color:#a2a2ad;text-align:center'>Карта не загрузилась — остальной путеводитель работает.</p>";
+    }
   }
 
   // ======================= АНИМАЦИИ / ПРОКРУТКА =======================
@@ -499,7 +517,6 @@
   function init() {
     renderStats();
     renderFilters();
-    renderMap();
     renderTimeline();
     renderChecklist();
     renderPhrases();
@@ -507,6 +524,7 @@
     setupEdit();
     setupModal();
     setupScrollProgress();
+    renderMapSafe();
     observeReveals();
   }
 
