@@ -5,13 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0a1620">
   <title>Китай · Шанхай 2026 — шпаргалка</title>
-  <meta name="description" content="Шпаргалка по Китаю: 25–27 сентября, Шанхай PVG, метро, Alipay, DiDi.">
+  <meta name="description" content="Транзит Шанхай 25–27 сентября: отель у PVG, Alipay, метро Line 2, DiDi, фразы.">
 
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="theme-color" content="#0a1620">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,7 +20,6 @@
 </head>
 <body class="china-page">
 
-  <!-- Переключатель стран — отдельный «слайд» от Японии -->
   <div class="country-switch">
     <a class="country-switch__btn" href="index.html">🇯🇵 Япония</a>
     <a class="country-switch__btn is-active" href="china.html">🇨🇳 Китай</a>
@@ -29,67 +27,87 @@
 
   <header class="c-hero" id="top">
     <div class="c-hero__bg" aria-hidden="true">
-      <span class="c-hero__hanzi">中国</span>
+      <span class="c-hero__hanzi">上海</span>
     </div>
     <div class="c-hero__content">
-      <p class="c-hero__eyebrow">отдельный слайд · не путать с Японией</p>
+      <p class="c-hero__eyebrow">транзит · отдельный слайд от Японии</p>
       <h1 class="c-hero__title">Китай <span>Шанхай</span></h1>
       <p class="c-hero__sub">25–27 сентября 2026 · 2 ночи у аэропорта PVG</p>
+      <p class="c-hero__lead" id="chinaIntro"></p>
       <div class="c-hero__meta">
-        <span>🛬 PVG 25 сент ~16:30</span>
-        <span>🏨 Elong Anyue (PVG)</span>
-        <span>🛫 PVG 27 сент 08:30</span>
+        <span>🛬 25 сент · PVG 16:30</span>
+        <span>🏨 Elong Anyue · PVG</span>
+        <span>🛫 27 сент · 08:30</span>
       </div>
     </div>
   </header>
 
   <nav class="c-nav">
     <div class="c-nav__inner">
+      <a href="#hotel">Отель</a>
       <a href="#timeline">Дни</a>
+      <a href="#first">1-й час</a>
       <a href="#pay">Оплата</a>
       <a href="#transport">Транспорт</a>
+      <a href="#city">Город</a>
       <a href="#phrases">Фразы</a>
       <a href="#sos">Важно</a>
     </div>
   </nav>
 
   <main>
+    <section class="c-section" id="hotel">
+      <div class="c-head">
+        <h2>Ваш отель</h2>
+        <p>База транзита. Сохраните китайское название — пригодится в DiDi и на ресепшене.</p>
+      </div>
+      <div id="chinaHotel"></div>
+    </section>
+
     <section class="c-section" id="timeline">
       <div class="c-head">
-        <h2>Ваши 2 дня</h2>
-        <p>Это транзит, не полноценный тур по Шанхаю. База — отель у Пудун (PVG).</p>
+        <h2>Три дня по плану</h2>
+        <p>Бирюзовые дни с бейджем «ФИКС» — жёсткие перелёты. Остальное гибко.</p>
       </div>
       <div class="c-days" id="chinaDays"></div>
     </section>
 
+    <section class="c-section" id="first">
+      <div class="c-head">
+        <h2>Первый час в Китае</h2>
+        <p>Чеклист сразу после прилёта 25 сентября — по порядку.</p>
+      </div>
+      <div class="c-steps" id="chinaFirst"></div>
+    </section>
+
     <section class="c-section" id="pay">
       <div class="c-head">
-        <h2>Оплата — без этого никуда</h2>
-        <p>В Китае почти всё через телефон. Наличные и иностранные карты часто не принимают.</p>
+        <h2>Оплата</h2>
+        <p>Без Alipay в Китае как без ICOCA в Японии — только жёстче.</p>
       </div>
       <div class="c-cards" id="chinaPay"></div>
     </section>
 
     <section class="c-section" id="transport">
       <div class="c-head">
-        <h2>Метро, автобусы, такси</h2>
-        <p>Как доехать от PVG, по городу и обратно к утреннему вылету.</p>
+        <h2>Транспорт</h2>
+        <p>Метро Line 2, Maglev, DiDi, аэропорт. Автобусы — только запасной вариант.</p>
       </div>
       <div class="c-cards" id="chinaTransport"></div>
     </section>
 
     <section class="c-section" id="city">
       <div class="c-head">
-        <h2>Если поедете в город (26 сентября)</h2>
-        <p>Необязательно. Если силы есть — лёгкий набор «увидеть Шанхай».</p>
+        <h2>Если поедете в город · 26 сентября</h2>
+        <p>Необязательно. Один короткий маршрут лучше, чем «весь Шанхай».</p>
       </div>
       <div class="c-cards" id="chinaCity"></div>
     </section>
 
     <section class="c-section" id="phrases">
       <div class="c-head">
-        <h2>Фразы на китайском</h2>
-        <p>Нажмите карточку — откроется подсказка. Чтение упрощённое.</p>
+        <h2>Фразы</h2>
+        <p>Китайский + чтение + перевод. Нажмите карточку — откроется совет.</p>
       </div>
       <div class="c-phrase-tabs" id="chinaPhraseTabs"></div>
       <div class="c-phrase-grid" id="chinaPhraseGrid"></div>
@@ -98,7 +116,7 @@
     <section class="c-section" id="sos">
       <div class="c-head">
         <h2>Важно знать</h2>
-        <p>Шпаргалка на экстренный случай и бытовые мелочи.</p>
+        <p>Интернет, паспорт, вода, экстренные номера.</p>
       </div>
       <div class="c-cards" id="chinaSos"></div>
     </section>
@@ -107,6 +125,7 @@
   <footer class="c-footer">
     <p class="c-footer__hanzi">一路平安</p>
     <p>Хорошей дороги через Шанхай</p>
+    <p class="c-footer__note">Этот слайд отделён от японского маршрута специально — чтобы ничего не смешать.</p>
     <a class="c-footer__back" href="index.html">← Вернуться в Японию</a>
   </footer>
 
