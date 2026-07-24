@@ -500,6 +500,24 @@ a { color: inherit; text-decoration: none; }
 }
 .place__name { font-size: 16px; font-weight: 700; }
 .place__desc { font-size: 14px; color: var(--text-dim); margin-top: 3px; }
+.place__hours {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 9px 12px;
+  background: rgba(233,196,106,.08);
+  border: 1px solid rgba(233,196,106,.28);
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--gold);
+  line-height: 1.4;
+}
+.place--fixed .place__hours {
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.18);
+  color: #ffd7a8;
+}
 .place__tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
 .tag {
   font-size: 11px;

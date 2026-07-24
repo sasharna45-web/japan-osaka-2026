@@ -134,6 +134,7 @@
           <div class="place__desc">${place.desc || ""}</div>
         </div>
       </div>
+      ${place.hours ? `<div class="place__hours"><span>🕐</span><span>${place.hours}</span></div>` : ""}
       <div class="place__tags">${timeBadge}${durBadge}${tagsHtml}</div>
     `;
     card.addEventListener("click", () => openModal(day, place));
@@ -264,7 +265,7 @@
     rows.push(row(who.emoji, "Для кого", who.label));
     if (p.how)      rows.push(row("🚉", "Как добраться", p.how));
     if (p.duration) rows.push(row("⏳", "Сколько времени", p.duration));
-    if (p.hours)    rows.push(row("🕐", "Часы работы", p.hours));
+    if (p.hours)    rows.push(row("🕐", "Часы работы", p.hours + " · ориентир, сверяйте перед визитом"));
     if (p.price)    rows.push(row("💴", "Цена", p.price));
     if (p.food)     rows.push(row("🍜", "Поесть рядом", p.food));
     if (p.tips)     rows.push(row("💡", "Совет", p.tips));
