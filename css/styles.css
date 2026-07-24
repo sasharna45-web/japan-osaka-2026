@@ -472,6 +472,65 @@ a { color: inherit; text-decoration: none; }
 }
 .reorder-btn:hover { background: var(--red); border-color: var(--red); }
 
+/* ============================ PHRASES ============================ */
+.phrase-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.phrase-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+.phrase-card {
+  text-align: left;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+  transition: border-color .2s, transform .2s, background .2s;
+  width: 100%;
+}
+.phrase-card:hover { border-color: var(--red); transform: translateY(-2px); }
+.phrase-card__jp {
+  font-family: "Noto Serif JP", serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.phrase-card__reading {
+  font-size: 13px;
+  color: var(--red-soft);
+  letter-spacing: .02em;
+  margin-bottom: 8px;
+}
+.phrase-card__ru {
+  font-size: 15px;
+  font-weight: 600;
+}
+.phrase-card__tip {
+  display: none;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+.phrase-card.open .phrase-card__tip { display: block; }
+.phrase-card.open { border-color: var(--red); background: rgba(230,57,70,.06); }
+
+@media (min-width: 720px) {
+  .phrase-grid { grid-template-columns: 1fr 1fr; }
+}
+
 /* ============================ CHECKLIST ============================ */
 .cl-progress { margin-bottom: 22px; }
 .cl-progress__bar {

@@ -431,6 +431,42 @@
     observeReveals();
   }
 
+  // ======================= ЯПОНСКИЕ ФРАЗЫ =======================
+  let activePhraseCat = "basics";
+
+  function renderPhrases() {
+    const tabs = $("#phraseTabs");
+    const grid = $("#phraseGrid");
+    tabs.innerHTML = "";
+    grid.innerHTML = "";
+
+    PHRASES.forEach(cat => {
+      const tab = el("button", "chip" + (cat.key === activePhraseCat ? " active" : ""),
+        `<span class="emo">${cat.emoji}</span>${cat.title}`);
+      tab.type = "button";
+      tab.addEventListener("click", () => {
+        activePhraseCat = cat.key;
+        renderPhrases();
+      });
+      tabs.appendChild(tab);
+    });
+
+    const cat = PHRASES.find(c => c.key === activePhraseCat) || PHRASES[0];
+    cat.cards.forEach(card => {
+      const node = el("button", "phrase-card reveal");
+      node.type = "button";
+      node.innerHTML = `
+        <div class="phrase-card__jp">${card.jp}</div>
+        <div class="phrase-card__reading">${card.reading}</div>
+        <div class="phrase-card__ru">${card.ru}</div>
+        ${card.tip ? `<div class="phrase-card__tip">💡 ${card.tip}</div>` : ""}
+      `;
+      node.addEventListener("click", () => node.classList.toggle("open"));
+      grid.appendChild(node);
+    });
+    observeReveals();
+  }
+
   // ======================= АНИМАЦИИ / ПРОКРУТКА =======================
   let io;
   function observeReveals() {
@@ -466,6 +502,7 @@
     renderMap();
     renderTimeline();
     renderChecklist();
+    renderPhrases();
     renderTips();
     setupEdit();
     setupModal();
