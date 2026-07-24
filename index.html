@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0d0d0f">
+  <title>Япония 2026 — Осака и Кансай</title>
+  <meta name="description" content="Персональный путеводитель Александра и Риты по Осаке и региону Кансай, 9–25 сентября 2026.">
+
+  <!-- Иконка и установка на главный экран -->
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Япония 2026">
+
+  <!-- Leaflet (карта) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Прогресс-бар прокрутки -->
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- ШАПКА / HERO -->
+  <header class="hero" id="top">
+    <div class="hero__bg" aria-hidden="true">
+      <span class="hero__kanji">日本</span>
+      <div class="hero__sun"></div>
+    </div>
+    <div class="hero__content">
+      <p class="hero__eyebrow">персональный путеводитель</p>
+      <h1 class="hero__title">Япония <span>2026</span></h1>
+      <p class="hero__subtitle">Осака и Кансай</p>
+      <div class="hero__meta">
+        <span>👥 Александр и Рита</span>
+        <span>📅 9 – 25 сентября</span>
+        <span>🏠 Tanimachi 6-chome</span>
+      </div>
+      <div class="hero__stats" id="heroStats"></div>
+      <a class="hero__cta" href="#route">Смотреть маршрут ↓</a>
+    </div>
+  </header>
+
+  <!-- НАВИГАЦИЯ -->
+  <nav class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="#top" class="nav__brand">日本 2026</a>
+      <div class="nav__links">
+        <a href="#route">Маршрут</a>
+        <a href="#map">Карта</a>
+        <a href="#tips">Советы</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- ФИЛЬТРЫ ПО ИНТЕРЕСАМ -->
+    <section class="section" id="filters-section">
+      <div class="section__head">
+        <h2 class="section__title">Что вам интересно?</h2>
+        <p class="section__sub">Выберите тему — подсветим подходящие места в маршруте.</p>
+      </div>
+      <div class="filters" id="filters"></div>
+    </section>
+
+    <!-- КАРТА -->
+    <section class="section" id="map">
+      <div class="section__head">
+        <h2 class="section__title">Карта маршрута</h2>
+        <p class="section__sub">Все точки поездки. Нажмите на маркер — откроется место.</p>
+      </div>
+      <div id="leafletMap" class="map"></div>
+    </section>
+
+    <!-- МАРШРУТ ПО ДНЯМ -->
+    <section class="section" id="route">
+      <div class="section__head">
+        <h2 class="section__title">Маршрут по дням</h2>
+        <p class="section__sub">
+          17 дней. Нажмите на день, чтобы раскрыть детали.
+          <button class="link-btn" id="editToggle" type="button">✏️ Изменить план</button>
+        </p>
+      </div>
+      <div class="edit-hint" id="editHint" hidden>
+        Режим редактирования включён: перетаскивайте дни стрелками ⬆⬇, чтобы менять порядок.
+        Изменения сохраняются на этом устройстве.
+        <button class="link-btn" id="resetPlan" type="button">↺ Сбросить к оригиналу</button>
+      </div>
+      <div class="timeline" id="timeline"></div>
+    </section>
+
+    <!-- СОВЕТЫ -->
+    <section class="section" id="tips">
+      <div class="section__head">
+        <h2 class="section__title">Полезные советы</h2>
+        <p class="section__sub">Мелочи, которые сделают поездку комфортнее.</p>
+      </div>
+      <div class="tips-grid" id="tipsGrid"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__jp">よい旅を</p>
+    <p>Хорошего путешествия, Александр и Рита ❤️</p>
+    <p class="footer__small">Часы работы и цены — ориентировочные, проверяйте перед визитом.</p>
+    <a href="#top" class="footer__up">↑ Наверх</a>
+  </footer>
+
+  <!-- Модальное окно места -->
+  <div class="modal" id="placeModal" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__card" role="dialog" aria-modal="true">
+      <button class="modal__close" data-close aria-label="Закрыть">✕</button>
+      <div class="modal__body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

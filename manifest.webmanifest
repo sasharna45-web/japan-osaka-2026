@@ -1,0 +1,20 @@
+{
+  "name": "Япония 2026 — Осака и Кансай",
+  "short_name": "Япония 2026",
+  "description": "Персональный путеводитель Александра и Риты по Осаке и Кансаю",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0d0d0f",
+  "theme_color": "#0d0d0f",
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
