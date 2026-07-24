@@ -50,6 +50,43 @@ body::before {
 
 a { color: inherit; text-decoration: none; }
 
+/* Переключатель Япония / Китай на японской странице */
+.country-switch--jp {
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  padding: 10px 16px;
+  background: rgba(13,13,15,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+.country-switch--jp .country-switch__btn {
+  flex: 1;
+  max-width: 180px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--text-dim);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--bg-soft);
+  transition: .2s;
+}
+.country-switch--jp .country-switch__btn.is-active {
+  color: #fff;
+  background: var(--red);
+  border-color: var(--red);
+}
+.country-switch--jp .country-switch__btn:not(.is-active):hover {
+  color: var(--text);
+  border-color: var(--red);
+}
+
 /* --------- Прогресс прокрутки --------- */
 .scroll-progress {
   position: fixed;
@@ -175,7 +212,7 @@ a { color: inherit; text-decoration: none; }
 /* ============================ NAV ============================ */
 .nav {
   position: sticky;
-  top: 0;
+  top: 53px;
   z-index: 50;
   background: rgba(13,13,15,.82);
   backdrop-filter: blur(14px);
