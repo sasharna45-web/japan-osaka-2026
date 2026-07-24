@@ -439,6 +439,19 @@ a { color: inherit; text-decoration: none; }
   transition: border-color .2s, transform .2s, background .2s;
 }
 .place:hover { border-color: var(--red); transform: translateX(4px); }
+.place--fixed {
+  background: rgba(230,57,70,.18);
+  border-color: rgba(230,57,70,.65);
+  box-shadow: inset 3px 0 0 var(--red);
+}
+.place--fixed:hover {
+  background: rgba(230,57,70,.26);
+  border-color: var(--red);
+}
+.place--fixed .place__emoji {
+  background: rgba(230,57,70,.28);
+}
+.place--fixed .place__name { color: #fff; }
 .place__top { display: flex; align-items: center; gap: 12px; }
 .place__emoji {
   font-size: 26px;

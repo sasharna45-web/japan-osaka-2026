@@ -106,7 +106,7 @@
   }
 
   function placeCard(day, place, di, pi) {
-    const card = el("div", "place");
+    const card = el("div", "place" + (place.fixed ? " place--fixed" : ""));
     if ((place.desc || "").length > 90) card.classList.add("full");
     card.dataset.di = di;
     card.dataset.pi = pi;
