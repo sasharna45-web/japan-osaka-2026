@@ -56,6 +56,7 @@
       <div class="nav__links">
         <a href="#route">Маршрут</a>
         <a href="#map">Карта</a>
+        <a href="#checklist">Чеклист</a>
         <a href="#tips">Советы</a>
       </div>
     </div>
@@ -95,6 +96,19 @@
         <button class="link-btn" id="resetPlan" type="button">↺ Сбросить к оригиналу</button>
       </div>
       <div class="timeline" id="timeline"></div>
+    </section>
+
+    <!-- ЧЕКЛИСТ ПОДГОТОВКИ -->
+    <section class="section" id="checklist">
+      <div class="section__head">
+        <h2 class="section__title">Чеклист подготовки</h2>
+        <p class="section__sub">Задачи до поездки. Отмечайте выполненное — галочки сохраняются на этом устройстве.</p>
+      </div>
+      <div class="cl-progress">
+        <div class="cl-progress__bar"><span id="clBarFill"></span></div>
+        <div class="cl-progress__label" id="clProgressLabel">0 из 0 выполнено</div>
+      </div>
+      <div class="checklist" id="checklist-body"></div>
     </section>
 
     <!-- СОВЕТЫ -->

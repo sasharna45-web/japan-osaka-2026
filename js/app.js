@@ -360,6 +360,77 @@
     });
   }
 
+  // ======================= ЧЕКЛИСТ ПОДГОТОВКИ =======================
+  const CL_KEY = "japan2026.checklist.v1";
+  function loadChecklistState() {
+    try { return JSON.parse(localStorage.getItem(CL_KEY)) || {}; } catch (e) { return {}; }
+  }
+  function saveChecklistState() {
+    try { localStorage.setItem(CL_KEY, JSON.stringify(clState)); } catch (e) {}
+  }
+  let clState = loadChecklistState();
+
+  function collectClIds() {
+    const ids = [];
+    CHECKLIST.forEach((g, gi) => g.items.forEach((it, ii) => {
+      if (it.sub && it.sub.length) it.sub.forEach((_, si) => ids.push(`g${gi}-i${ii}-s${si}`));
+      else ids.push(`g${gi}-i${ii}`);
+    }));
+    return ids;
+  }
+
+  function updateClProgress() {
+    const ids = collectClIds();
+    const done = ids.filter(id => clState[id]).length;
+    const pct = ids.length ? Math.round(done / ids.length * 100) : 0;
+    $("#clBarFill").style.width = pct + "%";
+    $("#clProgressLabel").textContent = `${done} из ${ids.length} выполнено · ${pct}%`;
+  }
+
+  function makeCheckItem(id, text) {
+    const wrap = el("label", "cl-item" + (clState[id] ? " done" : ""));
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.className = "cl-input";
+    input.checked = !!clState[id];
+    const box = el("span", "cl-box", clState[id] ? "✓" : "");
+    const txt = el("span", "cl-text", text);
+    input.addEventListener("change", () => {
+      clState[id] = input.checked;
+      saveChecklistState();
+      wrap.classList.toggle("done", input.checked);
+      box.textContent = input.checked ? "✓" : "";
+      updateClProgress();
+    });
+    wrap.append(input, box, txt);
+    return wrap;
+  }
+
+  function renderChecklist() {
+    const wrap = $("#checklist-body");
+    wrap.innerHTML = "";
+    CHECKLIST.forEach((g, gi) => {
+      const group = el("div", "cl-group reveal");
+      group.appendChild(el("div", `cl-step cl-step--${g.tone}`,
+        `<span class="cl-step__tag">${g.step}</span>${g.title}`));
+      const list = el("div", "cl-list");
+      g.items.forEach((it, ii) => {
+        if (it.sub && it.sub.length) {
+          list.appendChild(el("div", "cl-subhead", it.text));
+          const subwrap = el("div", "cl-sub");
+          it.sub.forEach((s, si) => subwrap.appendChild(makeCheckItem(`g${gi}-i${ii}-s${si}`, s)));
+          list.appendChild(subwrap);
+        } else {
+          list.appendChild(makeCheckItem(`g${gi}-i${ii}`, it.text));
+        }
+      });
+      group.appendChild(list);
+      wrap.appendChild(group);
+    });
+    updateClProgress();
+    observeReveals();
+  }
+
   // ======================= АНИМАЦИИ / ПРОКРУТКА =======================
   let io;
   function observeReveals() {
@@ -394,6 +465,7 @@
     renderFilters();
     renderMap();
     renderTimeline();
+    renderChecklist();
     renderTips();
     setupEdit();
     setupModal();
