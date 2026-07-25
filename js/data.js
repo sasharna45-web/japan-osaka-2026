@@ -901,64 +901,139 @@ const DAY_BRIEFS = {
 };
 
 /**
- * Чеклист «Перед вылетом из России» — что взять с собой прямо сейчас.
- * Галочки — localStorage на этом телефоне.
+ * Чек-лист перед поездкой в Японию.
+ * Галочки — localStorage на этом телефоне. Пункт может иметь sub: [{id,text}].
  */
 const PACKING = [
   {
-    id: "hand",
-    title: "При себе / в ручной клади (не сдавать)",
+    id: "docs",
+    title: "📄 Документы",
     items: [
-      { id: "ru-passports", text: "Загранпаспорта (оба) — в сумке у тела, не в чемодане" },
-      { id: "ru-phones", text: "Телефоны (оба), заряжены" },
-      { id: "ru-powerbank", text: "Пауэрбанк(и) + кабели" },
-      { id: "ru-cash-usd", text: "Наличные доллары ($425+) — новые купюры" },
-      { id: "ru-cards", text: "Банковские карты" },
-      { id: "ru-meds", text: "Лекарства на дорогу + в полёте" },
-      { id: "ru-print-hand", text: "Распечатки: билеты, Airbnb, страховка (в папке)" },
-      { id: "ru-snack", text: "Вода после досмотра / лёгкий перекус" }
+      { id: "pk-passports", text: "Загранпаспорта (оба)" },
+      { id: "pk-vjw", text: "Visit Japan Web (QR-код на телефоне + скриншот)" },
+      { id: "pk-flights", text: "Авиабилеты / посадочные талоны (в приложении + распечатка)" },
+      { id: "pk-airbnb", text: "Ваучер Airbnb и адрес квартиры" },
+      {
+        text: "Билеты:",
+        sub: [
+          { id: "pk-tix-harukas", text: "Harukas" },
+          { id: "pk-tix-usj", text: "Universal Studios Japan ×2" },
+          { id: "pk-tix-umeda", text: "Umeda Sky Building" }
+        ]
+      },
+      { id: "pk-insurance", text: "Страховка (фото полиса)" },
+      { id: "pk-pass-photo", text: "Фото паспортов в телефоне" },
+      { id: "pk-print-a4", text: "Все важные документы распечатаны на А4 (на всякий случай)" }
     ]
   },
   {
-    id: "digital",
-    title: "На телефонах (проверить до выхода из дома)",
+    id: "money",
+    title: "💴 Деньги и связь",
     items: [
-      { id: "ru-vjw", text: "Visit Japan Web: QR сохранены на обоих телефонах" },
-      { id: "ru-flights-app", text: "Авиабилеты в приложении авиакомпании / почте" },
-      { id: "ru-esim", text: "Японский eSIM установлен (активация в KIX)" },
-      { id: "ru-esim-cn", text: "Китайский eSIM / план на 25–27 сент готов" },
-      { id: "ru-alipay", text: "Alipay на обоих телефонах, вход работает" },
-      { id: "ru-tripcom", text: "Приложение с билетами: вход работает (Harukas, USJ, Umeda…)" },
-      { id: "ru-insurance-photo", text: "Фото полиса страховки в галерее" },
-      { id: "ru-airbnb", text: "Ваучер Airbnb + адрес квартиры сохранены" },
-      { id: "ru-guide", text: "Гид «Япония 2026» открывается офлайн" }
+      { id: "pk-cash-usd", text: "Наличные доллары (новыми купюрами)" },
+      { id: "pk-cards", text: "Банковские карты" },
+      { id: "pk-yen-kix", text: "Обменять часть денег на йены в KIX" },
+      { id: "pk-esim-jp", text: "Японский eSIM активирован" },
+      { id: "pk-esim-cn", text: "Китайский eSIM / план на 25–27 сентября" },
+      { id: "pk-alipay", text: "Alipay настроен на обоих телефонах" },
+      { id: "pk-icoca", text: "ICOCA купить и пополнить после прилёта" }
     ]
   },
   {
-    id: "suitcase",
-    title: "В чемодане",
+    id: "tech",
+    title: "📱 Техника",
     items: [
-      { id: "ru-clothes", text: "Одежда на сентябрь (футболки, лёгкая кофта, удобное)" },
-      { id: "ru-shoes", text: "Удобные кроссовки (на ногах или в ручной — как удобнее)" },
-      { id: "ru-underwear", text: "Бельё, носки с запасом" },
-      { id: "ru-sleep", text: "Пижама / одежда для сна" },
-      { id: "ru-hygiene", text: "Зубные щётки, паста, дезодорант, мелочи" },
-      { id: "ru-charger-jp", text: "Зарядка в розетку + переходник Япония (тип A)" },
-      { id: "ru-rain", text: "Складной зонт или пончо" },
-      { id: "ru-daypack", text: "Дневной рюкзак (можно надеть в самолёт)" },
-      { id: "ru-tablet", text: "Планшет (если берёте) + его зарядка" }
+      { id: "pk-phones", text: "Телефоны (оба)" },
+      { id: "pk-cases", text: "Чехлы" },
+      { id: "pk-tablet", text: "Планшет (если берёте)" },
+      { id: "pk-powerbank", text: "Пауэрбанк(и) — желательно два" },
+      { id: "pk-cables", text: "Кабели USB-C / Lightning" },
+      { id: "pk-charger", text: "Зарядное устройство" },
+      { id: "pk-adapter", text: "Переходник на японские розетки (тип A)" },
+      { id: "pk-headphones", text: "Наушники" },
+      { id: "pk-guide-offline", text: "Гид и маршрут доступны офлайн" }
+    ]
+  },
+  {
+    id: "clothes",
+    title: "👕 Одежда",
+    items: [
+      {
+        text: "Верх",
+        sub: [
+          { id: "pk-tees", text: "5–6 футболок" },
+          { id: "pk-hoodie", text: "Лёгкая олимпийка или худи" },
+          { id: "pk-jacket", text: "Лёгкая куртка (на обратный путь через Владивосток)" }
+        ]
+      },
+      {
+        text: "Низ",
+        sub: [
+          { id: "pk-shorts", text: "2–3 пары шорт" },
+          { id: "pk-pants", text: "1 лёгкие длинные брюки или джинсы" }
+        ]
+      },
+      {
+        text: "Обувь",
+        sub: [
+          { id: "pk-sneakers", text: "Основные удобные кроссовки" },
+          { id: "pk-slippers", text: "Шлёпанцы (по желанию)" }
+        ]
+      },
+      {
+        text: "Остальное",
+        sub: [
+          { id: "pk-cap", text: "Кепка или панама" },
+          { id: "pk-socks", text: "Носки (6–7 пар)" },
+          { id: "pk-underwear", text: "Нижнее бельё с запасом" },
+          { id: "pk-pj", text: "Пижама" },
+          { id: "pk-daypack", text: "Дневной рюкзак" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "hygiene",
+    title: "🪥 Гигиена",
+    items: [
+      { id: "pk-toothbrush", text: "Зубные щётки" },
+      { id: "pk-toothpaste", text: "Зубная паста" },
+      { id: "pk-deo", text: "Дезодорант" },
+      { id: "pk-razor", text: "Бритва (если нужна)" },
+      { id: "pk-sunscreen", text: "Крем от солнца" },
+      { id: "pk-lipbalm", text: "Гигиеническая помада" },
+      { id: "pk-wipes", text: "Влажные салфетки" },
+      { id: "pk-tissues", text: "Обычные салфетки" }
+    ]
+  },
+  {
+    id: "meds",
+    title: "💊 Аптечка",
+    items: [
+      { id: "pk-meds-personal", text: "Личные лекарства" },
+      { id: "pk-bandages", text: "Пластыри" },
+      { id: "pk-pain", text: "Обезболивающее" },
+      { id: "pk-stomach", text: "Средство от расстройства желудка" },
+      { id: "pk-masks", text: "Маски (по желанию)" }
+    ]
+  },
+  {
+    id: "buy-jp",
+    title: "🛍️ Купить уже в Японии",
+    items: [
+      { id: "pk-buy-umbrella", text: "Зонт" },
+      { id: "pk-buy-icoca", text: "Карта ICOCA" }
     ]
   },
   {
     id: "door",
-    title: "У двери — последний взгляд",
+    title: "✔️ Перед выходом из дома",
     items: [
-      { id: "ru-door-pass", text: "Паспорта точно с нами, не на столе" },
-      { id: "ru-door-cash", text: "Доллары и карты — в ручной, не в сданном багаже" },
-      { id: "ru-door-keys", text: "Ключи от квартиры в России (если нужны на возвращение)" },
-      { id: "ru-door-windows", text: "Окна / плита / утюг / свет выключены" },
-      { id: "ru-door-trash", text: "Мусор вынесен" },
-      { id: "ru-door-time", text: "Выезд к аэропорту с запасом (пробки + регистрация)" }
+      { id: "pk-door-charge", text: "Зарядить всю технику" },
+      { id: "pk-door-qr", text: "Проверить, что QR-коды открываются без интернета" },
+      { id: "pk-door-cash-split", text: "Деньги распределить по разным местам" },
+      { id: "pk-door-docs", text: "Проверить документы ещё раз" },
+      { id: "pk-door-home", text: "Закрыть окна, выключить электроприборы и проверить квартиру" }
     ]
   }
 ];
@@ -980,7 +1055,7 @@ const CHECKLIST = [
     title: "Уже закрыто",
     items: [
       { id: "abeno", text: "Abeno Harukas 300: билет подтверждён на 11 сентября · 17:00." },
-      { id: "cash", text: "Наличные: $425 куплено (новые купюры) для обмена на иены в KIX. При желании можно докупить ещё." }
+      { id: "cash", text: "Наличные доллары куплены (новые купюры) — для обмена на йены в KIX." }
     ]
   },
   {

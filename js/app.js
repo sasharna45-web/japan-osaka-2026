@@ -632,8 +632,8 @@
     }
   }
 
-  // ======================= ИНВЕНТАРИЗАЦИЯ БАГАЖА =======================
-  const PACK_KEY = "japan2026.packing.ru-depart.v1";
+  // ======================= ЧЕК-ЛИСТ ПЕРЕД ПОЕЗДКОЙ =======================
+  const PACK_KEY = "japan2026.packing.ru-depart.v2";
   let packState = {};
   try { packState = JSON.parse(localStorage.getItem(PACK_KEY)) || {}; } catch (e) { packState = {}; }
 
@@ -641,10 +641,18 @@
     try { localStorage.setItem(PACK_KEY, JSON.stringify(packState)); } catch (e) {}
   }
 
-  function updatePackProgress() {
-    if (typeof PACKING === "undefined") return;
+  function packingIds() {
     const ids = [];
-    PACKING.forEach(g => g.items.forEach(it => ids.push(it.id)));
+    if (typeof PACKING === "undefined") return ids;
+    PACKING.forEach(g => g.items.forEach(it => {
+      if (it.sub && it.sub.length) it.sub.forEach(s => ids.push(s.id));
+      else if (it.id) ids.push(it.id);
+    }));
+    return ids;
+  }
+
+  function updatePackProgress() {
+    const ids = packingIds();
     const done = ids.filter(id => packState[id]).length;
     const pct = ids.length ? Math.round(done / ids.length * 100) : 0;
     const bar = $("#packBarFill");
@@ -653,11 +661,34 @@
     if (label) label.textContent = `${done} из ${ids.length} · ${pct}%`;
   }
 
+  function makePackItem(id, text) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "cl-item" + (packState[id] ? " done" : "");
+    const box = document.createElement("span");
+    box.className = "cl-box";
+    box.textContent = packState[id] ? "✓" : "";
+    const txt = document.createElement("span");
+    txt.className = "cl-text";
+    txt.textContent = text;
+    btn.append(box, txt);
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      packState[id] = !packState[id];
+      btn.classList.toggle("done", !!packState[id]);
+      box.textContent = packState[id] ? "✓" : "";
+      savePackState();
+      updatePackProgress();
+    });
+    return btn;
+  }
+
   function renderPacking() {
     const wrap = $("#packingBody");
     if (!wrap) return;
     if (typeof PACKING === "undefined") {
-      wrap.innerHTML = `<p class="qr-empty">Список багажа не загрузился. Обновите страницу (потяните вниз) или откройте сайт заново.</p>`;
+      wrap.innerHTML = `<p class="qr-empty">Список не загрузился. Обновите страницу или откройте сайт заново.</p>`;
       return;
     }
     wrap.innerHTML = "";
@@ -667,26 +698,14 @@
       head.textContent = g.title;
       const list = el("div", "pack-group__list");
       g.items.forEach(it => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "cl-item" + (packState[it.id] ? " done" : "");
-        const box = document.createElement("span");
-        box.className = "cl-box";
-        box.textContent = packState[it.id] ? "✓" : "";
-        const txt = document.createElement("span");
-        txt.className = "cl-text";
-        txt.textContent = it.text;
-        btn.append(box, txt);
-        btn.addEventListener("click", (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          packState[it.id] = !packState[it.id];
-          btn.classList.toggle("done", !!packState[it.id]);
-          box.textContent = packState[it.id] ? "✓" : "";
-          savePackState();
-          updatePackProgress();
-        });
-        list.appendChild(btn);
+        if (it.sub && it.sub.length) {
+          list.appendChild(el("div", "cl-subhead", it.text));
+          const subwrap = el("div", "cl-sub");
+          it.sub.forEach(s => subwrap.appendChild(makePackItem(s.id, s.text)));
+          list.appendChild(subwrap);
+        } else if (it.id) {
+          list.appendChild(makePackItem(it.id, it.text));
+        }
       });
       group.append(head, list);
       wrap.appendChild(group);
