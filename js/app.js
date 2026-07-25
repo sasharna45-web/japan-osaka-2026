@@ -601,7 +601,7 @@
   }
 
   // ======================= ИНВЕНТАРИЗАЦИЯ БАГАЖА =======================
-  const PACK_KEY = "japan2026.packing.v1";
+  const PACK_KEY = "japan2026.packing.ru-depart.v1";
   let packState = {};
   try { packState = JSON.parse(localStorage.getItem(PACK_KEY)) || {}; } catch (e) { packState = {}; }
 
