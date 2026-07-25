@@ -179,17 +179,39 @@
     const body = el("div", "day__body");
     const bodyWrap = el("div", "day__body-wrap");
 
+    // Краткая шпаргалка — всегда сверху при открытии
+    const brief = (typeof DAY_BRIEFS !== "undefined" && DAY_BRIEFS[day.n]) || null;
+    if (brief) {
+      bodyWrap.appendChild(el("div", "day-brief", `
+        <div class="day-brief__row">
+          <span class="day-brief__k">Главное</span>
+          <span class="day-brief__v">${brief.main}</span>
+        </div>
+        <div class="day-brief__row">
+          <span class="day-brief__k">Когда выходить</span>
+          <span class="day-brief__v">${brief.leave}</span>
+        </div>
+        <div class="day-brief__row">
+          <span class="day-brief__k">Не забыть</span>
+          <span class="day-brief__v">${brief.remember}</span>
+        </div>
+      `));
+    }
+
+    const details = el("div", "day-details");
+    details.hidden = true;
+
     if (day.intro) {
-      bodyWrap.appendChild(el("p", "day__intro", `<span class="day__intro-ic">🗺️</span>${day.intro}`));
+      details.appendChild(el("p", "day__intro", day.intro));
     }
 
     const inner = el("div", "day__body-inner");
     day.places.forEach((p, pi) => inner.appendChild(placeCard(day, p, idx, pi)));
-    bodyWrap.appendChild(inner);
+    details.appendChild(inner);
 
     if (day.options && day.options.length) {
       const opt = el("div", "options");
-      opt.appendChild(el("div", "options__title", "🔀 На выбор / по желанию"));
+      opt.appendChild(el("div", "options__title", "На выбор"));
       const grid = el("div", "options__grid");
       day.options.forEach(o => {
         grid.appendChild(el("div", "opt",
@@ -197,9 +219,21 @@
            <div><div class="opt__title">${o.title}</div><div class="opt__text">${o.desc}</div></div>`));
       });
       opt.appendChild(grid);
-      bodyWrap.appendChild(opt);
+      details.appendChild(opt);
     }
 
+    const moreBtn = el("button", "day-more");
+    moreBtn.type = "button";
+    moreBtn.textContent = "Подробнее";
+    moreBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const open = details.hidden;
+      details.hidden = !open;
+      moreBtn.textContent = open ? "Скрыть подробности" : "Подробнее";
+      moreBtn.classList.toggle("is-open", open);
+    });
+
+    bodyWrap.append(moreBtn, details);
     body.appendChild(bodyWrap);
 
     head.addEventListener("click", () => {
@@ -566,6 +600,74 @@
     }
   }
 
+  // ======================= ИНВЕНТАРИЗАЦИЯ БАГАЖА =======================
+  const PACK_KEY = "japan2026.packing.v1";
+  let packState = {};
+  try { packState = JSON.parse(localStorage.getItem(PACK_KEY)) || {}; } catch (e) { packState = {}; }
+
+  function savePackState() {
+    try { localStorage.setItem(PACK_KEY, JSON.stringify(packState)); } catch (e) {}
+  }
+
+  function updatePackProgress() {
+    if (typeof PACKING === "undefined") return;
+    const ids = [];
+    PACKING.forEach(g => g.items.forEach(it => ids.push(it.id)));
+    const done = ids.filter(id => packState[id]).length;
+    const pct = ids.length ? Math.round(done / ids.length * 100) : 0;
+    const bar = $("#packBarFill");
+    const label = $("#packProgressLabel");
+    if (bar) bar.style.width = pct + "%";
+    if (label) label.textContent = `${done} из ${ids.length} · ${pct}%`;
+  }
+
+  function renderPacking() {
+    const wrap = $("#packingBody");
+    if (!wrap || typeof PACKING === "undefined") return;
+    wrap.innerHTML = "";
+    PACKING.forEach(g => {
+      const group = el("div", "pack-group");
+      const head = el("div", "pack-group__head", g.title);
+      const list = el("div", "pack-group__list");
+      g.items.forEach(it => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "cl-item" + (packState[it.id] ? " done" : "");
+        btn.innerHTML = `<span class="cl-box">${packState[it.id] ? "✓" : ""}</span><span class="cl-text">${it.text}</span>`;
+        btn.addEventListener("click", () => {
+          packState[it.id] = !packState[it.id];
+          btn.classList.toggle("done", !!packState[it.id]);
+          btn.querySelector(".cl-box").textContent = packState[it.id] ? "✓" : "";
+          savePackState();
+          updatePackProgress();
+        });
+        list.appendChild(btn);
+      });
+      group.append(head, list);
+      wrap.appendChild(group);
+    });
+    updatePackProgress();
+  }
+
+  function setupComfort() {
+    const btn = $("#comfortToggle");
+    if (!btn) return;
+    let on = false;
+    try { on = localStorage.getItem("japan2026.comfort") === "1"; } catch (e) {}
+    const apply = () => {
+      document.body.classList.toggle("comfort", on);
+      btn.classList.toggle("is-on", on);
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+      btn.textContent = on ? "Aa ✓" : "Aa";
+    };
+    apply();
+    btn.addEventListener("click", () => {
+      on = !on;
+      try { localStorage.setItem("japan2026.comfort", on ? "1" : "0"); } catch (e) {}
+      apply();
+    });
+  }
+
   // ======================= ЯПОНСКИЕ ФРАЗЫ =======================
   let activePhraseCat = "basics";
 
@@ -740,17 +842,20 @@
   function nextDayCard(label, idx, tone) {
     const day = TRIP.days[idx];
     if (!day) return "";
-    const places = (day.places || []).slice(0, 4).map(p =>
-      `<span class="next-day__chip">${p.emoji || "📍"} ${p.name}${p.time ? " · " + p.time : ""}</span>`
-    ).join("");
+    const brief = (typeof DAY_BRIEFS !== "undefined" && DAY_BRIEFS[day.n]) || null;
+    const briefHtml = brief ? `
+      <div class="day-brief day-brief--compact">
+        <div class="day-brief__row"><span class="day-brief__k">Главное</span><span class="day-brief__v">${brief.main}</span></div>
+        <div class="day-brief__row"><span class="day-brief__k">Выходить</span><span class="day-brief__v">${brief.leave}</span></div>
+        <div class="day-brief__row"><span class="day-brief__k">Не забыть</span><span class="day-brief__v">${brief.remember}</span></div>
+      </div>` : `<div class="next-day__goal">${day.goal || ""}</div>`;
     return `
       <article class="next-day__card next-day__card--${tone}">
         <div class="next-day__label">${label}</div>
         <div class="next-day__date">${day.date} · ${day.weekday}</div>
         <div class="next-day__title">${day.title}</div>
-        <div class="next-day__goal">${day.goal || ""}</div>
-        <div class="next-day__places">${places}</div>
-        <button type="button" class="next-day__btn" data-open-day="${idx}">Открыть день →</button>
+        ${briefHtml}
+        <button type="button" class="next-day__btn" data-open-day="${idx}">Открыть день</button>
       </article>
     `;
   }
@@ -1325,11 +1430,13 @@
     renderTickets();
     renderHomeSos();
     renderChecklist();
+    renderPacking();
     renderPhrases();
     renderTips();
     setupEdit();
     setupModal();
     setupTicketView();
+    setupComfort();
     setupScrollProgress();
     renderMapSafe();
     observeReveals();

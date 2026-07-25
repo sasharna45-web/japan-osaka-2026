@@ -1,25 +1,28 @@
 /* ============================================================
    Япония 2026 — стили.
-   Тема: японский минимализм. Тёмный фон, красные акценты.
-   Mobile-first: базовые стили под телефон, @media — для широких.
+   Ощущение: спокойный iOS / Apple (воздух, иерархия, крупные зоны).
    ============================================================ */
 
 :root {
-  --bg:        #0d0d0f;   /* почти чёрный фон */
-  --bg-soft:   #16161a;   /* карточки */
-  --bg-soft-2: #1e1e24;   /* вложенные блоки */
-  --line:      #2a2a31;   /* границы */
-  --text:      #f2f2f0;   /* основной текст */
-  --text-dim:  #a2a2ad;   /* приглушённый текст */
-  --red:       #e63946;   /* главный акцент */
-  --red-soft:  #ff5a67;
-  --gold:      #e9c46a;
-  --green:     #81b29a;
-  --radius:    18px;
-  --radius-sm: 12px;
-  --shadow:    0 10px 40px rgba(0,0,0,.45);
-  --maxw:      1080px;
+  --bg:        #000000;
+  --bg-soft:   #1c1c1e;
+  --bg-soft-2: #2c2c2e;
+  --line:      rgba(84, 84, 88, 0.65);
+  --text:      #f5f5f7;
+  --text-dim:  #98989f;
+  --red:       #ff453a;
+  --red-soft:  #ff6961;
+  --gold:      #ffd60a;
+  --green:     #30d158;
+  --radius:    22px;
+  --radius-sm: 14px;
+  --shadow:    0 8px 32px rgba(0,0,0,.4);
+  --maxw:      720px;
   --ease:      cubic-bezier(.22,.61,.36,1);
+  --font:      -apple-system, BlinkMacSystemFont, "SF Pro Text", "Noto Sans JP", "Hiragino Sans", "Segoe UI", sans-serif;
+  --font-display: "Noto Serif JP", "Hiragino Mincho ProN", Georgia, serif;
+  --fs: 17px;
+  --lh: 1.47;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,15 +32,21 @@ html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: "Noto Sans JP", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  line-height: 1.6;
+  font-family: var(--font);
+  font-size: var(--fs);
+  line-height: var(--lh);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.01em;
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px));
 }
 body.has-qr-dock {
   padding-bottom: calc(148px + env(safe-area-inset-bottom, 0px));
+}
+body.comfort {
+  --fs: 19px;
+  --lh: 1.55;
 }
 
 /* фоновая «сетка сакуры» — очень тонкая текстура */
@@ -235,19 +244,20 @@ a { color: inherit; text-decoration: none; }
 }
 
 .hero__title {
-  font-family: "Noto Serif JP", serif;
+  font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(52px, 15vw, 128px);
-  line-height: .95;
-  letter-spacing: -.02em;
+  font-size: clamp(48px, 13vw, 96px);
+  line-height: .98;
+  letter-spacing: -.03em;
 }
 .hero__title span { color: var(--red); }
 
 .hero__subtitle {
-  font-family: "Noto Serif JP", serif;
-  font-size: clamp(20px, 5vw, 34px);
+  font-family: var(--font);
+  font-size: clamp(17px, 4vw, 22px);
+  font-weight: 500;
   color: var(--text-dim);
-  margin-top: 6px;
+  margin-top: 10px;
 }
 
 .hero__meta {
@@ -286,24 +296,27 @@ a { color: inherit; text-decoration: none; }
 .hero__cta {
   display: inline-block;
   margin-top: 36px;
-  padding: 14px 32px;
+  padding: 15px 34px;
   background: var(--red);
   color: #fff;
-  border-radius: 999px;
-  font-weight: 700;
-  transition: transform .2s var(--ease), box-shadow .2s var(--ease), background .2s;
-  box-shadow: 0 8px 26px rgba(230,57,70,.35);
+  border-radius: 980px;
+  font-weight: 600;
+  font-size: 17px;
+  transition: transform .2s var(--ease), opacity .2s;
+  box-shadow: 0 10px 28px rgba(255,69,58,.28);
 }
-.hero__cta:hover { transform: translateY(-3px); background: var(--red-soft); }
+.hero__cta:hover { transform: scale(1.02); opacity: .95; }
+.hero__cta:active { transform: scale(.98); }
 
 /* ============================ NAV ============================ */
 .nav {
   position: sticky;
   top: env(safe-area-inset-top, 0px);
   z-index: 50;
-  background: rgba(13,13,15,.82);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--line);
+  background: rgba(0,0,0,.72);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 0.5px solid var(--line);
 }
 .nav__inner {
   max-width: var(--maxw);
@@ -348,27 +361,25 @@ a { color: inherit; text-decoration: none; }
 .section {
   max-width: var(--maxw);
   margin: 0 auto;
-  padding: 64px 20px;
+  padding: 48px 20px;
   position: relative;
   z-index: 1;
 }
-.section__head { margin-bottom: 28px; }
+.section__head { margin-bottom: 20px; }
 .section__title {
-  font-family: "Noto Serif JP", serif;
-  font-size: clamp(26px, 6vw, 40px);
-  position: relative;
-  padding-left: 18px;
+  font-family: var(--font);
+  font-size: clamp(28px, 7vw, 34px);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  padding-left: 0;
 }
-.section__title::before {
-  content: "";
-  position: absolute;
-  left: 0; top: 50%;
-  transform: translateY(-50%);
-  width: 5px; height: 70%;
-  background: var(--red);
-  border-radius: 4px;
+.section__title::before { display: none; }
+.section__sub {
+  margin-top: 6px;
+  font-size: 15px;
+  color: var(--text-dim);
+  line-height: 1.45;
 }
-.section__sub { color: var(--text-dim); margin-top: 10px; font-size: 15px; }
 
 .link-btn {
   background: none;
@@ -448,7 +459,7 @@ a { color: inherit; text-decoration: none; }
 
 .day {
   background: var(--bg-soft);
-  border: 1px solid var(--line);
+  border: 0.5px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
   transition: border-color .2s, transform .2s;
@@ -554,25 +565,103 @@ a { color: inherit; text-decoration: none; }
   overflow: hidden;
   transition: max-height .4s var(--ease);
 }
-.day.open .day__body { max-height: 6000px; }
-.day__body-wrap { padding: 4px 20px 22px; }
-.day__body-inner { display: grid; gap: 14px; }
+.day.open .day__body { max-height: 8000px; }
+.day__body-wrap { padding: 4px 16px 22px; }
+.day__body-inner { display: grid; gap: 12px; }
 
-/* вступление дня — «что куда и для кого» */
-.day__intro {
-  display: flex;
-  gap: 10px;
-  font-size: 14px;
-  color: var(--text-dim);
-  background: rgba(255,255,255,.03);
-  border: 1px solid var(--line);
-  border-left: 3px solid var(--red);
-  border-radius: 12px;
-  padding: 12px 14px;
-  margin-bottom: 16px;
-  line-height: 1.55;
+/* Краткая шпаргалка дня — как iOS grouped list */
+.day-brief {
+  background: var(--bg-soft-2);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: 12px;
 }
-.day__intro-ic { flex-shrink: 0; font-size: 16px; }
+.day-brief__row {
+  display: grid;
+  grid-template-columns: 7.5em 1fr;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 0.5px solid var(--line);
+  align-items: start;
+}
+.day-brief__row:last-child { border-bottom: none; }
+.day-brief__k {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dim);
+  padding-top: 1px;
+}
+.day-brief__v {
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--text);
+  font-weight: 500;
+}
+.day-brief--compact { margin: 12px 0 0; }
+.day-brief--compact .day-brief__row { grid-template-columns: 5.5em 1fr; padding: 10px 12px; }
+.day-brief--compact .day-brief__v { font-size: 14px; }
+
+.day-more {
+  width: 100%;
+  min-height: 48px;
+  margin-bottom: 12px;
+  border: none;
+  border-radius: 980px;
+  background: rgba(255,255,255,.08);
+  color: var(--red-soft);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.day-more.is-open { color: var(--text-dim); }
+.day-details[hidden] { display: none !important; }
+
+.day__intro {
+  font-size: 15px;
+  color: var(--text-dim);
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0 0 14px;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.comfort-btn {
+  flex-shrink: 0;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 980px;
+  border: none;
+  background: rgba(255,255,255,.08);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.comfort-btn.is-on { background: var(--red); color: #fff; }
+
+.packing { display: grid; gap: 14px; }
+.pack-group {
+  background: var(--bg-soft);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 0.5px solid var(--line);
+}
+.pack-group__head {
+  padding: 14px 16px 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.pack-group__list { padding: 0 8px 10px; }
 
 /* бейдж «для кого» */
 .who-badge {
