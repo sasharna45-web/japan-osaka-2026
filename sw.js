@@ -1,5 +1,5 @@
 /* Офлайн-кэш. App shell — network-first. */
-const CACHE = "japan2026-v12";
+const CACHE = "japan2026-v13";
 const ASSETS = [
   "./index.html",
   "./china.html",
@@ -37,7 +37,6 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // HTML/JS/CSS всегда пробуем с сети
   const shell = /\.(?:html|js|css)(?:$|\?)/.test(url.pathname + url.search) ||
     url.pathname.endsWith("/") ||
     /japan-osaka-2026\/?$/.test(url.pathname);

@@ -201,7 +201,7 @@
     // День 1: шаги KIX прямо в карточке дня
     if (day.n === 1 && typeof FIRST_HOUR_KIX !== "undefined") {
       const kixBox = el("div", "day-kix");
-      kixBox.appendChild(el("div", "day-kix__title", "Первый час в KIX"));
+      kixBox.appendChild(el("div", "day-kix__title", "Первый час в KIX · прилёт"));
       const kixList = el("div", "day-kix__list");
       FIRST_HOUR_KIX.forEach(s => {
         kixList.appendChild(el("div", "day-kix__item",
@@ -209,6 +209,25 @@
       });
       kixBox.appendChild(kixList);
       bodyWrap.appendChild(kixBox);
+    }
+
+    // День 17 / 25 сент: вылет в Шанхай (только в этой карточке)
+    if (day.n === 17 && typeof DEPARTURE_DAY !== "undefined") {
+      const dep = DEPARTURE_DAY;
+      const depBox = el("div", "day-dep");
+      depBox.innerHTML = `
+        <div class="day-dep__title">${dep.title}</div>
+        <div class="day-dep__flight">✈️ ${dep.flight}</div>
+        <div class="day-dep__list">
+          ${dep.steps.map((st, i) => `
+            <div class="day-dep__item">
+              <b>${i + 1}. ${st.t} · ${st.title}</b>
+              <span>${st.d}</span>
+            </div>`).join("")}
+        </div>
+        <a class="day-dep__cn" href="china.html">Дальше → слайд Китай / Шанхай</a>
+      `;
+      bodyWrap.appendChild(depBox);
     }
 
     const details = el("div", "day-details");
@@ -907,28 +926,18 @@
       else html += `<div class="next-day__empty">Последний день в Японии — дальше Китай 🇨🇳</div>`;
     }
 
-    // На день USJ — быстрые кнопки QR, если фото уже загружены
-    const focusIdx = focus.mode === "during" ? focus.todayIdx : focus.todayIdx;
-    const focusDay = focusIdx >= 0 ? TRIP.days[focusIdx] : null;
+    const focusDay = focus.todayIdx >= 0 ? TRIP.days[focus.todayIdx] : null;
     if (focusDay && focusDay.n === 7) {
       html += `
-        <div class="next-day__usj" id="usjQrQuick">
+        <div class="next-day__usj">
           <div class="next-day__usj-title">⚡ USJ сегодня · слот Nintendo 11:50</div>
-          <div class="next-day__usj-btns">
-            <button type="button" class="next-day__usj-btn" data-qr="usj-pass-sasha">🎢 Pass · Александр</button>
-            <button type="button" class="next-day__usj-btn" data-qr="usj-express-sasha">⚡ Exp · Александр</button>
-            <button type="button" class="next-day__usj-btn next-day__usj-btn--rita" data-qr="usj-pass-rita">🎢 Pass · Рита</button>
-            <button type="button" class="next-day__usj-btn next-day__usj-btn--rita" data-qr="usj-express-rita">⚡ Exp · Рита</button>
-          </div>
+          <a class="next-day__usj-btn" href="https://www.trip.com/orders/list/" target="_blank" rel="noopener">Открыть билеты в Trip.com</a>
         </div>`;
     }
 
     wrap.innerHTML = html;
     wrap.querySelectorAll("[data-open-day]").forEach(btn => {
       btn.addEventListener("click", () => openDayInTimeline(Number(btn.dataset.openDay)));
-    });
-    wrap.querySelectorAll("[data-qr]").forEach(btn => {
-      btn.addEventListener("click", () => showTicketById(btn.dataset.qr));
     });
   }
 
@@ -941,459 +950,24 @@
     return "дней";
   }
 
-  // ======================= ПЕРВЫЙ ЧАС KIX =======================
-  function renderKixSteps() {
-    const wrap = $("#kixSteps");
-    if (!wrap || typeof FIRST_HOUR_KIX === "undefined") return;
-    wrap.innerHTML = "";
-    FIRST_HOUR_KIX.forEach(s => {
-      wrap.appendChild(el("div", "kix-step", `
-        <div class="kix-step__n">${s.n}</div>
-        <div>
-          <div class="kix-step__t">${s.t}</div>
-          <div class="kix-step__d">${s.d}</div>
-        </div>
-      `));
-    });
-  }
-
-  // ======================= БИЛЕТЫ / QR (IndexedDB) =======================
-  const TICKETS_DB = "japan2026.tickets.v1";
-  const TICKETS_STORE = "photos";
-
-  function openTicketsDb() {
-    return new Promise((resolve, reject) => {
-      const req = indexedDB.open(TICKETS_DB, 1);
-      req.onupgradeneeded = () => {
-        const db = req.result;
-        if (!db.objectStoreNames.contains(TICKETS_STORE)) {
-          db.createObjectStore(TICKETS_STORE, { keyPath: "id" });
-        }
-      };
-      req.onsuccess = () => resolve(req.result);
-      req.onerror = () => reject(req.error);
-    });
-  }
-
-  function ticketGet(id) {
-    return openTicketsDb().then(db => new Promise((resolve, reject) => {
-      const tx = db.transaction(TICKETS_STORE, "readonly");
-      const req = tx.objectStore(TICKETS_STORE).get(id);
-      req.onsuccess = () => resolve(req.result || null);
-      req.onerror = () => reject(req.error);
-    }));
-  }
-
-  function ticketPut(record) {
-    return openTicketsDb().then(db => new Promise((resolve, reject) => {
-      const tx = db.transaction(TICKETS_STORE, "readwrite");
-      tx.objectStore(TICKETS_STORE).put(record);
-      tx.oncomplete = () => resolve();
-      tx.onerror = () => reject(tx.error);
-    }));
-  }
-
-  function ticketDel(id) {
-    return openTicketsDb().then(db => new Promise((resolve, reject) => {
-      const tx = db.transaction(TICKETS_STORE, "readwrite");
-      tx.objectStore(TICKETS_STORE).delete(id);
-      tx.oncomplete = () => resolve();
-      tx.onerror = () => reject(tx.error);
-    }));
-  }
-
-  function fileToDataUrl(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = () => reject(new Error("Не удалось прочитать файл"));
-      reader.readAsDataURL(file);
-    });
-  }
-
-  function isHeicLike(file) {
-    const type = (file.type || "").toLowerCase();
-    const name = (file.name || "").toLowerCase();
-    return type.includes("heic") || type.includes("heif") ||
-      name.endsWith(".heic") || name.endsWith(".heif");
-  }
-
-  /** Сжатие JPEG/PNG; HEIC с iPhone — как есть (canvas их часто не ест). */
-  async function compressImage(file, maxW = 1400, quality = 0.72) {
-    if (isHeicLike(file) || !(file.type || "").startsWith("image/")) {
-      return fileToDataUrl(file);
-    }
-    try {
-      const dataUrl = await new Promise((resolve, reject) => {
-        const url = URL.createObjectURL(file);
-        const img = new Image();
-        img.onload = () => {
-          try {
-            const scale = Math.min(1, maxW / Math.max(img.width, 1));
-            const w = Math.round(img.width * scale);
-            const h = Math.round(img.height * scale);
-            const canvas = document.createElement("canvas");
-            canvas.width = w;
-            canvas.height = h;
-            canvas.getContext("2d").drawImage(img, 0, 0, w, h);
-            URL.revokeObjectURL(url);
-            resolve(canvas.toDataURL("image/jpeg", quality));
-          } catch (e) {
-            URL.revokeObjectURL(url);
-            reject(e);
-          }
-        };
-        img.onerror = () => {
-          URL.revokeObjectURL(url);
-          reject(new Error("decode"));
-        };
-        img.src = url;
-      });
-      return dataUrl;
-    } catch (e) {
-      return fileToDataUrl(file);
-    }
-  }
-
-  function setTicketStatus(msg, isError) {
-    const elStatus = $("#ticketUploadStatus");
-    if (!elStatus) return;
-    if (!msg) {
-      elStatus.hidden = true;
-      elStatus.textContent = "";
-      return;
-    }
-    elStatus.hidden = false;
-    elStatus.textContent = msg;
-    elStatus.classList.toggle("is-error", !!isError);
-  }
-
-  async function saveTicketPhoto(slot, file) {
-    if (!file) {
-      setTicketStatus("Файл не выбран. Нажмите «Фотоплёнка» ещё раз.", true);
-      return;
-    }
-    setTicketStatus("Сохраняю фото…");
-    try {
-      const dataUrl = await compressImage(file);
-      if (!dataUrl || typeof dataUrl !== "string" || dataUrl.length < 32) {
-        throw new Error("empty");
-      }
-      // Очень большие HEIC режем через повторное чтение — IndexedDB обычно тянет
-      await ticketPut({ id: slot.id, name: slot.name, dataUrl, ts: Date.now(), mime: file.type || "" });
-      setTicketStatus("✓ Фото сохранено на этом телефоне");
-      setTimeout(() => setTicketStatus(""), 2000);
-      await renderTickets();
-    } catch (e) {
-      console.warn(e);
-      setTicketStatus("Не удалось сохранить. Откройте сайт в Safari → Билеты → Фотоплёнка (не камера).", true);
-      alert("Не удалось сохранить фото.\n\n1) Откройте гид в Safari (не с иконки на Домой)\n2) Нажмите «Фотоплёнка»\n3) Выберите скрин из галереи");
-    }
-  }
-
-  function openTicketView(dataUrl, title) {
-    const view = $("#ticketView");
-    const img = $("#ticketViewImg");
-    const titleEl = $("#ticketViewTitle");
-    if (!view || !img) return;
-    img.src = dataUrl;
-    if (titleEl) titleEl.textContent = title || "Билет";
-    view.hidden = false;
-    document.body.style.overflow = "hidden";
-  }
-
-  function closeTicketView() {
-    const view = $("#ticketView");
-    const img = $("#ticketViewImg");
-    if (!view) return;
-    view.hidden = true;
-    if (img) img.removeAttribute("src");
-    document.body.style.overflow = "";
-  }
-
-  function setupTicketView() {
-    const close = $("#ticketViewClose");
-    const view = $("#ticketView");
-    if (close) close.addEventListener("click", closeTicketView);
-    if (view) view.addEventListener("click", (e) => {
-      if (e.target === view || e.target.classList.contains("ticket-view__stage")) closeTicketView();
-    });
-  }
-
-  async function showTicketById(id) {
-    const slot = TICKET_SLOTS.find(s => s.id === id);
-    const rec = await ticketGet(id);
-    if (rec) openTicketView(rec.dataUrl, slot ? slot.name : "Билет");
-    else alert("Этот QR ещё не загружен. Добавьте скрин в разделе «Билеты».");
-  }
-
-  /** Старые общие USJ-слоты → слот Александра (Рите загрузите отдельно). */
-  async function migrateOldUsjTickets() {
-    const pairs = [
-      ["usj-pass", "usj-pass-sasha"],
-      ["usj-express", "usj-express-sasha"]
-    ];
-    for (const [oldId, newId] of pairs) {
-      try {
-        const old = await ticketGet(oldId);
-        const neu = await ticketGet(newId);
-        if (old && !neu) {
-          const slot = TICKET_SLOTS.find(s => s.id === newId);
-          await ticketPut({
-            id: newId,
-            name: slot ? slot.name : old.name,
-            dataUrl: old.dataUrl,
-            ts: old.ts || Date.now()
-          });
-        }
-      } catch (e) { /* ignore */ }
-    }
-  }
-
-  let qrDayMode = "today"; // today | all
-  let qrWho = "all";       // all | shared | sasha | rita
-
-  function ticketDayN() {
-    const focus = tripFocus();
-    if (focus.mode === "during" && focus.todayIdx >= 0) {
-      return TRIP.days[focus.todayIdx].n;
-    }
-    if (focus.mode === "before") return 1;
-    return 0;
-  }
-
-  function slotMatchesFilters(slot) {
-    if (qrWho === "shared" && slot.who !== "shared") return false;
-    if (qrWho === "sasha" && slot.who !== "sasha" && slot.who !== "shared") return false;
-    if (qrWho === "rita" && slot.who !== "rita" && slot.who !== "shared") return false;
-
-    if (qrDayMode === "all") return true;
-    const todayN = ticketDayN();
-    if (slot.dayN === 0) return true; // всегда под рукой
-    if (todayN === 0) return slot.dayN === 0;
-    return slot.dayN === todayN;
-  }
-
-  function whoBadge(who) {
-    if (who === "sasha") return `<span class="qr-who qr-who--sasha">🎮 Александр</span>`;
-    if (who === "rita") return `<span class="qr-who qr-who--rita">🎀 Рита</span>`;
-    return `<span class="qr-who qr-who--shared">👥 Общий</span>`;
-  }
-
-  function setupQrToolbar() {
-    const bar = $("#qrToolbar");
-    if (!bar || bar.dataset.ready) return;
-    bar.innerHTML = `
-      <div class="qr-toolbar__row">
-        <button type="button" class="chip active" data-qr-day="today">На сегодня</button>
-        <button type="button" class="chip" data-qr-day="all">Все дни</button>
-      </div>
-      <div class="qr-toolbar__row">
-        <button type="button" class="chip active" data-qr-who="all">Все</button>
-        <button type="button" class="chip" data-qr-who="shared">👥 Общие</button>
-        <button type="button" class="chip" data-qr-who="sasha">🎮 Александр</button>
-        <button type="button" class="chip" data-qr-who="rita">🎀 Рита</button>
+  // ======================= TRIP.COM (без скринов) =======================
+  function renderTripCom() {
+    const wrap = $("#tripComBody");
+    if (!wrap || typeof TRIP_COM === "undefined") return;
+    wrap.innerHTML = `
+      <p class="tripcom__note">${TRIP_COM.note}</p>
+      <div class="tripcom__list">
+        ${TRIP_COM.links.map(l => `
+          <a class="tripcom__link" href="${l.url}" target="_blank" rel="noopener">
+            <span class="tripcom__emoji">${l.emoji}</span>
+            <span class="tripcom__text">
+              <b>${l.name}</b>
+              <small>${l.desc}</small>
+            </span>
+            <span class="tripcom__go">→</span>
+          </a>`).join("")}
       </div>
     `;
-    bar.dataset.ready = "1";
-    bar.addEventListener("click", (e) => {
-      const dayBtn = e.target.closest("[data-qr-day]");
-      const whoBtn = e.target.closest("[data-qr-who]");
-      if (dayBtn) {
-        qrDayMode = dayBtn.dataset.qrDay;
-        bar.querySelectorAll("[data-qr-day]").forEach(b => b.classList.toggle("active", b === dayBtn));
-        renderQrWidgets();
-      }
-      if (whoBtn) {
-        qrWho = whoBtn.dataset.qrWho;
-        bar.querySelectorAll("[data-qr-who]").forEach(b => b.classList.toggle("active", b === whoBtn));
-        renderQrWidgets();
-      }
-    });
-  }
-
-  /** 7. Виджеты по дням / человеку + нижняя панель (только актуальные). */
-  async function renderQrWidgets() {
-    const wrap = $("#qrWidgets");
-    const hint = $("#qrWidgetsHint");
-    const dock = $("#qrDock");
-    if (!wrap || typeof TICKET_SLOTS === "undefined") return;
-    setupQrToolbar();
-
-    const ready = [];
-    for (const slot of TICKET_SLOTS) {
-      const saved = await ticketGet(slot.id).catch(() => null);
-      if (saved) ready.push({ slot, saved });
-    }
-
-    const filtered = ready.filter(({ slot }) => slotMatchesFilters(slot));
-
-    wrap.innerHTML = "";
-    if (hint) {
-      hint.hidden = ready.length > 0;
-      if (ready.length && !filtered.length) {
-        hint.hidden = false;
-        hint.textContent = "На сегодня нет подходящих QR с этим фильтром. Нажмите «Все дни» или смените человека.";
-      } else if (!ready.length) {
-        hint.textContent = "Пока нет загруженных билетов — добавьте скрины в блоке «Билеты» ниже.";
-      }
-    }
-
-    // Нижняя панель — только «на сегодня» (+ всегда), без чужих лишних
-    const dockSlots = ready.filter(({ slot }) => {
-      const todayN = ticketDayN();
-      const dayOk = slot.dayN === 0 || slot.dayN === todayN || (todayN === 0 && slot.dayN === 1);
-      if (!dayOk) return false;
-      if (qrWho === "sasha") return slot.who === "sasha" || slot.who === "shared";
-      if (qrWho === "rita") return slot.who === "rita" || slot.who === "shared";
-      if (qrWho === "shared") return slot.who === "shared";
-      return true;
-    });
-
-    if (dock) {
-      dock.innerHTML = "";
-      dock.hidden = dockSlots.length === 0;
-      document.body.classList.toggle("has-qr-dock", dockSlots.length > 0);
-      dockSlots.forEach(({ slot }) => {
-        const dBtn = el("button", "qr-dock__btn" + (slot.who !== "shared" ? ` qr-dock__btn--${slot.who}` : ""));
-        dBtn.type = "button";
-        dBtn.title = slot.name;
-        dBtn.innerHTML = `<span>${slot.emoji}</span><small>${slot.short || "QR"}</small>`;
-        dBtn.addEventListener("click", () => showTicketById(slot.id));
-        dock.appendChild(dBtn);
-      });
-    }
-
-    if (!ready.length) {
-      wrap.innerHTML = `
-        <div class="qr-empty">
-          <div class="qr-empty__title">Виджеты появятся после загрузки</div>
-          <p>В «Билеты» добавьте общие QR и отдельно USJ для Александра и для Риты.</p>
-          <a class="qr-empty__link" href="#tickets">Перейти к загрузке ↓</a>
-        </div>`;
-      return;
-    }
-
-    if (!filtered.length) return;
-
-    // Группировка по дню
-    const groups = new Map();
-    filtered.forEach(item => {
-      const key = item.slot.dayLabel || "Другое";
-      if (!groups.has(key)) groups.set(key, []);
-      groups.get(key).push(item);
-    });
-
-    groups.forEach((items, label) => {
-      const block = el("div", "qr-day");
-      block.appendChild(el("div", "qr-day__title", label));
-      const grid = el("div", "qr-day__grid");
-      items.forEach(({ slot }) => {
-        const btn = el("button", "qr-widget" + (slot.who !== "shared" ? ` qr-widget--${slot.who}` : ""));
-        btn.type = "button";
-        btn.innerHTML = `
-          ${whoBadge(slot.who)}
-          <span class="qr-widget__emoji">${slot.emoji}</span>
-          <span class="qr-widget__name">${slot.short || slot.name}</span>
-          <span class="qr-widget__hint">${slot.hint || "Показать сканеру"}</span>
-          <span class="qr-widget__cta">Показать QR</span>
-        `;
-        btn.addEventListener("click", () => showTicketById(slot.id));
-        grid.appendChild(btn);
-      });
-      block.appendChild(grid);
-      wrap.appendChild(block);
-    });
-  }
-
-  function makeTicketCard(slot, saved) {
-    const card = el("div", "ticket-card" + (saved ? " has-photo" : "") + (slot.who !== "shared" ? ` ticket-card--${slot.who}` : ""));
-    // Нативный <label>+<input> без capture и без input.click() —
-    // так iPhone показывает «Фотоплёнка», а не сразу камеру.
-    const inputId = `file-${slot.id}`;
-    card.innerHTML = `
-      <div class="ticket-card__head">
-        <span class="ticket-card__emoji">${slot.emoji}</span>
-        <div>
-          <div class="ticket-card__name">${slot.name}</div>
-          <div class="ticket-card__meta">${whoBadge(slot.who)} · ${slot.hint || ""}</div>
-        </div>
-      </div>
-      <div class="ticket-card__preview">
-        ${saved
-          ? `<img src="${saved.dataUrl}" alt="${slot.name}">`
-          : `<span class="ticket-card__empty">Нужен скрин QR</span>`}
-      </div>
-      <div class="ticket-card__actions">
-        <label class="ticket-card__btn ticket-card__btn--primary" for="${inputId}">
-          Фотоплёнка
-          <input id="${inputId}" class="ticket-file-input" type="file"
-            accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.heic,.heif"
-            tabindex="-1">
-        </label>
-        ${saved ? `
-          <button type="button" class="ticket-card__btn" data-view="${slot.id}">Показать</button>
-          <button type="button" class="ticket-card__btn ticket-card__btn--danger" data-del="${slot.id}">Удалить</button>
-        ` : ""}
-      </div>
-    `;
-
-    const fileInput = card.querySelector(".ticket-file-input");
-    if (fileInput) {
-      // Гарантированно без capture (даже если старый HTML закэшировался)
-      fileInput.removeAttribute("capture");
-      fileInput.addEventListener("change", async () => {
-        const file = fileInput.files && fileInput.files[0];
-        fileInput.value = "";
-        await saveTicketPhoto(slot, file);
-      });
-    }
-
-    const viewBtn = card.querySelector("[data-view]");
-    if (viewBtn) viewBtn.addEventListener("click", () => showTicketById(slot.id));
-    const preview = card.querySelector(".ticket-card__preview");
-    if (saved && preview) preview.addEventListener("click", () => showTicketById(slot.id));
-    const delBtn = card.querySelector("[data-del]");
-    if (delBtn) {
-      delBtn.addEventListener("click", async () => {
-        if (!confirm("Удалить это фото?")) return;
-        await ticketDel(slot.id);
-        await renderTickets();
-      });
-    }
-    return card;
-  }
-
-  async function renderTickets() {
-    const wrap = $("#ticketsGrid");
-    if (!wrap || typeof TICKET_SLOTS === "undefined") return;
-    await migrateOldUsjTickets();
-    wrap.innerHTML = "";
-
-    const groups = new Map();
-    TICKET_SLOTS.forEach(slot => {
-      const key = slot.dayLabel || "Другое";
-      if (!groups.has(key)) groups.set(key, []);
-      groups.get(key).push(slot);
-    });
-
-    for (const [label, slots] of groups) {
-      const block = el("div", "ticket-day");
-      block.appendChild(el("div", "ticket-day__title", label));
-      if (label.includes("USJ")) {
-        block.appendChild(el("p", "ticket-day__note",
-          "Здесь нужны <b>разные</b> QR: у каждого свой Studio Pass и Express Pass. Загрузите 4 скрина."));
-      }
-      const grid = el("div", "ticket-day__grid");
-      for (const slot of slots) {
-        const saved = await ticketGet(slot.id).catch(() => null);
-        grid.appendChild(makeTicketCard(slot, saved));
-      }
-      block.appendChild(grid);
-      wrap.appendChild(block);
-    }
-
-    await renderQrWidgets();
   }
 
   // ======================= 1. ПОГОДА =======================
@@ -1427,31 +1001,6 @@
               <span>${r.d}</span>
             </div>`).join("")}
         </div>
-      </div>
-    `;
-  }
-
-  // ======================= 3. ДЕНЬ ВЫЛЕТА =======================
-  function renderDeparture() {
-    const wrap = $("#departureBody");
-    if (!wrap || typeof DEPARTURE_DAY === "undefined") return;
-    const d = DEPARTURE_DAY;
-    wrap.innerHTML = `
-      <div class="dep-hero">
-        <div class="dep-hero__title">${d.title}</div>
-        <div class="dep-hero__flight">✈️ ${d.flight}</div>
-        <a class="dep-hero__cn" href="china.html">Дальше → слайд Китай / Шанхай</a>
-      </div>
-      <div class="dep-steps">
-        ${d.steps.map((s, i) => `
-          <div class="dep-step">
-            <div class="dep-step__rail"><span>${i + 1}</span></div>
-            <div>
-              <div class="dep-step__time">${s.t}</div>
-              <div class="dep-step__title">${s.title}</div>
-              <div class="dep-step__d">${s.d}</div>
-            </div>
-          </div>`).join("")}
       </div>
     `;
   }
@@ -1513,15 +1062,12 @@
   function init() {
     renderStats();
     renderNextDay();
-    renderQrWidgets();
     renderNearby();
     renderWeather();
-    renderKixSteps();
-    renderDeparture();
     renderFilters();
     renderTimeline();
     setupTodayOnly();
-    renderTickets();
+    renderTripCom();
     renderHomeSos();
     renderChecklist();
     renderPacking();
@@ -1529,7 +1075,6 @@
     renderTips();
     setupEdit();
     setupModal();
-    setupTicketView();
     setupComfort();
     setupScrollProgress();
     renderMapSafe();

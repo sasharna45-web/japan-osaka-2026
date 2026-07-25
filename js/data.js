@@ -814,9 +814,9 @@ const WHO = {
  */
 const DAY_BRIEFS = {
   1: {
-    main: "Прилёт, заселение, вечер в Дотонбори без жёсткого плана.",
-    leave: "Рейс в KIX 12:45 · к квартире без спешки · вечер — когда отдохнёте.",
-    remember: "Visit Japan QR · паспорт · eSIM · ICOCA · адрес квартиры на экране."
+    main: "Прилёт в KIX, заселение, вечер в Дотонбори без жёсткого плана.",
+    leave: "Прилёт 12:45 · к квартире без спешки · вечер — когда отдохнёте.",
+    remember: "Visit Japan Web · паспорт · eSIM · ICOCA · адрес квартиры на экране."
   },
   2: {
     main: "Утром замок Осаки, днём Den Den Town, вечером ретро-атмосфера.",
@@ -826,7 +826,7 @@ const DAY_BRIEFS = {
   3: {
     main: "Залив: Kaiyukan + колесо · к закату Abeno Harukas 17:00.",
     leave: "К океанариуму к 10:00 · с залива выезд ~15:30–16:00 к Harukas.",
-    remember: "Билет Harukas (QR) · не опаздывать к 17:00 · перекус у залива."
+    remember: "Билет Harukas в Trip.com · не опаздывать к 17:00 · перекус у залива."
   },
   4: {
     main: "Киото: Фусими Инари рано, потом старый город и Nintendo.",
@@ -841,7 +841,7 @@ const DAY_BRIEFS = {
   6: {
     main: "Пустой день перед USJ — только лёгкий город и ранний сон.",
     leave: "Когда хотите · никакого обязательного тайминга.",
-    remember: "Зарядить пауэрбанки · проверить QR USJ на двоих · лечь пораньше."
+    remember: "Зарядить пауэрбанки · открыть USJ в Trip.com (на двоих) · лечь пораньше."
   },
   7: {
     main: "USJ: к открытию, Express · Nintendo World слот 11:50.",
@@ -881,7 +881,7 @@ const DAY_BRIEFS = {
   14: {
     main: "Днём Expo ’70 · к вечеру Umeda Sky (бронь).",
     leave: "Парк днём без жёсткого слота · к Sky — по времени билета.",
-    remember: "QR Umeda Sky · лёгкий день · не таскать лишнее."
+    remember: "Umeda Sky в Trip.com · лёгкий день · не таскать лишнее."
   },
   15: {
     main: "Harvest Hill (Sylvanian/капибары) · море по погоде.",
@@ -891,7 +891,7 @@ const DAY_BRIEFS = {
   16: {
     main: "Сувениры, упаковка чемоданов, прощальный ужин.",
     leave: "Днём Donki / шопинг · вечер — ужин без спешки.",
-    remember: "Весы багажа · распечатки/QR на завтра · ничего ценного снаружи."
+    remember: "Весы багажа · билеты на завтра в Trip.com · ничего ценного снаружи."
   },
   17: {
     main: "Вылет 15:00 KIX → Шанхай (Spring Airlines).",
@@ -923,15 +923,15 @@ const PACKING = [
     id: "digital",
     title: "На телефонах (проверить до выхода из дома)",
     items: [
-      { id: "ru-vjw", text: "Visit Japan Web: QR сохранены (оба телефона + скрин в гиде)" },
+      { id: "ru-vjw", text: "Visit Japan Web: QR сохранены на обоих телефонах" },
       { id: "ru-flights-app", text: "Авиабилеты в приложении авиакомпании / почте" },
       { id: "ru-esim", text: "Японский eSIM установлен (активация в KIX)" },
       { id: "ru-esim-cn", text: "Китайский eSIM / план на 25–27 сент готов" },
       { id: "ru-alipay", text: "Alipay на обоих телефонах, вход работает" },
-      { id: "ru-tickets-qr", text: "QR в гиде: Harukas, USJ (×2), Umeda Sky" },
+      { id: "ru-tripcom", text: "Trip.com: вход работает, заказы открываются (Harukas, USJ, Umeda…)" },
       { id: "ru-insurance-photo", text: "Фото полиса страховки в галерее" },
       { id: "ru-airbnb", text: "Ваучер Airbnb + адрес квартиры сохранены" },
-      { id: "ru-guide", text: "Гид «Япония 2026» на Домой экран / открывался офлайн" }
+      { id: "ru-guide", text: "Гид «Япония 2026» открывается офлайн" }
     ]
   },
   {
@@ -1003,7 +1003,7 @@ const CHECKLIST = [
     step: "Шаг 3", tone: "green",
     title: "Финальная подготовка — сделать в начале сентября",
     items: [
-      { id: "vjw", text: "Visit Japan Web: заполнить миграционную и таможенную декларации, QR-коды сохранить на оба телефона (и в раздел «Билеты» ниже)." },
+      { id: "vjw", text: "Visit Japan Web: заполнить миграционную и таможенную декларации, QR-коды сохранить на оба телефона." },
       {
         text: "Бумажные документы (распечатать на A4):",
         sub: [
@@ -1030,23 +1030,31 @@ const FIRST_HOUR_KIX = [
 ];
 
 /**
- * Слоты QR / билетов.
- * who: "shared" — один на двоих; "sasha" / "rita" — личные (только USJ).
- * dayN: номер дня поездки (1–17); 0 = любой день (страховка и т.п.).
- * Фото хранятся в IndexedDB браузера на ЭТОМ телефоне — не в облаке и не на GitHub.
+ * Билеты открываем в Trip.com — в гиде скрины не храним.
  */
-const TICKET_SLOTS = [
-  { id: "vjw", emoji: "🛂", name: "Visit Japan Web QR", short: "VJW", hint: "Паспортный контроль в KIX", who: "shared", dayN: 1, dayLabel: "День 1 · 9 сент · прилёт" },
-  { id: "airbnb", emoji: "🏠", name: "Airbnb / ваучер", short: "Дом", hint: "Заселение 9 сент", who: "shared", dayN: 1, dayLabel: "День 1 · 9 сент · прилёт" },
-  { id: "abeno", emoji: "🌆", name: "Abeno Harukas 300", short: "Harukas", hint: "Общий билет · 17:00", who: "shared", dayN: 3, dayLabel: "День 3 · 11 сент · Harukas" },
-  { id: "usj-pass-sasha", emoji: "🎢", name: "USJ Studio Pass · Александр", short: "USJ · А", hint: "Личный вход Александра", who: "sasha", dayN: 7, dayLabel: "День 7 · 15 сент · USJ" },
-  { id: "usj-pass-rita", emoji: "🎢", name: "USJ Studio Pass · Рита", short: "USJ · Р", hint: "Личный вход Риты", who: "rita", dayN: 7, dayLabel: "День 7 · 15 сент · USJ" },
-  { id: "usj-express-sasha", emoji: "⚡", name: "USJ Express Pass · Александр", short: "Exp · А", hint: "Слот Nintendo 11:50 · Александр", who: "sasha", dayN: 7, dayLabel: "День 7 · 15 сент · USJ" },
-  { id: "usj-express-rita", emoji: "⚡", name: "USJ Express Pass · Рита", short: "Exp · Р", hint: "Слот Nintendo 11:50 · Рита", who: "rita", dayN: 7, dayLabel: "День 7 · 15 сент · USJ" },
-  { id: "umeda", emoji: "🏙️", name: "Umeda Sky", short: "Umeda", hint: "Общий билет", who: "shared", dayN: 14, dayLabel: "День 14 · 22 сент · Umeda Sky" },
-  { id: "insurance", emoji: "🩺", name: "Страховка", short: "Полис", hint: "На любой день", who: "shared", dayN: 0, dayLabel: "Всегда под рукой" },
-  { id: "other", emoji: "📎", name: "Другое", short: "Ещё", hint: "Любой другой QR", who: "shared", dayN: 0, dayLabel: "Всегда под рукой" }
-];
+const TRIP_COM = {
+  note: "На входе просто откройте заказ в Trip.com и покажите QR оттуда.",
+  links: [
+    {
+      emoji: "📋",
+      name: "Мои заказы",
+      desc: "Все билеты и ваучеры (Harukas, USJ, Umeda…)",
+      url: "https://www.trip.com/orders/list/"
+    },
+    {
+      emoji: "✈️",
+      name: "Авиабилеты",
+      desc: "Рейсы и посадочные в Trip.com",
+      url: "https://www.trip.com/flights/"
+    },
+    {
+      emoji: "🏠",
+      name: "Открыть Trip.com",
+      desc: "Сайт или приложение — что установлено",
+      url: "https://www.trip.com/"
+    }
+  ]
+};
 
 /**
  * 1. Погода сентября в Кансае + что надеть + план на дождь.

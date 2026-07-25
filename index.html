@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/styles.css?v=12">
+  <link rel="stylesheet" href="css/styles.css?v=13">
 </head>
 <body class="ios-feel">
 
@@ -54,11 +54,9 @@
       <a href="#top" class="nav__brand">日本</a>
       <div class="nav__links">
         <a href="#next">Сегодня</a>
-        <a href="#packing">Вылет РФ</a>
-        <a href="#arrival">KIX</a>
+        <a href="#packing">Сборы</a>
         <a href="#route">Маршрут</a>
-        <a href="#tickets">Билеты</a>
-        <a href="#qr">QR</a>
+        <a href="#tickets">Trip.com</a>
         <a href="#home">Дом</a>
       </div>
       <button type="button" class="comfort-btn" id="comfortToggle" aria-pressed="false" title="Крупный шрифт">Aa</button>
@@ -75,11 +73,11 @@
       <div id="nextDay" class="next-day"></div>
     </section>
 
-    <!-- ПЕРЕД ВЫЛЕТОМ ИЗ РОССИИ -->
+    <!-- СБОРЫ ПЕРЕД ВЫЛЕТОМ ИЗ РФ -->
     <section class="section" id="packing">
       <div class="section__head">
-        <h2 class="section__title">Перед вылетом из России</h2>
-        <p class="section__sub">Что взять с собой. Отмечайте у двери — и выходите.</p>
+        <h2 class="section__title">Сборы перед вылетом</h2>
+        <p class="section__sub">Что взять из России. Отмечайте у двери — и выходите.</p>
       </div>
       <div class="cl-progress">
         <div class="cl-progress__bar"><span id="packBarFill"></span></div>
@@ -88,24 +86,13 @@
       <div class="packing" id="packingBody"></div>
     </section>
 
-    <!-- ДЕНЬ 1 · KIX — сразу после сборов в РФ, у начала поездки -->
-    <section class="section section--tight" id="arrival">
+    <!-- БИЛЕТЫ → TRIP.COM (без скринов в гиде) -->
+    <section class="section section--tight" id="tickets">
       <div class="section__head">
-        <h2 class="section__title">День 1 · первый час в KIX</h2>
-        <p class="section__sub">9 сентября, сразу после прилёта — по порядку.</p>
+        <h2 class="section__title">Билеты · Trip.com</h2>
+        <p class="section__sub">QR и ваучеры смотрите в Trip.com. В гиде скрины не храним.</p>
       </div>
-      <div class="kix-steps" id="kixSteps"></div>
-    </section>
-
-    <!-- БЫСТРЫЕ QR -->
-    <section class="section section--tight" id="qr">
-      <div class="section__head">
-        <h2 class="section__title">QR у входа</h2>
-        <p class="section__sub">USJ — отдельно у каждого. Остальное общее.</p>
-      </div>
-      <div class="qr-toolbar" id="qrToolbar"></div>
-      <div class="qr-widgets" id="qrWidgets"></div>
-      <p class="qr-widgets__hint" id="qrWidgetsHint">Сначала загрузите скрины в разделе «Билеты».</p>
+      <div id="tripComBody"></div>
     </section>
 
     <!-- РЯДОМ С ДОМОМ -->
@@ -173,25 +160,6 @@
       <div class="timeline" id="timeline"></div>
     </section>
 
-    <!-- ДЕНЬ ВЫЛЕТА В ШАНХАЙ — в конце маршрута, не у прилёта -->
-    <section class="section" id="departure">
-      <div class="section__head">
-        <h2 class="section__title">25 сентября · в Шанхай</h2>
-        <p class="section__sub">Главное — рейс 15:00. Утро и дорога в KIX — по шагам ниже.</p>
-      </div>
-      <div id="departureBody"></div>
-    </section>
-
-    <!-- БИЛЕТЫ / ЗАГРУЗКА -->
-    <section class="section" id="tickets">
-      <div class="section__head">
-        <h2 class="section__title">Билеты</h2>
-        <p class="section__sub">Нажмите «Фотоплёнка» и выберите скрин. Если откроется только камера — откройте сайт в Safari, не с Домой экрана.</p>
-      </div>
-      <p id="ticketUploadStatus" class="ticket-status" hidden></p>
-      <div class="tickets" id="ticketsGrid"></div>
-    </section>
-
     <!-- ДОМ + SOS -->
     <section class="section" id="home">
       <div class="section__head">
@@ -250,21 +218,6 @@
     </div>
   </div>
 
-  <!-- Просмотр QR: режим для сканера (светлый фон) -->
-  <div class="ticket-view" id="ticketView" hidden>
-    <div class="ticket-view__bar">
-      <div class="ticket-view__title" id="ticketViewTitle">Билет</div>
-      <button type="button" class="ticket-view__close" id="ticketViewClose" aria-label="Закрыть">✕</button>
-    </div>
-    <div class="ticket-view__stage">
-      <img id="ticketViewImg" alt="QR билета">
-    </div>
-    <p class="ticket-view__tip">Поднесите QR к сканеру · яркость экрана на максимум</p>
-  </div>
-
-  <!-- Быстрая панель QR над переключателем стран -->
-  <div class="qr-dock" id="qrDock" hidden aria-label="Быстрые QR"></div>
-
   <!-- Нижний переключатель стран (удобно на iPhone) -->
   <nav class="country-dock country-dock--jp" aria-label="Страна">
     <a class="country-dock__btn is-active" href="index.html">
@@ -278,15 +231,14 @@
   </nav>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="js/data.js?v=12"></script>
-  <script src="js/app.js?v=12"></script>
+  <script src="js/data.js?v=13"></script>
+  <script src="js/app.js?v=13"></script>
   <script>
-    // Принудительно подтянуть новый SW (старый кэш ломал выбор фото на iPhone)
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.getRegistrations().then(function (regs) {
         return Promise.all(regs.map(function (r) { return r.update(); }));
       }).then(function () {
-        return navigator.serviceWorker.register("./sw.js?v=12");
+        return navigator.serviceWorker.register("./sw.js?v=13");
       }).catch(function () {});
     }
   </script>
