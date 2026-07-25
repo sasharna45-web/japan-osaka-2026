@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#0d0d0f">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
   <title>Япония 2026 — Осака и Кансай</title>
   <meta name="description" content="Персональный путеводитель Александра и Риты по Осаке и региону Кансай, 9–25 сентября 2026.">
 
@@ -22,7 +24,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/styles.css?v=13">
+  <link rel="stylesheet" href="css/styles.css?v=14">
 </head>
 <body class="ios-feel">
 
@@ -36,7 +38,7 @@
       <div class="hero__sun"></div>
     </div>
     <div class="hero__content">
-      <p class="hero__eyebrow">Alexander & Rita</p>
+      <p class="hero__eyebrow">Alexander & Rita · версия 14</p>
       <h1 class="hero__title">Япония <span>2026</span></h1>
       <p class="hero__subtitle">Осака · Кансай · 9–25 сентября</p>
       <div class="hero__meta">
@@ -45,6 +47,7 @@
       </div>
       <div class="hero__stats" id="heroStats"></div>
       <a class="hero__cta" href="#next">Начать</a>
+      <button type="button" class="hero__refresh" id="forceRefresh">Обновить гид</button>
     </div>
   </header>
 
@@ -231,16 +234,64 @@
   </nav>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="js/data.js?v=13"></script>
-  <script src="js/app.js?v=13"></script>
+  <script src="js/data.js?v=14"></script>
+  <script src="js/app.js?v=14"></script>
   <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.getRegistrations().then(function (regs) {
-        return Promise.all(regs.map(function (r) { return r.update(); }));
-      }).then(function () {
-        return navigator.serviceWorker.register("./sw.js?v=13");
-      }).catch(function () {});
-    }
+    (function () {
+      var VER = "14";
+      var KEY = "japan2026.cleared." + VER;
+
+      async function wipe() {
+        try {
+          if (window.caches) {
+            var keys = await caches.keys();
+            await Promise.all(keys.map(function (k) { return caches.delete(k); }));
+          }
+        } catch (e) {}
+        try {
+          if ("serviceWorker" in navigator) {
+            var regs = await navigator.serviceWorker.getRegistrations();
+            await Promise.all(regs.map(function (r) { return r.unregister(); }));
+          }
+        } catch (e) {}
+      }
+
+      async function boot() {
+        var already = false;
+        try { already = localStorage.getItem(KEY) === "1"; } catch (e) {}
+
+        if (!already) {
+          await wipe();
+          try { localStorage.setItem(KEY, "1"); } catch (e) {}
+          // Один принудительный перезагруз без кэша
+          var url = new URL(location.href);
+          url.searchParams.set("v", VER);
+          url.searchParams.set("fresh", String(Date.now()));
+          location.replace(url.toString());
+          return;
+        }
+
+        // Kill-SW: подчистит хвосты старых кэшей и сам отпишется
+        if ("serviceWorker" in navigator) {
+          navigator.serviceWorker.register("./sw.js?v=" + VER).catch(function () {});
+        }
+      }
+
+      var btn = document.getElementById("forceRefresh");
+      if (btn) {
+        btn.addEventListener("click", function () {
+          try { localStorage.removeItem(KEY); } catch (e) {}
+          wipe().then(function () {
+            var url = new URL(location.href);
+            url.searchParams.set("v", VER);
+            url.searchParams.set("fresh", String(Date.now()));
+            location.replace(url.toString());
+          });
+        });
+      }
+
+      boot();
+    })();
   </script>
 </body>
 </html>

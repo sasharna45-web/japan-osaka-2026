@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>Обновление гида…</title>
+  <style>
+    body {
+      margin: 0; min-height: 100vh; display: grid; place-items: center;
+      background: #000; color: #f5f5f7; font-family: -apple-system, system-ui, sans-serif;
+      padding: 24px; text-align: center;
+    }
+    p { color: #98989f; line-height: 1.4; }
+    b { color: #f5f5f7; }
+  </style>
+</head>
+<body>
+  <div>
+    <h1>Обновляю гид…</h1>
+    <p>Сбрасываю старый кэш на телефоне.<br>Через секунду откроется <b>версия 14</b>.</p>
+  </div>
+  <script>
+    (async function () {
+      try {
+        if (window.caches) {
+          var keys = await caches.keys();
+          await Promise.all(keys.map(function (k) { return caches.delete(k); }));
+        }
+      } catch (e) {}
+      try {
+        if ("serviceWorker" in navigator) {
+          var regs = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(regs.map(function (r) { return r.unregister(); }));
+        }
+      } catch (e) {}
+      try {
+        localStorage.removeItem("japan2026.cleared.14");
+        // сбросим и прошлые ключи
+        Object.keys(localStorage).forEach(function (k) {
+          if (k.indexOf("japan2026.cleared.") === 0) localStorage.removeItem(k);
+        });
+      } catch (e) {}
+      setTimeout(function () {
+        location.replace("./index.html?v=14&fresh=" + Date.now());
+      }, 400);
+    })();
+  </script>
+</body>
+</html>
