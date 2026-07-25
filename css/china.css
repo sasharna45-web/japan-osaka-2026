@@ -27,7 +27,8 @@ body.china-page {
   font-family: "Noto Sans SC", system-ui, -apple-system, "Segoe UI", sans-serif;
   line-height: 1.6;
   min-height: 100svh;
-  padding-bottom: calc(48px + env(safe-area-inset-bottom));
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: calc(92px + env(safe-area-inset-bottom, 0px));
   -webkit-font-smoothing: antialiased;
 }
 
@@ -50,42 +51,46 @@ body.china-page::before {
   to   { opacity: 1; transform: none; }
 }
 
-/* Переключатель */
-.country-switch {
-  position: sticky;
-  top: 0;
-  z-index: 80;
+/* Нижний переключатель стран (iPhone-friendly) */
+.country-dock {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  z-index: 120;
   display: flex;
-  gap: 6px;
-  justify-content: center;
-  padding: 10px 16px;
-  background: rgba(10,22,32,.92);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--c-line);
+  gap: 8px;
+  padding: 8px;
+  border-radius: 22px;
+  background: rgba(16,36,51,.96);
+  border: 1px solid var(--c-line);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
-.country-switch__btn {
+.country-dock__btn {
   flex: 1;
-  max-width: 180px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 52px;
+  padding: 8px 10px;
+  border-radius: 16px;
   text-decoration: none;
   color: var(--c-dim);
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
-  padding: 10px 14px;
-  border-radius: 999px;
-  border: 1px solid var(--c-line);
-  background: var(--c-soft);
-  transition: .2s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
-.country-switch__btn.is-active {
-  color: #04201c;
+.country-dock__flag { font-size: 20px; line-height: 1; }
+.country-dock__label { letter-spacing: .02em; }
+.country-dock--cn .country-dock__btn.is-active {
   background: var(--c-accent);
-  border-color: var(--c-accent);
+  color: #04201c;
 }
-.country-switch__btn:not(.is-active):hover {
-  color: var(--c-text);
-  border-color: var(--c-accent);
-}
+.country-dock__btn:active { transform: scale(.98); }
 
 /* Hero */
 .c-hero {
@@ -147,7 +152,7 @@ body.china-page::before {
 /* Nav */
 .c-nav {
   position: sticky;
-  top: 53px;
+  top: env(safe-area-inset-top, 0px);
   z-index: 70;
   background: rgba(10,22,32,.9);
   backdrop-filter: blur(10px);
@@ -169,8 +174,13 @@ body.china-page::before {
   color: var(--c-dim);
   text-decoration: none;
   font-size: 13px;
-  padding: 8px 12px;
+  padding: 10px 14px;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
   border-radius: 999px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 .c-nav__inner a:hover { color: var(--c-text); background: rgba(46,196,182,.12); }
 
@@ -539,16 +549,8 @@ body.china-page::before {
 }
 .c-footer__note { font-size: 12px; margin-top: 8px; opacity: .75; }
 .c-footer__back {
-  display: inline-block;
-  margin-top: 18px;
-  color: var(--c-text);
-  text-decoration: none;
-  border: 1px solid var(--c-line);
-  padding: 10px 20px;
-  border-radius: 999px;
-  font-size: 14px;
+  display: none;
 }
-.c-footer__back:hover { border-color: var(--c-accent); color: var(--c-accent2); }
 
 @media (min-width: 720px) {
   .c-cards { grid-template-columns: 1fr 1fr; }

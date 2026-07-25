@@ -26,12 +26,6 @@
 </head>
 <body>
 
-  <!-- Переключатель стран -->
-  <div class="country-switch country-switch--jp">
-    <a class="country-switch__btn is-active" href="index.html">🇯🇵 Япония</a>
-    <a class="country-switch__btn" href="china.html">🇨🇳 Китай</a>
-  </div>
-
   <!-- Прогресс-бар прокрутки -->
   <div class="scroll-progress" id="scrollProgress"></div>
 
@@ -62,6 +56,7 @@
       <div class="nav__links">
         <a href="#route">Маршрут</a>
         <a href="#map">Карта</a>
+        <a href="#home">Дом / SOS</a>
         <a href="#phrases">Фразы</a>
         <a href="#checklist">Чеклист</a>
         <a href="#tips">Советы</a>
@@ -108,6 +103,15 @@
         <button class="link-btn" id="resetPlan" type="button">↺ Сбросить к оригиналу</button>
       </div>
       <div class="timeline" id="timeline"></div>
+    </section>
+
+    <!-- ДОМ + SOS -->
+    <section class="section" id="home">
+      <div class="section__head">
+        <h2 class="section__title">Дом и экстренное</h2>
+        <p class="section__sub">Адрес для такси и важные номера. Держите под рукой.</p>
+      </div>
+      <div class="home-sos" id="homeSos"></div>
     </section>
 
     <!-- ЯПОНСКИЕ ФРАЗЫ -->
@@ -158,6 +162,18 @@
       <div class="modal__body" id="modalBody"></div>
     </div>
   </div>
+
+  <!-- Нижний переключатель стран (удобно на iPhone) -->
+  <nav class="country-dock country-dock--jp" aria-label="Страна">
+    <a class="country-dock__btn is-active" href="index.html">
+      <span class="country-dock__flag">🇯🇵</span>
+      <span class="country-dock__label">Япония</span>
+    </a>
+    <a class="country-dock__btn" href="china.html">
+      <span class="country-dock__flag">🇨🇳</span>
+      <span class="country-dock__label">Китай</span>
+    </a>
+  </nav>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="js/data.js"></script>

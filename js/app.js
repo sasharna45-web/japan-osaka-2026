@@ -491,6 +491,57 @@
     }
   }
 
+  // ======================= ДОМ + SOS =======================
+  function renderHomeSos() {
+    const wrap = $("#homeSos");
+    if (!wrap || !TRIP.home) return;
+    const h = TRIP.home;
+    const maps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(h.maps)}`;
+
+    wrap.innerHTML = `
+      <div class="hs-card">
+        <div class="hs-card__title">🏠 ${h.title}</div>
+        <p class="hs-card__text">${h.tip}</p>
+        <div class="hs-card__zh" id="homeJa">${h.ja}</div>
+        <div class="hs-card__text" style="margin-top:-4px">${h.en}</div>
+        <div class="hs-actions">
+          <button type="button" class="hs-btn" id="copyHomeJa">📋 Копировать адрес</button>
+          <a class="hs-btn hs-btn--ghost" href="${maps}" target="_blank" rel="noopener">📍 Google Maps</a>
+        </div>
+      </div>
+      <div class="hs-card hs-card--sos">
+        <div class="hs-card__title">🆘 Экстренные номера (Япония)</div>
+        <div class="hs-nums">
+          <a class="hs-num" href="tel:110"><b>110</b><span>Полиция</span></a>
+          <a class="hs-num" href="tel:119"><b>119</b><span>Скорая / пожарные</span></a>
+        </div>
+        <p class="hs-card__text" style="margin-top:12px;margin-bottom:0">
+          Покажите паспорт и адрес на экране. В аптеке: «薬局» (яккёку) / drugstore, или Maps → pharmacy.
+          Страховку держите в телефоне (фото полиса).
+        </p>
+      </div>
+      <div class="hs-card">
+        <div class="hs-card__title">🎒 На каждый день</div>
+        <p class="hs-card__text" style="margin-bottom:0">
+          ICOCA · пауэрбанк · паспорт (для tax-free) · салфетки · вода · зарядка телефона на 100% перед USJ / дальними днями.
+        </p>
+      </div>
+    `;
+
+    const btn = $("#copyHomeJa");
+    if (btn) {
+      btn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(h.ja + "\n" + h.en);
+          btn.textContent = "✓ Скопировано";
+          setTimeout(() => { btn.textContent = "📋 Копировать адрес"; }, 1600);
+        } catch (e) {
+          prompt("Скопируйте адрес:", h.ja);
+        }
+      });
+    }
+  }
+
   // ======================= АНИМАЦИИ / ПРОКРУТКА =======================
   let io;
   function observeReveals() {
@@ -524,6 +575,7 @@
     renderStats();
     renderFilters();
     renderTimeline();
+    renderHomeSos();
     renderChecklist();
     renderPhrases();
     renderTips();
@@ -532,6 +584,23 @@
     setupScrollProgress();
     renderMapSafe();
     observeReveals();
+    highlightToday();
+  }
+
+  // Подсветка «сегодня», если дата устройства совпадает с днём поездки (сент 2026).
+  function highlightToday() {
+    const now = new Date();
+    if (now.getFullYear() !== 2026 || now.getMonth() !== 8) return; // сентябрь = 8
+    const dayNum = now.getDate(); // 9..25
+    if (dayNum < 9 || dayNum > 25) return;
+    const idx = dayNum - 9; // day 1 = Sept 9
+    const card = document.querySelector(`.day[data-index="${idx}"]`);
+    if (!card) return;
+    card.classList.add("day--today");
+    const dateEl = card.querySelector(".day__date");
+    if (dateEl && !dateEl.textContent.includes("СЕГОДНЯ")) {
+      dateEl.insertAdjacentHTML("beforeend", ` <span class="day__today-badge">СЕГОДНЯ</span>`);
+    }
   }
 
   if (document.readyState === "loading") {

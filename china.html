@@ -11,6 +11,8 @@
   <link rel="apple-touch-icon" href="icon.svg">
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Китай 2026">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,11 +21,6 @@
   <link rel="stylesheet" href="css/china.css">
 </head>
 <body class="china-page">
-
-  <div class="country-switch">
-    <a class="country-switch__btn" href="index.html">🇯🇵 Япония</a>
-    <a class="country-switch__btn is-active" href="china.html">🇨🇳 Китай</a>
-  </div>
 
   <header class="c-hero" id="top">
     <div class="c-hero__bg" aria-hidden="true">
@@ -126,8 +123,19 @@
     <p class="c-footer__hanzi">一路平安</p>
     <p>Хорошей дороги через Шанхай</p>
     <p class="c-footer__note">Этот слайд отделён от японского маршрута специально — чтобы ничего не смешать.</p>
-    <a class="c-footer__back" href="index.html">← Вернуться в Японию</a>
   </footer>
+
+  <!-- Нижний переключатель стран (удобно на iPhone) -->
+  <nav class="country-dock country-dock--cn" aria-label="Страна">
+    <a class="country-dock__btn" href="index.html">
+      <span class="country-dock__flag">🇯🇵</span>
+      <span class="country-dock__label">Япония</span>
+    </a>
+    <a class="country-dock__btn is-active" href="china.html">
+      <span class="country-dock__flag">🇨🇳</span>
+      <span class="country-dock__label">Китай</span>
+    </a>
+  </nav>
 
   <script src="js/china-data.js"></script>
   <script src="js/china.js"></script>

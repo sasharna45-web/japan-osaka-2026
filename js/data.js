@@ -31,6 +31,13 @@ const TRIP = {
   base: "Osaka · Tanimachi 6-chome",
   dateFrom: "9 сентября 2026",
   dateTo: "25 сентября 2026",
+  home: {
+    title: "База · Tanimachi 6-chome",
+    en: "Tanimachi 6-chome, Chuo-ku, Osaka",
+    ja: "大阪府大阪市中央区谷町六丁目",
+    maps: "Tanimachi 6-chome Osaka",
+    tip: "Полный адрес квартиры возьмите из брони Airbnb и сохраните в заметках телефона. Ниже — район для такси / Google Maps."
+  },
   days: [
     {
       n: 1, date: "9 сентября", weekday: "Ср",
