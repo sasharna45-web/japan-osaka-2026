@@ -989,28 +989,105 @@
     }));
   }
 
-  function compressImage(file, maxW = 1400, quality = 0.72) {
+  function fileToDataUrl(file) {
     return new Promise((resolve, reject) => {
-      const url = URL.createObjectURL(file);
-      const img = new Image();
-      img.onload = () => {
-        const scale = Math.min(1, maxW / img.width);
-        const w = Math.round(img.width * scale);
-        const h = Math.round(img.height * scale);
-        const canvas = document.createElement("canvas");
-        canvas.width = w;
-        canvas.height = h;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, w, h);
-        URL.revokeObjectURL(url);
-        resolve(canvas.toDataURL("image/jpeg", quality));
-      };
-      img.onerror = () => {
-        URL.revokeObjectURL(url);
-        reject(new Error("Не удалось прочитать фото"));
-      };
-      img.src = url;
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(new Error("Не удалось прочитать файл"));
+      reader.readAsDataURL(file);
     });
+  }
+
+  function isHeicLike(file) {
+    const type = (file.type || "").toLowerCase();
+    const name = (file.name || "").toLowerCase();
+    return type.includes("heic") || type.includes("heif") ||
+      name.endsWith(".heic") || name.endsWith(".heif");
+  }
+
+  /** Сжатие JPEG/PNG; HEIC с iPhone — как есть (canvas их часто не ест). */
+  async function compressImage(file, maxW = 1400, quality = 0.72) {
+    if (isHeicLike(file) || !(file.type || "").startsWith("image/")) {
+      return fileToDataUrl(file);
+    }
+    try {
+      const dataUrl = await new Promise((resolve, reject) => {
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = () => {
+          try {
+            const scale = Math.min(1, maxW / Math.max(img.width, 1));
+            const w = Math.round(img.width * scale);
+            const h = Math.round(img.height * scale);
+            const canvas = document.createElement("canvas");
+            canvas.width = w;
+            canvas.height = h;
+            canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+            URL.revokeObjectURL(url);
+            resolve(canvas.toDataURL("image/jpeg", quality));
+          } catch (e) {
+            URL.revokeObjectURL(url);
+            reject(e);
+          }
+        };
+        img.onerror = () => {
+          URL.revokeObjectURL(url);
+          reject(new Error("decode"));
+        };
+        img.src = url;
+      });
+      return dataUrl;
+    } catch (e) {
+      return fileToDataUrl(file);
+    }
+  }
+
+  /**
+   * Выбор фото с iPhone: без attribute capture (иначе сразу камера).
+   * Создаём input программно — так Safari стабильнее показывает «Фотоплёнка».
+   */
+  function pickPhoto({ camera = false } = {}) {
+    return new Promise((resolve) => {
+      const input = document.createElement("input");
+      input.type = "file";
+      // Без capture → галерея / «Фотоплёнка». С capture → камера.
+      if (camera) {
+        input.accept = "image/*";
+        input.setAttribute("capture", "environment");
+      } else {
+        input.accept = "image/jpeg,image/png,image/webp,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.heic,.heif";
+        input.removeAttribute("capture");
+      }
+      input.style.cssText = "position:fixed;left:-9999px;top:0;opacity:0;width:1px;height:1px;";
+      const cleanup = () => {
+        input.remove();
+      };
+      input.addEventListener("change", () => {
+        const file = input.files && input.files[0];
+        cleanup();
+        resolve(file || null);
+      }, { once: true });
+      // Если пользователь закрыл пикер без выбора — change не придёт
+      window.setTimeout(() => {
+        if (document.body.contains(input)) {
+          // оставляем; удалим при следующем pick
+        }
+      }, 0);
+      document.body.appendChild(input);
+      input.click();
+    });
+  }
+
+  async function saveTicketPhoto(slot, file) {
+    if (!file) return;
+    try {
+      const dataUrl = await compressImage(file);
+      await ticketPut({ id: slot.id, name: slot.name, dataUrl, ts: Date.now() });
+      await renderTickets();
+    } catch (e) {
+      console.warn(e);
+      alert("Не удалось сохранить фото. Выберите скрин из «Фотоплёнка» (не Live Photo) или сделайте скрин ещё раз.");
+    }
   }
 
   function openTicketView(dataUrl, title) {
@@ -1241,39 +1318,39 @@
       <div class="ticket-card__preview">
         ${saved
           ? `<img src="${saved.dataUrl}" alt="${slot.name}">`
-          : `<span class="ticket-card__empty">Скрин из галереи</span>`}
+          : `<span class="ticket-card__empty">Выберите скрин из Фотоплёнки</span>`}
       </div>
       <div class="ticket-card__actions">
-        <label class="ticket-card__btn ticket-card__btn--primary">
-          ${saved ? "🖼 Галерея" : "🖼 Из галереи"}
-          <input type="file" accept="image/*" hidden data-from="gallery" data-slot="${slot.id}">
-        </label>
-        <label class="ticket-card__btn">
-          📷 Камера
-          <input type="file" accept="image/*" capture="environment" hidden data-from="camera" data-slot="${slot.id}">
-        </label>
+        <button type="button" class="ticket-card__btn ticket-card__btn--primary" data-gallery="${slot.id}">
+          ${saved ? "Выбрать из фото" : "Выбрать из фото"}
+        </button>
         ${saved ? `
           <button type="button" class="ticket-card__btn" data-view="${slot.id}">Показать</button>
           <button type="button" class="ticket-card__btn ticket-card__btn--danger" data-del="${slot.id}">Удалить</button>
-        ` : ""}
+        ` : `
+          <button type="button" class="ticket-card__btn ticket-card__btn--link" data-camera="${slot.id}">Снять камерой</button>
+        `}
       </div>
     `;
 
-    const onFile = async (input) => {
-      const file = input.files && input.files[0];
-      input.value = "";
-      if (!file) return;
-      try {
-        const dataUrl = await compressImage(file);
-        await ticketPut({ id: slot.id, name: slot.name, dataUrl, ts: Date.now() });
-        await renderTickets();
-      } catch (e) {
-        alert("Не удалось сохранить фото. Попробуйте другое изображение.");
-      }
-    };
-    card.querySelectorAll('input[type="file"]').forEach(input => {
-      input.addEventListener("change", () => onFile(input));
-    });
+    const galBtn = card.querySelector("[data-gallery]");
+    if (galBtn) {
+      galBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const file = await pickPhoto({ camera: false });
+        await saveTicketPhoto(slot, file);
+      });
+    }
+    const camBtn = card.querySelector("[data-camera]");
+    if (camBtn) {
+      camBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const file = await pickPhoto({ camera: true });
+        await saveTicketPhoto(slot, file);
+      });
+    }
 
     const viewBtn = card.querySelector("[data-view]");
     if (viewBtn) viewBtn.addEventListener("click", () => showTicketById(slot.id));

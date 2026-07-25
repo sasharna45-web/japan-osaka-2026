@@ -1,5 +1,5 @@
-/* Офлайн-кэш путеводителя (GitHub Pages). */
-const CACHE = "japan2026-v10";
+/* Офлайн-кэш путеводителя. HTML/JS/CSS — network-first, чтобы фиксы на iPhone доезжали. */
+const CACHE = "japan2026-v11";
 const ASSETS = [
   "./",
   "./index.html",
@@ -28,6 +28,11 @@ self.addEventListener("activate", (event) => {
   );
 });
 
+function isAppShell(url) {
+  const p = url.pathname;
+  return /\.(?:html|js|css|webmanifest)$/.test(p) || p.endsWith("/") || p.endsWith("/japan-osaka-2026");
+}
+
 self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET") return;
@@ -35,31 +40,43 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(req.url);
   const sameOrigin = url.origin === self.location.origin;
 
-  // Свои файлы: cache-first
-  if (sameOrigin) {
+  if (!sameOrigin) {
     event.respondWith(
-      caches.match(req).then((cached) => {
-        const network = fetch(req).then((res) => {
-          if (res && res.ok) {
-            const copy = res.clone();
-            caches.open(CACHE).then((c) => c.put(req, copy));
-          }
-          return res;
-        }).catch(() => cached);
-        return cached || network;
-      })
+      fetch(req).then((res) => {
+        if (res && res.ok) {
+          const copy = res.clone();
+          caches.open(CACHE).then((c) => c.put(req, copy));
+        }
+        return res;
+      }).catch(() => caches.match(req))
     );
     return;
   }
 
-  // CDN (Leaflet и т.п.): network, при ошибке — кэш
+  // Свежий код с сети; офлайн — из кэша
+  if (isAppShell(url)) {
+    event.respondWith(
+      fetch(req).then((res) => {
+        if (res && res.ok) {
+          const copy = res.clone();
+          caches.open(CACHE).then((c) => c.put(req, copy));
+        }
+        return res;
+      }).catch(() => caches.match(req).then((cached) => cached || caches.match("./index.html")))
+    );
+    return;
+  }
+
   event.respondWith(
-    fetch(req).then((res) => {
-      if (res && res.ok) {
-        const copy = res.clone();
-        caches.open(CACHE).then((c) => c.put(req, copy));
-      }
-      return res;
-    }).catch(() => caches.match(req))
+    caches.match(req).then((cached) => {
+      const network = fetch(req).then((res) => {
+        if (res && res.ok) {
+          const copy = res.clone();
+          caches.open(CACHE).then((c) => c.put(req, copy));
+        }
+        return res;
+      }).catch(() => cached);
+      return cached || network;
+    })
   );
 });
