@@ -45,7 +45,7 @@
         <span>🏠 Tanimachi 6-chome</span>
       </div>
       <div class="hero__stats" id="heroStats"></div>
-      <a class="hero__cta" href="#route">Смотреть маршрут ↓</a>
+      <a class="hero__cta" href="#next">Что дальше ↓</a>
     </div>
   </header>
 
@@ -54,17 +54,37 @@
     <div class="nav__inner">
       <a href="#top" class="nav__brand">日本 2026</a>
       <div class="nav__links">
+        <a href="#next">Сегодня</a>
+        <a href="#arrival">KIX</a>
         <a href="#route">Маршрут</a>
-        <a href="#map">Карта</a>
+        <a href="#tickets">Билеты</a>
         <a href="#home">Дом / SOS</a>
-        <a href="#phrases">Фразы</a>
         <a href="#checklist">Чеклист</a>
-        <a href="#tips">Советы</a>
+        <a href="#phrases">Фразы</a>
+        <a href="#map">Карта</a>
       </div>
     </div>
   </nav>
 
   <main>
+    <!-- СЕГОДНЯ / ЗАВТРА -->
+    <section class="section section--tight" id="next">
+      <div class="section__head">
+        <h2 class="section__title">Сегодня и завтра</h2>
+        <p class="section__sub">Главный день без прокрутки всего маршрута.</p>
+      </div>
+      <div id="nextDay" class="next-day"></div>
+    </section>
+
+    <!-- ПЕРВЫЙ ЧАС В KIX -->
+    <section class="section section--tight" id="arrival">
+      <div class="section__head">
+        <h2 class="section__title">День 1 · первый час в KIX</h2>
+        <p class="section__sub">Чеклист сразу после прилёта 9 сентября — по порядку.</p>
+      </div>
+      <div class="kix-steps" id="kixSteps"></div>
+    </section>
+
     <!-- ФИЛЬТРЫ ПО ИНТЕРЕСАМ -->
     <section class="section" id="filters-section">
       <div class="section__head">
@@ -105,6 +125,15 @@
       <div class="timeline" id="timeline"></div>
     </section>
 
+    <!-- БИЛЕТЫ / QR -->
+    <section class="section" id="tickets">
+      <div class="section__head">
+        <h2 class="section__title">Билеты и QR</h2>
+        <p class="section__sub">Загрузите скрины билетов — покажите на входе. Фото остаются только на этом телефоне (не уходят в интернет).</p>
+      </div>
+      <div class="tickets" id="ticketsGrid"></div>
+    </section>
+
     <!-- ДОМ + SOS -->
     <section class="section" id="home">
       <div class="section__head">
@@ -112,16 +141,6 @@
         <p class="section__sub">Адрес для такси и важные номера. Держите под рукой.</p>
       </div>
       <div class="home-sos" id="homeSos"></div>
-    </section>
-
-    <!-- ЯПОНСКИЕ ФРАЗЫ -->
-    <section class="section" id="phrases">
-      <div class="section__head">
-        <h2 class="section__title">Японские фразы</h2>
-        <p class="section__sub">Карточки-напоминалки на все случаи: метро, кафе, магазины, помощь. Нажмите карточку — откроется подсказка.</p>
-      </div>
-      <div class="phrase-tabs" id="phraseTabs"></div>
-      <div class="phrase-grid" id="phraseGrid"></div>
     </section>
 
     <!-- ЧЕКЛИСТ ПОДГОТОВКИ -->
@@ -135,6 +154,16 @@
         <div class="cl-progress__label" id="clProgressLabel">0 из 0 выполнено</div>
       </div>
       <div class="checklist" id="checklist-body"></div>
+    </section>
+
+    <!-- ЯПОНСКИЕ ФРАЗЫ -->
+    <section class="section" id="phrases">
+      <div class="section__head">
+        <h2 class="section__title">Японские фразы</h2>
+        <p class="section__sub">Карточки-напоминалки на все случаи: метро, кафе, магазины, помощь. Нажмите карточку — откроется подсказка.</p>
+      </div>
+      <div class="phrase-tabs" id="phraseTabs"></div>
+      <div class="phrase-grid" id="phraseGrid"></div>
     </section>
 
     <!-- СОВЕТЫ -->
@@ -163,6 +192,12 @@
     </div>
   </div>
 
+  <!-- Просмотр билета на весь экран -->
+  <div class="ticket-view" id="ticketView" hidden>
+    <button type="button" class="ticket-view__close" id="ticketViewClose" aria-label="Закрыть">✕</button>
+    <img id="ticketViewImg" alt="Билет">
+  </div>
+
   <!-- Нижний переключатель стран (удобно на iPhone) -->
   <nav class="country-dock country-dock--jp" aria-label="Страна">
     <a class="country-dock__btn is-active" href="index.html">
@@ -178,5 +213,10 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="js/data.js"></script>
   <script src="js/app.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./sw.js").catch(function () {});
+    }
+  </script>
 </body>
 </html>

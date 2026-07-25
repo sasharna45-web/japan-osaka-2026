@@ -631,17 +631,288 @@
     onScroll();
   }
 
+  // ======================= СЕГОДНЯ / ЗАВТРА =======================
+  function dayIndexByN(n) {
+    return TRIP.days.findIndex(d => d.n === n);
+  }
+
+  function tripFocus(now = new Date()) {
+    const y = now.getFullYear();
+    const m = now.getMonth();
+    const d = now.getDate();
+    const start = new Date(2026, 8, 9);
+    const end = new Date(2026, 8, 25);
+    const cur = new Date(y, m, d);
+    const ms = 86400000;
+
+    if (cur < start) {
+      return { mode: "before", daysLeft: Math.round((start - cur) / ms), todayIdx: dayIndexByN(1), tomorrowIdx: dayIndexByN(2) };
+    }
+    if (cur > end) {
+      return { mode: "after" };
+    }
+    const n = d - 8; // 9 сент → день 1
+    const todayIdx = dayIndexByN(n);
+    const tomorrowIdx = n < 17 ? dayIndexByN(n + 1) : -1;
+    return { mode: "during", todayIdx, tomorrowIdx };
+  }
+
+  function openDayInTimeline(idx) {
+    if (idx < 0) return;
+    const card = document.querySelector(`.day[data-index="${idx}"]`);
+    if (!card) return;
+    card.classList.add("open");
+    card.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function nextDayCard(label, idx, tone) {
+    const day = TRIP.days[idx];
+    if (!day) return "";
+    const places = (day.places || []).slice(0, 4).map(p =>
+      `<span class="next-day__chip">${p.emoji || "📍"} ${p.name}${p.time ? " · " + p.time : ""}</span>`
+    ).join("");
+    return `
+      <article class="next-day__card next-day__card--${tone}">
+        <div class="next-day__label">${label}</div>
+        <div class="next-day__date">${day.date} · ${day.weekday}</div>
+        <div class="next-day__title">${day.title}</div>
+        <div class="next-day__goal">${day.goal || ""}</div>
+        <div class="next-day__places">${places}</div>
+        <button type="button" class="next-day__btn" data-open-day="${idx}">Открыть день →</button>
+      </article>
+    `;
+  }
+
+  function renderNextDay() {
+    const wrap = $("#nextDay");
+    if (!wrap) return;
+    const focus = tripFocus();
+
+    if (focus.mode === "after") {
+      wrap.innerHTML = `<div class="next-day__empty">Поездка уже позади. Хороших воспоминаний 🌸</div>`;
+      return;
+    }
+
+    let html = "";
+    if (focus.mode === "before") {
+      html += `<div class="next-day__countdown">До вылета в Осаку: <b>${focus.daysLeft}</b> ${pluralDays(focus.daysLeft)}</div>`;
+      html += nextDayCard("Старт · день 1", focus.todayIdx, "today");
+      if (focus.tomorrowIdx >= 0) html += nextDayCard("Потом · день 2", focus.tomorrowIdx, "tomorrow");
+    } else {
+      html += nextDayCard("СЕГОДНЯ", focus.todayIdx, "today");
+      if (focus.tomorrowIdx >= 0) html += nextDayCard("ЗАВТРА", focus.tomorrowIdx, "tomorrow");
+      else html += `<div class="next-day__empty">Последний день в Японии — дальше Китай 🇨🇳</div>`;
+    }
+
+    wrap.innerHTML = html;
+    wrap.querySelectorAll("[data-open-day]").forEach(btn => {
+      btn.addEventListener("click", () => openDayInTimeline(Number(btn.dataset.openDay)));
+    });
+  }
+
+  function pluralDays(n) {
+    const a = Math.abs(n) % 100;
+    const b = a % 10;
+    if (a > 10 && a < 20) return "дней";
+    if (b === 1) return "день";
+    if (b >= 2 && b <= 4) return "дня";
+    return "дней";
+  }
+
+  // ======================= ПЕРВЫЙ ЧАС KIX =======================
+  function renderKixSteps() {
+    const wrap = $("#kixSteps");
+    if (!wrap || typeof FIRST_HOUR_KIX === "undefined") return;
+    wrap.innerHTML = "";
+    FIRST_HOUR_KIX.forEach(s => {
+      wrap.appendChild(el("div", "kix-step", `
+        <div class="kix-step__n">${s.n}</div>
+        <div>
+          <div class="kix-step__t">${s.t}</div>
+          <div class="kix-step__d">${s.d}</div>
+        </div>
+      `));
+    });
+  }
+
+  // ======================= БИЛЕТЫ / QR (IndexedDB) =======================
+  const TICKETS_DB = "japan2026.tickets.v1";
+  const TICKETS_STORE = "photos";
+
+  function openTicketsDb() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(TICKETS_DB, 1);
+      req.onupgradeneeded = () => {
+        const db = req.result;
+        if (!db.objectStoreNames.contains(TICKETS_STORE)) {
+          db.createObjectStore(TICKETS_STORE, { keyPath: "id" });
+        }
+      };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  function ticketGet(id) {
+    return openTicketsDb().then(db => new Promise((resolve, reject) => {
+      const tx = db.transaction(TICKETS_STORE, "readonly");
+      const req = tx.objectStore(TICKETS_STORE).get(id);
+      req.onsuccess = () => resolve(req.result || null);
+      req.onerror = () => reject(req.error);
+    }));
+  }
+
+  function ticketPut(record) {
+    return openTicketsDb().then(db => new Promise((resolve, reject) => {
+      const tx = db.transaction(TICKETS_STORE, "readwrite");
+      tx.objectStore(TICKETS_STORE).put(record);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    }));
+  }
+
+  function ticketDel(id) {
+    return openTicketsDb().then(db => new Promise((resolve, reject) => {
+      const tx = db.transaction(TICKETS_STORE, "readwrite");
+      tx.objectStore(TICKETS_STORE).delete(id);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    }));
+  }
+
+  function compressImage(file, maxW = 1400, quality = 0.72) {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, maxW / img.width);
+        const w = Math.round(img.width * scale);
+        const h = Math.round(img.height * scale);
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, w, h);
+        URL.revokeObjectURL(url);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error("Не удалось прочитать фото"));
+      };
+      img.src = url;
+    });
+  }
+
+  function openTicketView(dataUrl) {
+    const view = $("#ticketView");
+    const img = $("#ticketViewImg");
+    if (!view || !img) return;
+    img.src = dataUrl;
+    view.hidden = false;
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeTicketView() {
+    const view = $("#ticketView");
+    const img = $("#ticketViewImg");
+    if (!view) return;
+    view.hidden = true;
+    if (img) img.removeAttribute("src");
+    document.body.style.overflow = "";
+  }
+
+  function setupTicketView() {
+    const close = $("#ticketViewClose");
+    const view = $("#ticketView");
+    if (close) close.addEventListener("click", closeTicketView);
+    if (view) view.addEventListener("click", (e) => {
+      if (e.target === view) closeTicketView();
+    });
+  }
+
+  async function renderTickets() {
+    const wrap = $("#ticketsGrid");
+    if (!wrap || typeof TICKET_SLOTS === "undefined") return;
+    wrap.innerHTML = "";
+
+    for (const slot of TICKET_SLOTS) {
+      const saved = await ticketGet(slot.id).catch(() => null);
+      const card = el("div", "ticket-card" + (saved ? " has-photo" : ""));
+      card.innerHTML = `
+        <div class="ticket-card__head">
+          <span class="ticket-card__emoji">${slot.emoji}</span>
+          <span class="ticket-card__name">${slot.name}</span>
+        </div>
+        <div class="ticket-card__preview">
+          ${saved
+            ? `<img src="${saved.dataUrl}" alt="${slot.name}">`
+            : `<span class="ticket-card__empty">Нет фото</span>`}
+        </div>
+        <div class="ticket-card__actions">
+          <label class="ticket-card__btn">
+            ${saved ? "↻ Заменить" : "+ Добавить"}
+            <input type="file" accept="image/*" hidden data-slot="${slot.id}">
+          </label>
+          ${saved ? `
+            <button type="button" class="ticket-card__btn ticket-card__btn--primary" data-view="${slot.id}">Показать</button>
+            <button type="button" class="ticket-card__btn ticket-card__btn--danger" data-del="${slot.id}">Удалить</button>
+          ` : ""}
+        </div>
+      `;
+
+      const input = card.querySelector('input[type="file"]');
+      input.addEventListener("change", async () => {
+        const file = input.files && input.files[0];
+        if (!file) return;
+        try {
+          const dataUrl = await compressImage(file);
+          await ticketPut({ id: slot.id, name: slot.name, dataUrl, ts: Date.now() });
+          renderTickets();
+        } catch (e) {
+          alert("Не удалось сохранить фото. Попробуйте другое изображение.");
+        }
+      });
+
+      const viewBtn = card.querySelector("[data-view]");
+      if (viewBtn) {
+        viewBtn.addEventListener("click", async () => {
+          const rec = await ticketGet(slot.id);
+          if (rec) openTicketView(rec.dataUrl);
+        });
+      }
+      const preview = card.querySelector(".ticket-card__preview");
+      if (saved && preview) {
+        preview.addEventListener("click", () => openTicketView(saved.dataUrl));
+      }
+      const delBtn = card.querySelector("[data-del]");
+      if (delBtn) {
+        delBtn.addEventListener("click", async () => {
+          if (!confirm("Удалить это фото?")) return;
+          await ticketDel(slot.id);
+          renderTickets();
+        });
+      }
+
+      wrap.appendChild(card);
+    }
+  }
+
   // ======================= INIT =======================
   function init() {
     renderStats();
+    renderNextDay();
+    renderKixSteps();
     renderFilters();
     renderTimeline();
+    renderTickets();
     renderHomeSos();
     renderChecklist();
     renderPhrases();
     renderTips();
     setupEdit();
     setupModal();
+    setupTicketView();
     setupScrollProgress();
     renderMapSafe();
     observeReveals();
@@ -650,12 +921,9 @@
 
   // Подсветка «сегодня», если дата устройства совпадает с днём поездки (сент 2026).
   function highlightToday() {
-    const now = new Date();
-    if (now.getFullYear() !== 2026 || now.getMonth() !== 8) return; // сентябрь = 8
-    const dayNum = now.getDate(); // 9..25
-    if (dayNum < 9 || dayNum > 25) return;
-    const idx = dayNum - 9; // day 1 = Sept 9
-    const card = document.querySelector(`.day[data-index="${idx}"]`);
+    const focus = tripFocus();
+    if (focus.mode !== "during" || focus.todayIdx < 0) return;
+    const card = document.querySelector(`.day[data-index="${focus.todayIdx}"]`);
     if (!card) return;
     card.classList.add("day--today");
     const dateEl = card.querySelector(".day__date");

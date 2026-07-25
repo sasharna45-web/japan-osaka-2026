@@ -139,5 +139,10 @@
 
   <script src="js/china-data.js"></script>
   <script src="js/china.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./sw.js").catch(function () {});
+    }
+  </script>
 </body>
 </html>
