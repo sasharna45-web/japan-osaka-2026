@@ -367,20 +367,64 @@
   }
 
   // ======================= ЧЕКЛИСТ ПОДГОТОВКИ =======================
-  const CL_KEY = "japan2026.checklist.v1";
+  const CL_KEY = "japan2026.checklist.v2";
+  const CL_DONE_DEFAULT = { abeno: true, cash: true }; // уже закрыто по факту
+
+  function storageAvailable() {
+    try {
+      const k = "__jp2026_test__";
+      localStorage.setItem(k, "1");
+      localStorage.removeItem(k);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   function loadChecklistState() {
-    try { return JSON.parse(localStorage.getItem(CL_KEY)) || {}; } catch (e) { return {}; }
+    try {
+      const raw = localStorage.getItem(CL_KEY);
+      if (raw) return JSON.parse(raw) || {};
+    } catch (e) {}
+    return { ...CL_DONE_DEFAULT };
   }
+
   function saveChecklistState() {
-    try { localStorage.setItem(CL_KEY, JSON.stringify(clState)); } catch (e) {}
+    const ok = storageAvailable();
+    if (!ok) {
+      flashClSave("⚠️ Не сохраняется (режим инкогнито?)");
+      return false;
+    }
+    try {
+      localStorage.setItem(CL_KEY, JSON.stringify(clState));
+      flashClSave("✓ Сохранено на этом устройстве");
+      return true;
+    } catch (e) {
+      flashClSave("⚠️ Ошибка сохранения");
+      return false;
+    }
   }
+
+  let clSaveTimer = null;
+  function flashClSave(msg) {
+    const label = $("#clProgressLabel");
+    if (!label) return;
+    const base = label.dataset.base || label.textContent;
+    label.dataset.base = base;
+    label.textContent = msg;
+    clearTimeout(clSaveTimer);
+    clSaveTimer = setTimeout(() => {
+      label.textContent = label.dataset.base || base;
+    }, 1600);
+  }
+
   let clState = loadChecklistState();
 
   function collectClIds() {
     const ids = [];
-    CHECKLIST.forEach((g, gi) => g.items.forEach((it, ii) => {
-      if (it.sub && it.sub.length) it.sub.forEach((_, si) => ids.push(`g${gi}-i${ii}-s${si}`));
-      else ids.push(`g${gi}-i${ii}`);
+    CHECKLIST.forEach(g => g.items.forEach(it => {
+      if (it.sub && it.sub.length) it.sub.forEach(s => ids.push(s.id));
+      else if (it.id) ids.push(it.id);
     }));
     return ids;
   }
@@ -391,52 +435,63 @@
     const pct = ids.length ? Math.round(done / ids.length * 100) : 0;
     const bar = $("#clBarFill");
     const label = $("#clProgressLabel");
+    const text = `${done} из ${ids.length} выполнено · ${pct}%`;
     if (bar) bar.style.width = pct + "%";
-    if (label) label.textContent = `${done} из ${ids.length} выполнено · ${pct}%`;
+    if (label) {
+      label.textContent = text;
+      label.dataset.base = text;
+    }
   }
 
   function makeCheckItem(id, text) {
-    const wrap = el("label", "cl-item" + (clState[id] ? " done" : ""));
-    const input = document.createElement("input");
-    input.type = "checkbox";
-    input.className = "cl-input";
-    input.checked = !!clState[id];
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "cl-item" + (clState[id] ? " done" : "");
+    btn.setAttribute("aria-pressed", clState[id] ? "true" : "false");
     const box = el("span", "cl-box", clState[id] ? "✓" : "");
     const txt = el("span", "cl-text", text);
-    input.addEventListener("change", () => {
-      clState[id] = input.checked;
-      saveChecklistState();
-      wrap.classList.toggle("done", input.checked);
-      box.textContent = input.checked ? "✓" : "";
+    btn.append(box, txt);
+
+    const toggle = () => {
+      const next = !clState[id];
+      clState[id] = next;
+      btn.classList.toggle("done", next);
+      btn.setAttribute("aria-pressed", next ? "true" : "false");
+      box.textContent = next ? "✓" : "";
       updateClProgress();
-    });
-    wrap.append(input, box, txt);
-    return wrap;
+      saveChecklistState();
+    };
+
+    btn.addEventListener("click", toggle);
+    return btn;
   }
 
   function renderChecklist() {
     const wrap = $("#checklist-body");
     if (!wrap || typeof CHECKLIST === "undefined") return;
     wrap.innerHTML = "";
-    CHECKLIST.forEach((g, gi) => {
+    CHECKLIST.forEach(g => {
       const group = el("div", "cl-group");
       group.appendChild(el("div", `cl-step cl-step--${g.tone}`,
         `<span class="cl-step__tag">${g.step}</span>${g.title}`));
       const list = el("div", "cl-list");
-      g.items.forEach((it, ii) => {
+      g.items.forEach(it => {
         if (it.sub && it.sub.length) {
           list.appendChild(el("div", "cl-subhead", it.text));
           const subwrap = el("div", "cl-sub");
-          it.sub.forEach((s, si) => subwrap.appendChild(makeCheckItem(`g${gi}-i${ii}-s${si}`, s)));
+          it.sub.forEach(s => subwrap.appendChild(makeCheckItem(s.id, s.text)));
           list.appendChild(subwrap);
-        } else {
-          list.appendChild(makeCheckItem(`g${gi}-i${ii}`, it.text));
+        } else if (it.id) {
+          list.appendChild(makeCheckItem(it.id, it.text));
         }
       });
       group.appendChild(list);
       wrap.appendChild(group);
     });
     updateClProgress();
+    if (!storageAvailable()) {
+      flashClSave("⚠️ Галочки не сохранятся — откройте не в инкогнито");
+    }
   }
 
   // ======================= ЯПОНСКИЕ ФРАЗЫ =======================
