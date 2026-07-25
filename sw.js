@@ -1,7 +1,6 @@
-/* Офлайн-кэш путеводителя. HTML/JS/CSS — network-first, чтобы фиксы на iPhone доезжали. */
-const CACHE = "japan2026-v11";
+/* Офлайн-кэш. App shell — network-first. */
+const CACHE = "japan2026-v12";
 const ASSETS = [
-  "./",
   "./index.html",
   "./china.html",
   "./css/styles.css",
@@ -28,33 +27,22 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-function isAppShell(url) {
-  const p = url.pathname;
-  return /\.(?:html|js|css|webmanifest)$/.test(p) || p.endsWith("/") || p.endsWith("/japan-osaka-2026");
-}
-
 self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET") return;
 
   const url = new URL(req.url);
-  const sameOrigin = url.origin === self.location.origin;
-
-  if (!sameOrigin) {
-    event.respondWith(
-      fetch(req).then((res) => {
-        if (res && res.ok) {
-          const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put(req, copy));
-        }
-        return res;
-      }).catch(() => caches.match(req))
-    );
+  if (url.origin !== self.location.origin) {
+    event.respondWith(fetch(req).catch(() => caches.match(req)));
     return;
   }
 
-  // Свежий код с сети; офлайн — из кэша
-  if (isAppShell(url)) {
+  // HTML/JS/CSS всегда пробуем с сети
+  const shell = /\.(?:html|js|css)(?:$|\?)/.test(url.pathname + url.search) ||
+    url.pathname.endsWith("/") ||
+    /japan-osaka-2026\/?$/.test(url.pathname);
+
+  if (shell) {
     event.respondWith(
       fetch(req).then((res) => {
         if (res && res.ok) {
@@ -62,21 +50,20 @@ self.addEventListener("fetch", (event) => {
           caches.open(CACHE).then((c) => c.put(req, copy));
         }
         return res;
-      }).catch(() => caches.match(req).then((cached) => cached || caches.match("./index.html")))
+      }).catch(() => caches.match(req).then((c) => c || caches.match("./index.html")))
     );
     return;
   }
 
   event.respondWith(
-    caches.match(req).then((cached) => {
-      const network = fetch(req).then((res) => {
+    caches.match(req).then((cached) =>
+      fetch(req).then((res) => {
         if (res && res.ok) {
           const copy = res.clone();
           caches.open(CACHE).then((c) => c.put(req, copy));
         }
         return res;
-      }).catch(() => cached);
-      return cached || network;
-    })
+      }).catch(() => cached)
+    )
   );
 });

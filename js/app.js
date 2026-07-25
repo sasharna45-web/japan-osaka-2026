@@ -198,6 +198,19 @@
       `));
     }
 
+    // День 1: шаги KIX прямо в карточке дня
+    if (day.n === 1 && typeof FIRST_HOUR_KIX !== "undefined") {
+      const kixBox = el("div", "day-kix");
+      kixBox.appendChild(el("div", "day-kix__title", "Первый час в KIX"));
+      const kixList = el("div", "day-kix__list");
+      FIRST_HOUR_KIX.forEach(s => {
+        kixList.appendChild(el("div", "day-kix__item",
+          `<b>${s.n}. ${s.t}</b><span>${s.d}</span>`));
+      });
+      kixBox.appendChild(kixList);
+      bodyWrap.appendChild(kixBox);
+    }
+
     const details = el("div", "day-details");
     details.hidden = true;
 
@@ -1042,51 +1055,39 @@
     }
   }
 
-  /**
-   * Выбор фото с iPhone: без attribute capture (иначе сразу камера).
-   * Создаём input программно — так Safari стабильнее показывает «Фотоплёнка».
-   */
-  function pickPhoto({ camera = false } = {}) {
-    return new Promise((resolve) => {
-      const input = document.createElement("input");
-      input.type = "file";
-      // Без capture → галерея / «Фотоплёнка». С capture → камера.
-      if (camera) {
-        input.accept = "image/*";
-        input.setAttribute("capture", "environment");
-      } else {
-        input.accept = "image/jpeg,image/png,image/webp,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.heic,.heif";
-        input.removeAttribute("capture");
-      }
-      input.style.cssText = "position:fixed;left:-9999px;top:0;opacity:0;width:1px;height:1px;";
-      const cleanup = () => {
-        input.remove();
-      };
-      input.addEventListener("change", () => {
-        const file = input.files && input.files[0];
-        cleanup();
-        resolve(file || null);
-      }, { once: true });
-      // Если пользователь закрыл пикер без выбора — change не придёт
-      window.setTimeout(() => {
-        if (document.body.contains(input)) {
-          // оставляем; удалим при следующем pick
-        }
-      }, 0);
-      document.body.appendChild(input);
-      input.click();
-    });
+  function setTicketStatus(msg, isError) {
+    const elStatus = $("#ticketUploadStatus");
+    if (!elStatus) return;
+    if (!msg) {
+      elStatus.hidden = true;
+      elStatus.textContent = "";
+      return;
+    }
+    elStatus.hidden = false;
+    elStatus.textContent = msg;
+    elStatus.classList.toggle("is-error", !!isError);
   }
 
   async function saveTicketPhoto(slot, file) {
-    if (!file) return;
+    if (!file) {
+      setTicketStatus("Файл не выбран. Нажмите «Фотоплёнка» ещё раз.", true);
+      return;
+    }
+    setTicketStatus("Сохраняю фото…");
     try {
       const dataUrl = await compressImage(file);
-      await ticketPut({ id: slot.id, name: slot.name, dataUrl, ts: Date.now() });
+      if (!dataUrl || typeof dataUrl !== "string" || dataUrl.length < 32) {
+        throw new Error("empty");
+      }
+      // Очень большие HEIC режем через повторное чтение — IndexedDB обычно тянет
+      await ticketPut({ id: slot.id, name: slot.name, dataUrl, ts: Date.now(), mime: file.type || "" });
+      setTicketStatus("✓ Фото сохранено на этом телефоне");
+      setTimeout(() => setTicketStatus(""), 2000);
       await renderTickets();
     } catch (e) {
       console.warn(e);
-      alert("Не удалось сохранить фото. Выберите скрин из «Фотоплёнка» (не Live Photo) или сделайте скрин ещё раз.");
+      setTicketStatus("Не удалось сохранить. Откройте сайт в Safari → Билеты → Фотоплёнка (не камера).", true);
+      alert("Не удалось сохранить фото.\n\n1) Откройте гид в Safari (не с иконки на Домой)\n2) Нажмите «Фотоплёнка»\n3) Выберите скрин из галереи");
     }
   }
 
@@ -1307,6 +1308,9 @@
 
   function makeTicketCard(slot, saved) {
     const card = el("div", "ticket-card" + (saved ? " has-photo" : "") + (slot.who !== "shared" ? ` ticket-card--${slot.who}` : ""));
+    // Нативный <label>+<input> без capture и без input.click() —
+    // так iPhone показывает «Фотоплёнка», а не сразу камеру.
+    const inputId = `file-${slot.id}`;
     card.innerHTML = `
       <div class="ticket-card__head">
         <span class="ticket-card__emoji">${slot.emoji}</span>
@@ -1318,36 +1322,29 @@
       <div class="ticket-card__preview">
         ${saved
           ? `<img src="${saved.dataUrl}" alt="${slot.name}">`
-          : `<span class="ticket-card__empty">Выберите скрин из Фотоплёнки</span>`}
+          : `<span class="ticket-card__empty">Нужен скрин QR</span>`}
       </div>
       <div class="ticket-card__actions">
-        <button type="button" class="ticket-card__btn ticket-card__btn--primary" data-gallery="${slot.id}">
-          ${saved ? "Выбрать из фото" : "Выбрать из фото"}
-        </button>
+        <label class="ticket-card__btn ticket-card__btn--primary" for="${inputId}">
+          Фотоплёнка
+          <input id="${inputId}" class="ticket-file-input" type="file"
+            accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.heic,.heif"
+            tabindex="-1">
+        </label>
         ${saved ? `
           <button type="button" class="ticket-card__btn" data-view="${slot.id}">Показать</button>
           <button type="button" class="ticket-card__btn ticket-card__btn--danger" data-del="${slot.id}">Удалить</button>
-        ` : `
-          <button type="button" class="ticket-card__btn ticket-card__btn--link" data-camera="${slot.id}">Снять камерой</button>
-        `}
+        ` : ""}
       </div>
     `;
 
-    const galBtn = card.querySelector("[data-gallery]");
-    if (galBtn) {
-      galBtn.addEventListener("click", async (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const file = await pickPhoto({ camera: false });
-        await saveTicketPhoto(slot, file);
-      });
-    }
-    const camBtn = card.querySelector("[data-camera]");
-    if (camBtn) {
-      camBtn.addEventListener("click", async (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const file = await pickPhoto({ camera: true });
+    const fileInput = card.querySelector(".ticket-file-input");
+    if (fileInput) {
+      // Гарантированно без capture (даже если старый HTML закэшировался)
+      fileInput.removeAttribute("capture");
+      fileInput.addEventListener("change", async () => {
+        const file = fileInput.files && fileInput.files[0];
+        fileInput.value = "";
         await saveTicketPhoto(slot, file);
       });
     }

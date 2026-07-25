@@ -22,7 +22,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/styles.css?v=11">
+  <link rel="stylesheet" href="css/styles.css?v=12">
 </head>
 <body class="ios-feel">
 
@@ -55,11 +55,11 @@
       <div class="nav__links">
         <a href="#next">Сегодня</a>
         <a href="#packing">Вылет РФ</a>
-        <a href="#qr">QR</a>
+        <a href="#arrival">KIX</a>
         <a href="#route">Маршрут</a>
-        <a href="#nearby">Рядом</a>
+        <a href="#tickets">Билеты</a>
+        <a href="#qr">QR</a>
         <a href="#home">Дом</a>
-        <a href="#checklist">Дела</a>
       </div>
       <button type="button" class="comfort-btn" id="comfortToggle" aria-pressed="false" title="Крупный шрифт">Aa</button>
     </div>
@@ -88,43 +88,43 @@
       <div class="packing" id="packingBody"></div>
     </section>
 
-    <!-- 7 · БЫСТРЫЕ QR-ВИДЖЕТЫ -->
+    <!-- ДЕНЬ 1 · KIX — сразу после сборов в РФ, у начала поездки -->
+    <section class="section section--tight" id="arrival">
+      <div class="section__head">
+        <h2 class="section__title">День 1 · первый час в KIX</h2>
+        <p class="section__sub">9 сентября, сразу после прилёта — по порядку.</p>
+      </div>
+      <div class="kix-steps" id="kixSteps"></div>
+    </section>
+
+    <!-- БЫСТРЫЕ QR -->
     <section class="section section--tight" id="qr">
       <div class="section__head">
         <h2 class="section__title">QR у входа</h2>
-        <p class="section__sub">USJ — отдельно у каждого. Остальное общее. Фото только на этом телефоне.</p>
+        <p class="section__sub">USJ — отдельно у каждого. Остальное общее.</p>
       </div>
       <div class="qr-toolbar" id="qrToolbar"></div>
       <div class="qr-widgets" id="qrWidgets"></div>
-      <p class="qr-widgets__hint" id="qrWidgetsHint">Пока нет загруженных билетов — добавьте скрины в блоке «Билеты» ниже.</p>
+      <p class="qr-widgets__hint" id="qrWidgetsHint">Сначала загрузите скрины в разделе «Билеты».</p>
     </section>
 
-    <!-- 8 · РЯДОМ С ДОМОМ -->
+    <!-- РЯДОМ С ДОМОМ -->
     <section class="section" id="nearby">
       <div class="section__head">
         <h2 class="section__title">Рядом с домом</h2>
-        <p class="section__sub">7-Eleven, аптеки и где подзарядить телефон у Tanimachi 6-chome.</p>
+        <p class="section__sub">7-Eleven, аптеки и зарядка у Tanimachi 6-chome.</p>
       </div>
       <div class="nearby-filters" id="nearbyFilters"></div>
       <div class="nearby-grid" id="nearbyGrid"></div>
     </section>
 
-    <!-- 1 · ПОГОДА -->
+    <!-- ПОГОДА -->
     <section class="section" id="weather">
       <div class="section__head">
         <h2 class="section__title">Погода и что надеть</h2>
-        <p class="section__sub">Сентябрь в Кансае: тепло, влажно, иногда дождь. План Б — если небо хмурое.</p>
+        <p class="section__sub">Сентябрь в Кансае + план Б на дождь.</p>
       </div>
       <div id="weatherBody"></div>
-    </section>
-
-    <!-- ПЕРВЫЙ ЧАС В KIX -->
-    <section class="section section--tight" id="arrival">
-      <div class="section__head">
-        <h2 class="section__title">День 1 · первый час в KIX</h2>
-        <p class="section__sub">Чеклист сразу после прилёта 9 сентября — по порядку.</p>
-      </div>
-      <div class="kix-steps" id="kixSteps"></div>
     </section>
 
     <!-- ФИЛЬТРЫ ПО ИНТЕРЕСАМ -->
@@ -186,8 +186,9 @@
     <section class="section" id="tickets">
       <div class="section__head">
         <h2 class="section__title">Билеты</h2>
-        <p class="section__sub">Кнопка «Выбрать из фото» → на iPhone жмите «Фотоплёнка». USJ: 4 скрина.</p>
+        <p class="section__sub">Нажмите «Фотоплёнка» и выберите скрин. Если откроется только камера — откройте сайт в Safari, не с Домой экрана.</p>
       </div>
+      <p id="ticketUploadStatus" class="ticket-status" hidden></p>
       <div class="tickets" id="ticketsGrid"></div>
     </section>
 
@@ -277,12 +278,15 @@
   </nav>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="js/data.js?v=11"></script>
-  <script src="js/app.js?v=11"></script>
+  <script src="js/data.js?v=12"></script>
+  <script src="js/app.js?v=12"></script>
   <script>
+    // Принудительно подтянуть новый SW (старый кэш ломал выбор фото на iPhone)
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("./sw.js?v=11").then(function (reg) {
-        if (reg.update) reg.update();
+      navigator.serviceWorker.getRegistrations().then(function (regs) {
+        return Promise.all(regs.map(function (r) { return r.update(); }));
+      }).then(function () {
+        return navigator.serviceWorker.register("./sw.js?v=12");
       }).catch(function () {});
     }
   </script>

@@ -1296,6 +1296,54 @@ a { color: inherit; text-decoration: none; }
   min-width: auto;
   flex: 0 0 auto;
 }
+.ticket-card__btn { position: relative; overflow: hidden; }
+/* Не display:none — на iPhone иначе часто открывается только камера */
+.ticket-file-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+  font-size: 16px; /* iOS не любит мелкий шрифт на file input */
+}
+.ticket-status {
+  font-size: 14px;
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(48,209,88,.12);
+  color: var(--green);
+}
+.ticket-status.is-error {
+  background: rgba(255,69,58,.12);
+  color: var(--red-soft);
+}
+.day-kix {
+  margin: 0 0 12px;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  background: rgba(255,69,58,.08);
+  border: 0.5px solid rgba(255,69,58,.35);
+}
+.day-kix__title {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: var(--red-soft);
+}
+.day-kix__list { display: grid; gap: 8px; }
+.day-kix__item {
+  display: grid;
+  gap: 2px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.day-kix__item b { color: var(--text); font-weight: 600; }
+.day-kix__item span { color: var(--text-dim); }
 
 /* 7 · QR на весь экран (светлый — удобнее сканеру) */
 .ticket-view {
