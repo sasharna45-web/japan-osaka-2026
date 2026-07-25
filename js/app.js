@@ -623,21 +623,34 @@
 
   function renderPacking() {
     const wrap = $("#packingBody");
-    if (!wrap || typeof PACKING === "undefined") return;
+    if (!wrap) return;
+    if (typeof PACKING === "undefined") {
+      wrap.innerHTML = `<p class="qr-empty">Список багажа не загрузился. Обновите страницу (потяните вниз) или откройте сайт заново.</p>`;
+      return;
+    }
     wrap.innerHTML = "";
     PACKING.forEach(g => {
       const group = el("div", "pack-group");
-      const head = el("div", "pack-group__head", g.title);
+      const head = el("div", "pack-group__head");
+      head.textContent = g.title;
       const list = el("div", "pack-group__list");
       g.items.forEach(it => {
         const btn = document.createElement("button");
         btn.type = "button";
         btn.className = "cl-item" + (packState[it.id] ? " done" : "");
-        btn.innerHTML = `<span class="cl-box">${packState[it.id] ? "✓" : ""}</span><span class="cl-text">${it.text}</span>`;
-        btn.addEventListener("click", () => {
+        const box = document.createElement("span");
+        box.className = "cl-box";
+        box.textContent = packState[it.id] ? "✓" : "";
+        const txt = document.createElement("span");
+        txt.className = "cl-text";
+        txt.textContent = it.text;
+        btn.append(box, txt);
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
           packState[it.id] = !packState[it.id];
           btn.classList.toggle("done", !!packState[it.id]);
-          btn.querySelector(".cl-box").textContent = packState[it.id] ? "✓" : "";
+          box.textContent = packState[it.id] ? "✓" : "";
           savePackState();
           updatePackProgress();
         });
