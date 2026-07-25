@@ -553,6 +553,8 @@
     const h = TRIP.home;
     const maps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(h.maps)}`;
 
+    const taxiLine = `この住所までお願いします。\n${h.ja}`;
+
     wrap.innerHTML = `
       <div class="hs-card">
         <div class="hs-card__title">🏠 ${h.title}</div>
@@ -561,6 +563,7 @@
         <div class="hs-card__text" style="margin-top:-4px">${h.en}</div>
         <div class="hs-actions">
           <button type="button" class="hs-btn" id="copyHomeJa">📋 Копировать адрес</button>
+          <button type="button" class="hs-btn hs-btn--ghost" id="copyTaxi">🚕 Фраза для такси</button>
           <a class="hs-btn hs-btn--ghost" href="${maps}" target="_blank" rel="noopener">📍 Google Maps</a>
         </div>
       </div>
@@ -583,18 +586,21 @@
       </div>
     `;
 
-    const btn = $("#copyHomeJa");
-    if (btn) {
+    const bindCopy = (sel, text, okLabel, idleLabel) => {
+      const btn = $(sel);
+      if (!btn) return;
       btn.addEventListener("click", async () => {
         try {
-          await navigator.clipboard.writeText(h.ja + "\n" + h.en);
-          btn.textContent = "✓ Скопировано";
-          setTimeout(() => { btn.textContent = "📋 Копировать адрес"; }, 1600);
+          await navigator.clipboard.writeText(text);
+          btn.textContent = okLabel;
+          setTimeout(() => { btn.textContent = idleLabel; }, 1600);
         } catch (e) {
-          prompt("Скопируйте адрес:", h.ja);
+          prompt("Скопируйте:", text);
         }
       });
-    }
+    };
+    bindCopy("#copyHomeJa", h.ja + "\n" + h.en, "✓ Скопировано", "📋 Копировать адрес");
+    bindCopy("#copyTaxi", taxiLine, "✓ Скопировано", "🚕 Фраза для такси");
   }
 
   // ======================= АНИМАЦИИ / ПРОКРУТКА =======================
