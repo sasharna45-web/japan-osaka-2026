@@ -930,8 +930,7 @@
     if (focusDay && focusDay.n === 7) {
       html += `
         <div class="next-day__usj">
-          <div class="next-day__usj-title">⚡ USJ сегодня · слот Nintendo 11:50</div>
-          <a class="next-day__usj-btn" href="https://www.trip.com/orders/list/" target="_blank" rel="noopener">Открыть билеты в Trip.com</a>
+          <div class="next-day__usj-title">⚡ USJ сегодня · слот Nintendo 11:50 · билеты в приложении</div>
         </div>`;
     }
 
@@ -948,26 +947,6 @@
     if (b === 1) return "день";
     if (b >= 2 && b <= 4) return "дня";
     return "дней";
-  }
-
-  // ======================= TRIP.COM (без скринов) =======================
-  function renderTripCom() {
-    const wrap = $("#tripComBody");
-    if (!wrap || typeof TRIP_COM === "undefined") return;
-    wrap.innerHTML = `
-      <p class="tripcom__note">${TRIP_COM.note}</p>
-      <div class="tripcom__list">
-        ${TRIP_COM.links.map(l => `
-          <a class="tripcom__link" href="${l.url}" target="_blank" rel="noopener">
-            <span class="tripcom__emoji">${l.emoji}</span>
-            <span class="tripcom__text">
-              <b>${l.name}</b>
-              <small>${l.desc}</small>
-            </span>
-            <span class="tripcom__go">→</span>
-          </a>`).join("")}
-      </div>
-    `;
   }
 
   // ======================= 1. ПОГОДА =======================
@@ -1067,7 +1046,6 @@
     renderFilters();
     renderTimeline();
     setupTodayOnly();
-    renderTripCom();
     renderHomeSos();
     renderChecklist();
     renderPacking();

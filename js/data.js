@@ -826,7 +826,7 @@ const DAY_BRIEFS = {
   3: {
     main: "Залив: Kaiyukan + колесо · к закату Abeno Harukas 17:00.",
     leave: "К океанариуму к 10:00 · с залива выезд ~15:30–16:00 к Harukas.",
-    remember: "Билет Harukas в Trip.com · не опаздывать к 17:00 · перекус у залива."
+    remember: "Билет Harukas · не опаздывать к 17:00 · перекус у залива."
   },
   4: {
     main: "Киото: Фусими Инари рано, потом старый город и Nintendo.",
@@ -841,7 +841,7 @@ const DAY_BRIEFS = {
   6: {
     main: "Пустой день перед USJ — только лёгкий город и ранний сон.",
     leave: "Когда хотите · никакого обязательного тайминга.",
-    remember: "Зарядить пауэрбанки · открыть USJ в Trip.com (на двоих) · лечь пораньше."
+    remember: "Зарядить пауэрбанки · билеты USJ на двоих · лечь пораньше."
   },
   7: {
     main: "USJ: к открытию, Express · Nintendo World слот 11:50.",
@@ -881,7 +881,7 @@ const DAY_BRIEFS = {
   14: {
     main: "Днём Expo ’70 · к вечеру Umeda Sky (бронь).",
     leave: "Парк днём без жёсткого слота · к Sky — по времени билета.",
-    remember: "Umeda Sky в Trip.com · лёгкий день · не таскать лишнее."
+    remember: "Билет Umeda Sky · лёгкий день · не таскать лишнее."
   },
   15: {
     main: "Harvest Hill (Sylvanian/капибары) · море по погоде.",
@@ -891,7 +891,7 @@ const DAY_BRIEFS = {
   16: {
     main: "Сувениры, упаковка чемоданов, прощальный ужин.",
     leave: "Днём Donki / шопинг · вечер — ужин без спешки.",
-    remember: "Весы багажа · билеты на завтра в Trip.com · ничего ценного снаружи."
+    remember: "Весы багажа · билеты на завтра · ничего ценного снаружи."
   },
   17: {
     main: "Вылет 15:00 KIX → Шанхай (Spring Airlines).",
@@ -928,7 +928,7 @@ const PACKING = [
       { id: "ru-esim", text: "Японский eSIM установлен (активация в KIX)" },
       { id: "ru-esim-cn", text: "Китайский eSIM / план на 25–27 сент готов" },
       { id: "ru-alipay", text: "Alipay на обоих телефонах, вход работает" },
-      { id: "ru-tripcom", text: "Trip.com: вход работает, заказы открываются (Harukas, USJ, Umeda…)" },
+      { id: "ru-tripcom", text: "Приложение с билетами: вход работает (Harukas, USJ, Umeda…)" },
       { id: "ru-insurance-photo", text: "Фото полиса страховки в галерее" },
       { id: "ru-airbnb", text: "Ваучер Airbnb + адрес квартиры сохранены" },
       { id: "ru-guide", text: "Гид «Япония 2026» открывается офлайн" }
@@ -1028,33 +1028,6 @@ const FIRST_HOUR_KIX = [
   { n: "5", t: "ICOCA", d: "Купите/пополните ICOCA в автомате у поездов — на весь Кансай для метро и JR." },
   { n: "6", t: "Домой", d: "Nankai → Namba или JR Haruka, дальше метро до Tanimachi 6-chome. Заселение с 16:00." }
 ];
-
-/**
- * Билеты открываем в Trip.com — в гиде скрины не храним.
- */
-const TRIP_COM = {
-  note: "На входе просто откройте заказ в Trip.com и покажите QR оттуда.",
-  links: [
-    {
-      emoji: "📋",
-      name: "Мои заказы",
-      desc: "Все билеты и ваучеры (Harukas, USJ, Umeda…)",
-      url: "https://www.trip.com/orders/list/"
-    },
-    {
-      emoji: "✈️",
-      name: "Авиабилеты",
-      desc: "Рейсы и посадочные в Trip.com",
-      url: "https://www.trip.com/flights/"
-    },
-    {
-      emoji: "🏠",
-      name: "Открыть Trip.com",
-      desc: "Сайт или приложение — что установлено",
-      url: "https://www.trip.com/"
-    }
-  ]
-};
 
 /**
  * 1. Погода сентября в Кансае + что надеть + план на дождь.

@@ -1,6 +1,6 @@
 /* Временно: SW только сбрасывает старые кэши и уходит.
    Иначе iPhone месяцами показывает устаревший гид. */
-const KILL = "japan2026-kill-v14";
+const KILL = "japan2026-kill-v15";
 
 self.addEventListener("install", (event) => {
   self.skipWaiting();

@@ -18,7 +18,7 @@
 <body>
   <div>
     <h1>Обновляю гид…</h1>
-    <p>Сбрасываю старый кэш на телефоне.<br>Через секунду откроется <b>версия 14</b>.</p>
+    <p>Сбрасываю старый кэш на телефоне.<br>Через секунду откроется <b>версия 15</b>.</p>
   </div>
   <script>
     (async function () {
@@ -35,14 +35,12 @@
         }
       } catch (e) {}
       try {
-        localStorage.removeItem("japan2026.cleared.14");
-        // сбросим и прошлые ключи
         Object.keys(localStorage).forEach(function (k) {
           if (k.indexOf("japan2026.cleared.") === 0) localStorage.removeItem(k);
         });
       } catch (e) {}
       setTimeout(function () {
-        location.replace("./index.html?v=14&fresh=" + Date.now());
+        location.replace("./index.html?v=15&fresh=" + Date.now());
       }, 400);
     })();
   </script>
