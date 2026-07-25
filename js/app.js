@@ -216,7 +216,62 @@
     wrap.innerHTML = "";
     order.forEach((dayIdx, position) => wrap.appendChild(dayCard(dayIdx, position)));
     applyFilter();
+    applyTodayOnly();
     observeReveals();
+  }
+
+  // ======================= 6. РЕЖИМ «ТОЛЬКО СЕГОДНЯ» =======================
+  const TODAY_ONLY_KEY = "japan2026.todayOnly.v1";
+  let todayOnly = false;
+  try { todayOnly = localStorage.getItem(TODAY_ONLY_KEY) === "1"; } catch (e) {}
+
+  function focusDayIndex() {
+    const focus = tripFocus();
+    if (focus.mode === "during" && focus.todayIdx >= 0) return focus.todayIdx;
+    if (focus.mode === "before" && focus.todayIdx >= 0) return focus.todayIdx;
+    if (focus.mode === "after") return dayIndexByN(17);
+    return 0;
+  }
+
+  function applyTodayOnly() {
+    const btn = $("#todayOnlyBtn");
+    const hint = $("#todayOnlyHint");
+    const idx = focusDayIndex();
+    $$(".day").forEach(dayEl => {
+      if (!todayOnly) {
+        dayEl.hidden = false;
+        return;
+      }
+      dayEl.hidden = Number(dayEl.dataset.index) !== idx;
+    });
+    if (btn) {
+      btn.classList.toggle("is-on", todayOnly);
+      btn.setAttribute("aria-pressed", todayOnly ? "true" : "false");
+      btn.textContent = todayOnly ? "✓ Только сегодня" : "Только сегодня";
+    }
+    if (hint) {
+      hint.textContent = todayOnly
+        ? "Скрыты остальные дни · нажмите ещё раз, чтобы показать все"
+        : "Показать все 17 дней";
+    }
+  }
+
+  function setupTodayOnly() {
+    const btn = $("#todayOnlyBtn");
+    if (!btn) return;
+    applyTodayOnly();
+    btn.addEventListener("click", () => {
+      todayOnly = !todayOnly;
+      try { localStorage.setItem(TODAY_ONLY_KEY, todayOnly ? "1" : "0"); } catch (e) {}
+      applyTodayOnly();
+      if (todayOnly) {
+        const card = document.querySelector(`.day[data-index="${focusDayIndex()}"]`);
+        if (card) {
+          card.classList.add("open");
+          card.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+    });
   }
 
   // Перемещение дня в режиме редактирования.
@@ -252,9 +307,24 @@
     });
   }
 
-  // ======================= МОДАЛКА =======================
+  // ======================= МОДАЛКА + МАРШРУТ ИЗ ДОМА =======================
   function gmapsLink(p) {
-    return `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
+    if (p.lat != null && p.lng != null) {
+      return `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
+    }
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((p.maps || p.name) + " Osaka")}`;
+  }
+
+  /** 2. Маршрут из квартиры → место (метро/пешком в Google Maps). */
+  function directionsFromHome(p) {
+    const h = TRIP.home || {};
+    const origin = (h.lat != null && h.lng != null)
+      ? `${h.lat},${h.lng}`
+      : encodeURIComponent(h.maps || "Tanimachi 6-chome Osaka");
+    const destination = (p.lat != null && p.lng != null)
+      ? `${p.lat},${p.lng}`
+      : encodeURIComponent(p.maps || (p.name + " Osaka"));
+    return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=transit`;
   }
 
   function openModal(day, p) {
@@ -275,6 +345,8 @@
       return `<span class="tag">${i ? i.emoji + " " + i.label : t}</span>`;
     }).join("");
 
+    const canRoute = p.lat != null || p.maps || p.name;
+
     body.innerHTML = `
       <div class="m-emoji">${p.emoji || "📍"}</div>
       <div class="m-title">${p.name}</div>
@@ -282,14 +354,14 @@
       <div class="place__tags" style="margin-bottom:16px">${tags}</div>
       <div class="m-grid">${rows.join("")}</div>
       <div class="m-actions">
-        <a class="m-btn primary" href="${gmapsLink(p)}" target="_blank" rel="noopener">📍 Открыть в Google Maps</a>
+        ${canRoute ? `<a class="m-btn primary" href="${directionsFromHome(p)}" target="_blank" rel="noopener">🚇 Из дома → сюда</a>` : ""}
+        <a class="m-btn ghost" href="${gmapsLink(p)}" target="_blank" rel="noopener">📍 Точка на карте</a>
         <a class="m-btn ghost" href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(p.name + " Japan")}" target="_blank" rel="noopener">📷 Фотографии</a>
       </div>
     `;
     const modal = $("#placeModal");
     modal.hidden = false;
     document.body.style.overflow = "hidden";
-    // Фокус на карте: подлетаем к точке
     if (map && p.lat) map.flyTo([p.lat, p.lng], 13, { duration: .8 });
   }
 
@@ -704,9 +776,26 @@
       else html += `<div class="next-day__empty">Последний день в Японии — дальше Китай 🇨🇳</div>`;
     }
 
+    // На день USJ — быстрые кнопки QR, если фото уже загружены
+    const focusIdx = focus.mode === "during" ? focus.todayIdx : focus.todayIdx;
+    const focusDay = focusIdx >= 0 ? TRIP.days[focusIdx] : null;
+    if (focusDay && focusDay.n === 7) {
+      html += `
+        <div class="next-day__usj" id="usjQrQuick">
+          <div class="next-day__usj-title">⚡ USJ сегодня · слот Nintendo 11:50</div>
+          <div class="next-day__usj-btns">
+            <button type="button" class="next-day__usj-btn" data-qr="usj-pass">🎢 Studio Pass</button>
+            <button type="button" class="next-day__usj-btn" data-qr="usj-express">⚡ Express Pass</button>
+          </div>
+        </div>`;
+    }
+
     wrap.innerHTML = html;
     wrap.querySelectorAll("[data-open-day]").forEach(btn => {
       btn.addEventListener("click", () => openDayInTimeline(Number(btn.dataset.openDay)));
+    });
+    wrap.querySelectorAll("[data-qr]").forEach(btn => {
+      btn.addEventListener("click", () => showTicketById(btn.dataset.qr));
     });
   }
 
@@ -804,11 +893,13 @@
     });
   }
 
-  function openTicketView(dataUrl) {
+  function openTicketView(dataUrl, title) {
     const view = $("#ticketView");
     const img = $("#ticketViewImg");
+    const titleEl = $("#ticketViewTitle");
     if (!view || !img) return;
     img.src = dataUrl;
+    if (titleEl) titleEl.textContent = title || "Билет";
     view.hidden = false;
     document.body.style.overflow = "hidden";
   }
@@ -827,7 +918,67 @@
     const view = $("#ticketView");
     if (close) close.addEventListener("click", closeTicketView);
     if (view) view.addEventListener("click", (e) => {
-      if (e.target === view) closeTicketView();
+      if (e.target === view || e.target.classList.contains("ticket-view__stage")) closeTicketView();
+    });
+  }
+
+  async function showTicketById(id) {
+    const slot = TICKET_SLOTS.find(s => s.id === id);
+    const rec = await ticketGet(id);
+    if (rec) openTicketView(rec.dataUrl, slot ? slot.name : "Билет");
+  }
+
+  /** 7. Крупные виджеты + нижняя панель для показа QR сканеру. */
+  async function renderQrWidgets() {
+    const wrap = $("#qrWidgets");
+    const hint = $("#qrWidgetsHint");
+    const dock = $("#qrDock");
+    if (!wrap || typeof TICKET_SLOTS === "undefined") return;
+
+    const ready = [];
+    for (const slot of TICKET_SLOTS) {
+      const saved = await ticketGet(slot.id).catch(() => null);
+      if (saved) ready.push({ slot, saved });
+    }
+
+    wrap.innerHTML = "";
+    if (hint) hint.hidden = ready.length > 0;
+    if (dock) {
+      dock.innerHTML = "";
+      dock.hidden = ready.length === 0;
+      document.body.classList.toggle("has-qr-dock", ready.length > 0);
+    }
+
+    if (!ready.length) {
+      wrap.innerHTML = `
+        <div class="qr-empty">
+          <div class="qr-empty__title">Виджеты появятся после загрузки</div>
+          <p>Откройте «Билеты · загрузить фото», добавьте скрин Express Pass / Harukas / VJW — и сюда встанут большие кнопки «Показать QR».</p>
+          <a class="qr-empty__link" href="#tickets">Перейти к загрузке ↓</a>
+        </div>`;
+      return;
+    }
+
+    ready.forEach(({ slot }) => {
+      const btn = el("button", "qr-widget");
+      btn.type = "button";
+      btn.innerHTML = `
+        <span class="qr-widget__emoji">${slot.emoji}</span>
+        <span class="qr-widget__name">${slot.short || slot.name}</span>
+        <span class="qr-widget__hint">${slot.hint || "Показать сканеру"}</span>
+        <span class="qr-widget__cta">Показать QR</span>
+      `;
+      btn.addEventListener("click", () => showTicketById(slot.id));
+      wrap.appendChild(btn);
+
+      if (dock) {
+        const dBtn = el("button", "qr-dock__btn");
+        dBtn.type = "button";
+        dBtn.title = slot.name;
+        dBtn.innerHTML = `<span>${slot.emoji}</span><small>${slot.short || "QR"}</small>`;
+        dBtn.addEventListener("click", () => showTicketById(slot.id));
+        dock.appendChild(dBtn);
+      }
     });
   }
 
@@ -842,20 +993,23 @@
       card.innerHTML = `
         <div class="ticket-card__head">
           <span class="ticket-card__emoji">${slot.emoji}</span>
-          <span class="ticket-card__name">${slot.name}</span>
+          <div>
+            <div class="ticket-card__name">${slot.name}</div>
+            <div class="ticket-card__meta">${slot.hint || ""}</div>
+          </div>
         </div>
         <div class="ticket-card__preview">
           ${saved
             ? `<img src="${saved.dataUrl}" alt="${slot.name}">`
-            : `<span class="ticket-card__empty">Нет фото</span>`}
+            : `<span class="ticket-card__empty">Нет фото · добавьте скрин</span>`}
         </div>
         <div class="ticket-card__actions">
           <label class="ticket-card__btn">
             ${saved ? "↻ Заменить" : "+ Добавить"}
-            <input type="file" accept="image/*" hidden data-slot="${slot.id}">
+            <input type="file" accept="image/*" capture="environment" hidden data-slot="${slot.id}">
           </label>
           ${saved ? `
-            <button type="button" class="ticket-card__btn ticket-card__btn--primary" data-view="${slot.id}">Показать</button>
+            <button type="button" class="ticket-card__btn ticket-card__btn--primary" data-view="${slot.id}">Показать QR</button>
             <button type="button" class="ticket-card__btn ticket-card__btn--danger" data-del="${slot.id}">Удалить</button>
           ` : ""}
         </div>
@@ -868,43 +1022,158 @@
         try {
           const dataUrl = await compressImage(file);
           await ticketPut({ id: slot.id, name: slot.name, dataUrl, ts: Date.now() });
-          renderTickets();
+          await renderTickets();
+          await renderQrWidgets();
         } catch (e) {
           alert("Не удалось сохранить фото. Попробуйте другое изображение.");
         }
       });
 
       const viewBtn = card.querySelector("[data-view]");
-      if (viewBtn) {
-        viewBtn.addEventListener("click", async () => {
-          const rec = await ticketGet(slot.id);
-          if (rec) openTicketView(rec.dataUrl);
-        });
-      }
+      if (viewBtn) viewBtn.addEventListener("click", () => showTicketById(slot.id));
       const preview = card.querySelector(".ticket-card__preview");
-      if (saved && preview) {
-        preview.addEventListener("click", () => openTicketView(saved.dataUrl));
-      }
+      if (saved && preview) preview.addEventListener("click", () => showTicketById(slot.id));
       const delBtn = card.querySelector("[data-del]");
       if (delBtn) {
         delBtn.addEventListener("click", async () => {
           if (!confirm("Удалить это фото?")) return;
           await ticketDel(slot.id);
-          renderTickets();
+          await renderTickets();
+          await renderQrWidgets();
         });
       }
 
       wrap.appendChild(card);
     }
+
+    await renderQrWidgets();
+  }
+
+  // ======================= 1. ПОГОДА =======================
+  function renderWeather() {
+    const wrap = $("#weatherBody");
+    if (!wrap || typeof WEATHER === "undefined") return;
+    const w = WEATHER;
+    wrap.innerHTML = `
+      <div class="wx-card wx-card--hero">
+        <div class="wx-card__title">${w.title}</div>
+        <p class="wx-card__text">${w.summary}</p>
+        <a class="wx-link" href="${w.forecastUrl}" target="_blank" rel="noopener">Актуальный прогноз Осаки →</a>
+      </div>
+      <div class="wx-grid">
+        ${w.feel.map(x => `
+          <div class="wx-card">
+            <div class="wx-card__title">${x.e} ${x.t}</div>
+            <p class="wx-card__text">${x.d}</p>
+          </div>`).join("")}
+      </div>
+      <div class="wx-card">
+        <div class="wx-card__title">👕 Что надеть</div>
+        <ul class="wx-list">${w.wear.map(i => `<li>${i}</li>`).join("")}</ul>
+      </div>
+      <div class="wx-card wx-card--rain">
+        <div class="wx-card__title">☔ Если дождь — план Б</div>
+        <div class="wx-rain">
+          ${w.rainPlans.map(r => `
+            <div class="wx-rain__item">
+              <b>${r.e} ${r.t}</b>
+              <span>${r.d}</span>
+            </div>`).join("")}
+        </div>
+      </div>
+    `;
+  }
+
+  // ======================= 3. ДЕНЬ ВЫЛЕТА =======================
+  function renderDeparture() {
+    const wrap = $("#departureBody");
+    if (!wrap || typeof DEPARTURE_DAY === "undefined") return;
+    const d = DEPARTURE_DAY;
+    wrap.innerHTML = `
+      <div class="dep-hero">
+        <div class="dep-hero__title">${d.title}</div>
+        <div class="dep-hero__flight">✈️ ${d.flight}</div>
+        <a class="dep-hero__cn" href="china.html">Дальше → слайд Китай / Шанхай</a>
+      </div>
+      <div class="dep-steps">
+        ${d.steps.map((s, i) => `
+          <div class="dep-step">
+            <div class="dep-step__rail"><span>${i + 1}</span></div>
+            <div>
+              <div class="dep-step__time">${s.t}</div>
+              <div class="dep-step__title">${s.title}</div>
+              <div class="dep-step__d">${s.d}</div>
+            </div>
+          </div>`).join("")}
+      </div>
+    `;
+  }
+
+  // ======================= 8. РЯДОМ С ДОМОМ =======================
+  let nearbyFilter = "all";
+
+  function renderNearby() {
+    const wrap = $("#nearbyGrid");
+    const filters = $("#nearbyFilters");
+    if (!wrap || typeof NEARBY === "undefined") return;
+
+    if (filters && !filters.dataset.ready) {
+      const cats = [
+        { key: "all", label: "Всё" },
+        { key: "konbini", label: "7️⃣ Конбини" },
+        { key: "pharmacy", label: "💊 Аптеки" },
+        { key: "charge", label: "🔋 Зарядка" }
+      ];
+      cats.forEach(c => {
+        const b = el("button", "chip" + (c.key === "all" ? " active" : ""), c.label);
+        b.type = "button";
+        b.addEventListener("click", () => {
+          nearbyFilter = c.key;
+          $$("#nearbyFilters .chip").forEach(x => x.classList.remove("active"));
+          b.classList.add("active");
+          paintNearby();
+        });
+        filters.appendChild(b);
+      });
+      filters.dataset.ready = "1";
+    }
+    paintNearby();
+  }
+
+  function paintNearby() {
+    const wrap = $("#nearbyGrid");
+    if (!wrap) return;
+    wrap.innerHTML = "";
+    NEARBY.filter(n => nearbyFilter === "all" || n.cat === nearbyFilter).forEach(n => {
+      const card = el("div", "nearby-card");
+      card.innerHTML = `
+        <div class="nearby-card__emoji">${n.emoji}</div>
+        <div class="nearby-card__body">
+          <div class="nearby-card__name">${n.name}</div>
+          <div class="nearby-card__where">${n.where}</div>
+          <p class="nearby-card__d">${n.d}</p>
+          <div class="nearby-card__actions">
+            <a class="hs-btn" href="${directionsFromHome(n)}" target="_blank" rel="noopener">🚇 Из дома</a>
+            <a class="hs-btn hs-btn--ghost" href="${gmapsLink(n)}" target="_blank" rel="noopener">📍 Карта</a>
+          </div>
+        </div>
+      `;
+      wrap.appendChild(card);
+    });
   }
 
   // ======================= INIT =======================
   function init() {
     renderStats();
     renderNextDay();
+    renderQrWidgets();
+    renderNearby();
+    renderWeather();
     renderKixSteps();
+    renderDeparture();
     renderFilters();
     renderTimeline();
+    setupTodayOnly();
     renderTickets();
     renderHomeSos();
     renderChecklist();

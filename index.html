@@ -55,25 +55,55 @@
       <a href="#top" class="nav__brand">日本 2026</a>
       <div class="nav__links">
         <a href="#next">Сегодня</a>
+        <a href="#qr">QR</a>
+        <a href="#nearby">Рядом</a>
+        <a href="#weather">Погода</a>
         <a href="#arrival">KIX</a>
+        <a href="#departure">Вылет</a>
         <a href="#route">Маршрут</a>
-        <a href="#tickets">Билеты</a>
-        <a href="#home">Дом / SOS</a>
+        <a href="#home">Дом</a>
         <a href="#checklist">Чеклист</a>
-        <a href="#phrases">Фразы</a>
-        <a href="#map">Карта</a>
       </div>
     </div>
   </nav>
 
   <main>
-    <!-- СЕГОДНЯ / ЗАВТРА -->
+    <!-- 4+6 · СЕГОДНЯ / ЗАВТРА -->
     <section class="section section--tight" id="next">
       <div class="section__head">
         <h2 class="section__title">Сегодня и завтра</h2>
         <p class="section__sub">Главный день без прокрутки всего маршрута.</p>
       </div>
       <div id="nextDay" class="next-day"></div>
+    </section>
+
+    <!-- 7 · БЫСТРЫЕ QR-ВИДЖЕТЫ -->
+    <section class="section section--tight" id="qr">
+      <div class="section__head">
+        <h2 class="section__title">QR у входа</h2>
+        <p class="section__sub">Крупные кнопки для показа билета сканеру. Сначала добавьте фото ниже — потом жмите виджет.</p>
+      </div>
+      <div class="qr-widgets" id="qrWidgets"></div>
+      <p class="qr-widgets__hint" id="qrWidgetsHint">Пока нет загруженных билетов — добавьте скрины в блоке «Билеты» чуть ниже.</p>
+    </section>
+
+    <!-- 8 · РЯДОМ С ДОМОМ -->
+    <section class="section" id="nearby">
+      <div class="section__head">
+        <h2 class="section__title">Рядом с домом</h2>
+        <p class="section__sub">7-Eleven, аптеки и где подзарядить телефон у Tanimachi 6-chome.</p>
+      </div>
+      <div class="nearby-filters" id="nearbyFilters"></div>
+      <div class="nearby-grid" id="nearbyGrid"></div>
+    </section>
+
+    <!-- 1 · ПОГОДА -->
+    <section class="section" id="weather">
+      <div class="section__head">
+        <h2 class="section__title">Погода и что надеть</h2>
+        <p class="section__sub">Сентябрь в Кансае: тепло, влажно, иногда дождь. План Б — если небо хмурое.</p>
+      </div>
+      <div id="weatherBody"></div>
     </section>
 
     <!-- ПЕРВЫЙ ЧАС В KIX -->
@@ -83,6 +113,15 @@
         <p class="section__sub">Чеклист сразу после прилёта 9 сентября — по порядку.</p>
       </div>
       <div class="kix-steps" id="kixSteps"></div>
+    </section>
+
+    <!-- 3 · ДЕНЬ ВЫЛЕТА -->
+    <section class="section" id="departure">
+      <div class="section__head">
+        <h2 class="section__title">День вылета · 25 сентября</h2>
+        <p class="section__sub">От квартиры до гейта — один таймлайн, без прыжков по страницам.</p>
+      </div>
+      <div id="departureBody"></div>
     </section>
 
     <!-- ФИЛЬТРЫ ПО ИНТЕРЕСАМ -->
@@ -111,6 +150,12 @@
           17 дней. Нажмите на день, чтобы раскрыть детали.
           <button class="link-btn" id="editToggle" type="button">✏️ Изменить план</button>
         </p>
+        <div class="route-toolbar">
+          <button type="button" class="route-toggle" id="todayOnlyBtn" aria-pressed="false">
+            Только сегодня
+          </button>
+          <span class="route-toggle__hint" id="todayOnlyHint">Показать все 17 дней</span>
+        </div>
         <p class="legend-fixed">
           <span class="legend-fixed__mark">⏰ ФИКС</span>
           Красные карточки — фиксированные пункты.
@@ -125,11 +170,11 @@
       <div class="timeline" id="timeline"></div>
     </section>
 
-    <!-- БИЛЕТЫ / QR -->
+    <!-- БИЛЕТЫ / ЗАГРУЗКА -->
     <section class="section" id="tickets">
       <div class="section__head">
-        <h2 class="section__title">Билеты и QR</h2>
-        <p class="section__sub">Загрузите скрины билетов — покажите на входе. Фото остаются только на этом телефоне (не уходят в интернет).</p>
+        <h2 class="section__title">Билеты · загрузить фото</h2>
+        <p class="section__sub">Скрины QR остаются только на этом телефоне. После загрузки появятся виджеты в блоке «QR у входа» и быстрая панель внизу.</p>
       </div>
       <div class="tickets" id="ticketsGrid"></div>
     </section>
@@ -192,11 +237,20 @@
     </div>
   </div>
 
-  <!-- Просмотр билета на весь экран -->
+  <!-- Просмотр QR: режим для сканера (светлый фон) -->
   <div class="ticket-view" id="ticketView" hidden>
-    <button type="button" class="ticket-view__close" id="ticketViewClose" aria-label="Закрыть">✕</button>
-    <img id="ticketViewImg" alt="Билет">
+    <div class="ticket-view__bar">
+      <div class="ticket-view__title" id="ticketViewTitle">Билет</div>
+      <button type="button" class="ticket-view__close" id="ticketViewClose" aria-label="Закрыть">✕</button>
+    </div>
+    <div class="ticket-view__stage">
+      <img id="ticketViewImg" alt="QR билета">
+    </div>
+    <p class="ticket-view__tip">Поднесите QR к сканеру · яркость экрана на максимум</p>
   </div>
+
+  <!-- Быстрая панель QR над переключателем стран -->
+  <div class="qr-dock" id="qrDock" hidden aria-label="Быстрые QR"></div>
 
   <!-- Нижний переключатель стран (удобно на iPhone) -->
   <nav class="country-dock country-dock--jp" aria-label="Страна">
