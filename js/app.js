@@ -105,6 +105,89 @@
     return out;
   }
 
+  function photosFor(place) {
+    if (!place || typeof PLACE_PHOTOS === "undefined") return [];
+    const list = PLACE_PHOTOS[place.name];
+    return Array.isArray(list) ? list.filter(Boolean) : [];
+  }
+
+  function galleryStripHtml(urls, name) {
+    if (!urls.length) return "";
+    const imgs = urls.map((src, i) =>
+      `<button type="button" class="pgal__thumb" data-gidx="${i}" aria-label="Фото ${i + 1}">
+        <img src="${src}" alt="${name}" loading="lazy" decoding="async">
+      </button>`
+    ).join("");
+    return `<div class="pgal" data-gallery>${imgs}</div>`;
+  }
+
+  let galleryState = { urls: [], idx: 0, title: "" };
+
+  function openGallery(urls, idx, title) {
+    if (!urls || !urls.length) return;
+    galleryState = { urls, idx: idx || 0, title: title || "" };
+    const view = $("#galleryView");
+    const img = $("#galleryImg");
+    const cap = $("#galleryCap");
+    if (!view || !img) return;
+    img.src = urls[galleryState.idx];
+    img.alt = title || "";
+    if (cap) cap.textContent = `${title || ""} · ${galleryState.idx + 1}/${urls.length}`;
+    view.hidden = false;
+    document.body.style.overflow = "hidden";
+  }
+
+  function stepGallery(dir) {
+    const { urls } = galleryState;
+    if (!urls.length) return;
+    galleryState.idx = (galleryState.idx + dir + urls.length) % urls.length;
+    const img = $("#galleryImg");
+    const cap = $("#galleryCap");
+    if (img) img.src = urls[galleryState.idx];
+    if (cap) cap.textContent = `${galleryState.title || ""} · ${galleryState.idx + 1}/${urls.length}`;
+  }
+
+  function closeGallery() {
+    const view = $("#galleryView");
+    const img = $("#galleryImg");
+    if (view) view.hidden = true;
+    if (img) img.removeAttribute("src");
+    document.body.style.overflow = "";
+  }
+
+  function setupGallery() {
+    const view = $("#galleryView");
+    if (!view || view.dataset.ready) return;
+    view.dataset.ready = "1";
+    const close = $("#galleryClose");
+    if (close) close.addEventListener("click", closeGallery);
+    const prev = $("#galleryPrev");
+    const next = $("#galleryNext");
+    if (prev) prev.addEventListener("click", (e) => { e.stopPropagation(); stepGallery(-1); });
+    if (next) next.addEventListener("click", (e) => { e.stopPropagation(); stepGallery(1); });
+    view.addEventListener("click", (e) => {
+      if (e.target === view) closeGallery();
+    });
+    document.addEventListener("keydown", (e) => {
+      const g = $("#galleryView");
+      if (!g || g.hidden) return;
+      if (e.key === "Escape") closeGallery();
+      if (e.key === "ArrowLeft") stepGallery(-1);
+      if (e.key === "ArrowRight") stepGallery(1);
+    });
+  }
+
+  function bindGalleryClicks(root, urls, title) {
+    if (!root) return;
+    root.querySelectorAll("[data-gidx]").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        openGallery(urls, Number(btn.dataset.gidx) || 0, title);
+      });
+    });
+  }
+
   function placeCard(day, place, di, pi) {
     const card = el("div", "place" + (place.fixed ? " place--fixed" : ""));
     if ((place.desc || "").length > 90) card.classList.add("full");
@@ -125,6 +208,7 @@
 
     const who = WHO[place.who] || WHO.both;
     const whoBadge = `<span class="who-badge ${who.cls}">${who.emoji} ${who.label}</span>`;
+    const photos = photosFor(place);
 
     card.innerHTML = `
       <div class="place__top">
@@ -134,9 +218,11 @@
           <div class="place__desc">${place.desc || ""}</div>
         </div>
       </div>
+      ${galleryStripHtml(photos, place.name)}
       ${place.hours ? `<div class="place__hours"><span>🕐</span><span>${place.hours}</span></div>` : ""}
       <div class="place__tags">${timeBadge}${durBadge}${tagsHtml}</div>
     `;
+    bindGalleryClicks(card, photos, place.name);
     card.addEventListener("click", () => openModal(day, place));
     return card;
   }
@@ -412,19 +498,29 @@
     }).join("");
 
     const canRoute = p.lat != null || p.maps || p.name;
+    const photos = photosFor(p);
 
     body.innerHTML = `
       <div class="m-emoji">${p.emoji || "📍"}</div>
       <div class="m-title">${p.name}</div>
       <div class="m-desc">День ${day.n} · ${day.date} — ${p.desc || ""}</div>
+      ${photos.length ? `
+        <div class="m-gallery">
+          ${photos.map((src, i) => `
+            <button type="button" class="m-gallery__item" data-gidx="${i}">
+              <img src="${src}" alt="${p.name}" loading="lazy" decoding="async">
+            </button>`).join("")}
+        </div>
+        <p class="m-gallery__hint">Нажмите фото — на весь экран · свайпните в стороны</p>
+      ` : ""}
       <div class="place__tags" style="margin-bottom:16px">${tags}</div>
       <div class="m-grid">${rows.join("")}</div>
       <div class="m-actions">
         ${canRoute ? `<a class="m-btn primary" href="${directionsFromHome(p)}" target="_blank" rel="noopener">🚇 Из дома → сюда</a>` : ""}
         <a class="m-btn ghost" href="${gmapsLink(p)}" target="_blank" rel="noopener">📍 Точка на карте</a>
-        <a class="m-btn ghost" href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(p.name + " Japan")}" target="_blank" rel="noopener">📷 Фотографии</a>
       </div>
     `;
+    bindGalleryClicks(body, photos, p.name);
     const modal = $("#placeModal");
     modal.hidden = false;
     document.body.style.overflow = "hidden";
@@ -446,7 +542,34 @@
   }
   function closeModal() {
     $("#placeModal").hidden = true;
-    document.body.style.overflow = "";
+    const g = $("#galleryView");
+    if (!g || g.hidden) document.body.style.overflow = "";
+  }
+
+  function renderTransitOut() {
+    const wrap = $("#transitBody");
+    if (!wrap || typeof TRANSIT_OUT === "undefined") return;
+    const t = TRANSIT_OUT;
+    wrap.innerHTML = `
+      <p class="transit__note">${t.note}</p>
+      <div class="transit__hotel">
+        <div class="transit__hotel-name">🏨 ${t.hotel.name}</div>
+        <div class="transit__hotel-meta">${t.hotel.branch} · ${t.hotel.nights}</div>
+        <p class="transit__hotel-tip">${t.hotel.tip}</p>
+      </div>
+      <div class="transit__steps">
+        ${t.steps.map((s, i) => `
+          <div class="transit__step">
+            <div class="transit__n">${i + 1}</div>
+            <div>
+              <div class="transit__time">${s.t}</div>
+              <div class="transit__title">${s.title}</div>
+              <div class="transit__d">${s.d}</div>
+            </div>
+          </div>`).join("")}
+      </div>
+      <a class="transit__link" href="#route">Дальше → день 1 в Осаке</a>
+    `;
   }
 
   // ======================= КАРТА (Leaflet) =======================
@@ -1060,6 +1183,7 @@
   function init() {
     renderStats();
     renderNextDay();
+    renderTransitOut();
     renderNearby();
     renderWeather();
     renderFilters();
@@ -1072,6 +1196,7 @@
     renderTips();
     setupEdit();
     setupModal();
+    setupGallery();
     setupComfort();
     setupScrollProgress();
     renderMapSafe();
