@@ -784,8 +784,10 @@
         <div class="next-day__usj" id="usjQrQuick">
           <div class="next-day__usj-title">⚡ USJ сегодня · слот Nintendo 11:50</div>
           <div class="next-day__usj-btns">
-            <button type="button" class="next-day__usj-btn" data-qr="usj-pass">🎢 Studio Pass</button>
-            <button type="button" class="next-day__usj-btn" data-qr="usj-express">⚡ Express Pass</button>
+            <button type="button" class="next-day__usj-btn" data-qr="usj-pass-sasha">🎢 Pass · Александр</button>
+            <button type="button" class="next-day__usj-btn" data-qr="usj-express-sasha">⚡ Exp · Александр</button>
+            <button type="button" class="next-day__usj-btn next-day__usj-btn--rita" data-qr="usj-pass-rita">🎢 Pass · Рита</button>
+            <button type="button" class="next-day__usj-btn next-day__usj-btn--rita" data-qr="usj-express-rita">⚡ Exp · Рита</button>
           </div>
         </div>`;
     }
@@ -926,14 +928,101 @@
     const slot = TICKET_SLOTS.find(s => s.id === id);
     const rec = await ticketGet(id);
     if (rec) openTicketView(rec.dataUrl, slot ? slot.name : "Билет");
+    else alert("Этот QR ещё не загружен. Добавьте скрин в разделе «Билеты».");
   }
 
-  /** 7. Крупные виджеты + нижняя панель для показа QR сканеру. */
+  /** Старые общие USJ-слоты → слот Александра (Рите загрузите отдельно). */
+  async function migrateOldUsjTickets() {
+    const pairs = [
+      ["usj-pass", "usj-pass-sasha"],
+      ["usj-express", "usj-express-sasha"]
+    ];
+    for (const [oldId, newId] of pairs) {
+      try {
+        const old = await ticketGet(oldId);
+        const neu = await ticketGet(newId);
+        if (old && !neu) {
+          const slot = TICKET_SLOTS.find(s => s.id === newId);
+          await ticketPut({
+            id: newId,
+            name: slot ? slot.name : old.name,
+            dataUrl: old.dataUrl,
+            ts: old.ts || Date.now()
+          });
+        }
+      } catch (e) { /* ignore */ }
+    }
+  }
+
+  let qrDayMode = "today"; // today | all
+  let qrWho = "all";       // all | shared | sasha | rita
+
+  function ticketDayN() {
+    const focus = tripFocus();
+    if (focus.mode === "during" && focus.todayIdx >= 0) {
+      return TRIP.days[focus.todayIdx].n;
+    }
+    if (focus.mode === "before") return 1;
+    return 0;
+  }
+
+  function slotMatchesFilters(slot) {
+    if (qrWho === "shared" && slot.who !== "shared") return false;
+    if (qrWho === "sasha" && slot.who !== "sasha" && slot.who !== "shared") return false;
+    if (qrWho === "rita" && slot.who !== "rita" && slot.who !== "shared") return false;
+
+    if (qrDayMode === "all") return true;
+    const todayN = ticketDayN();
+    if (slot.dayN === 0) return true; // всегда под рукой
+    if (todayN === 0) return slot.dayN === 0;
+    return slot.dayN === todayN;
+  }
+
+  function whoBadge(who) {
+    if (who === "sasha") return `<span class="qr-who qr-who--sasha">🎮 Александр</span>`;
+    if (who === "rita") return `<span class="qr-who qr-who--rita">🎀 Рита</span>`;
+    return `<span class="qr-who qr-who--shared">👥 Общий</span>`;
+  }
+
+  function setupQrToolbar() {
+    const bar = $("#qrToolbar");
+    if (!bar || bar.dataset.ready) return;
+    bar.innerHTML = `
+      <div class="qr-toolbar__row">
+        <button type="button" class="chip active" data-qr-day="today">На сегодня</button>
+        <button type="button" class="chip" data-qr-day="all">Все дни</button>
+      </div>
+      <div class="qr-toolbar__row">
+        <button type="button" class="chip active" data-qr-who="all">Все</button>
+        <button type="button" class="chip" data-qr-who="shared">👥 Общие</button>
+        <button type="button" class="chip" data-qr-who="sasha">🎮 Александр</button>
+        <button type="button" class="chip" data-qr-who="rita">🎀 Рита</button>
+      </div>
+    `;
+    bar.dataset.ready = "1";
+    bar.addEventListener("click", (e) => {
+      const dayBtn = e.target.closest("[data-qr-day]");
+      const whoBtn = e.target.closest("[data-qr-who]");
+      if (dayBtn) {
+        qrDayMode = dayBtn.dataset.qrDay;
+        bar.querySelectorAll("[data-qr-day]").forEach(b => b.classList.toggle("active", b === dayBtn));
+        renderQrWidgets();
+      }
+      if (whoBtn) {
+        qrWho = whoBtn.dataset.qrWho;
+        bar.querySelectorAll("[data-qr-who]").forEach(b => b.classList.toggle("active", b === whoBtn));
+        renderQrWidgets();
+      }
+    });
+  }
+
+  /** 7. Виджеты по дням / человеку + нижняя панель (только актуальные). */
   async function renderQrWidgets() {
     const wrap = $("#qrWidgets");
     const hint = $("#qrWidgetsHint");
     const dock = $("#qrDock");
     if (!wrap || typeof TICKET_SLOTS === "undefined") return;
+    setupQrToolbar();
 
     const ready = [];
     for (const slot of TICKET_SLOTS) {
@@ -941,109 +1030,168 @@
       if (saved) ready.push({ slot, saved });
     }
 
+    const filtered = ready.filter(({ slot }) => slotMatchesFilters(slot));
+
     wrap.innerHTML = "";
-    if (hint) hint.hidden = ready.length > 0;
+    if (hint) {
+      hint.hidden = ready.length > 0;
+      if (ready.length && !filtered.length) {
+        hint.hidden = false;
+        hint.textContent = "На сегодня нет подходящих QR с этим фильтром. Нажмите «Все дни» или смените человека.";
+      } else if (!ready.length) {
+        hint.textContent = "Пока нет загруженных билетов — добавьте скрины в блоке «Билеты» ниже.";
+      }
+    }
+
+    // Нижняя панель — только «на сегодня» (+ всегда), без чужих лишних
+    const dockSlots = ready.filter(({ slot }) => {
+      const todayN = ticketDayN();
+      const dayOk = slot.dayN === 0 || slot.dayN === todayN || (todayN === 0 && slot.dayN === 1);
+      if (!dayOk) return false;
+      if (qrWho === "sasha") return slot.who === "sasha" || slot.who === "shared";
+      if (qrWho === "rita") return slot.who === "rita" || slot.who === "shared";
+      if (qrWho === "shared") return slot.who === "shared";
+      return true;
+    });
+
     if (dock) {
       dock.innerHTML = "";
-      dock.hidden = ready.length === 0;
-      document.body.classList.toggle("has-qr-dock", ready.length > 0);
+      dock.hidden = dockSlots.length === 0;
+      document.body.classList.toggle("has-qr-dock", dockSlots.length > 0);
+      dockSlots.forEach(({ slot }) => {
+        const dBtn = el("button", "qr-dock__btn" + (slot.who !== "shared" ? ` qr-dock__btn--${slot.who}` : ""));
+        dBtn.type = "button";
+        dBtn.title = slot.name;
+        dBtn.innerHTML = `<span>${slot.emoji}</span><small>${slot.short || "QR"}</small>`;
+        dBtn.addEventListener("click", () => showTicketById(slot.id));
+        dock.appendChild(dBtn);
+      });
     }
 
     if (!ready.length) {
       wrap.innerHTML = `
         <div class="qr-empty">
           <div class="qr-empty__title">Виджеты появятся после загрузки</div>
-          <p>Откройте «Билеты · загрузить фото», добавьте скрин Express Pass / Harukas / VJW — и сюда встанут большие кнопки «Показать QR».</p>
+          <p>В «Билеты» добавьте общие QR и отдельно USJ для Александра и для Риты.</p>
           <a class="qr-empty__link" href="#tickets">Перейти к загрузке ↓</a>
         </div>`;
       return;
     }
 
-    ready.forEach(({ slot }) => {
-      const btn = el("button", "qr-widget");
-      btn.type = "button";
-      btn.innerHTML = `
-        <span class="qr-widget__emoji">${slot.emoji}</span>
-        <span class="qr-widget__name">${slot.short || slot.name}</span>
-        <span class="qr-widget__hint">${slot.hint || "Показать сканеру"}</span>
-        <span class="qr-widget__cta">Показать QR</span>
-      `;
-      btn.addEventListener("click", () => showTicketById(slot.id));
-      wrap.appendChild(btn);
+    if (!filtered.length) return;
 
-      if (dock) {
-        const dBtn = el("button", "qr-dock__btn");
-        dBtn.type = "button";
-        dBtn.title = slot.name;
-        dBtn.innerHTML = `<span>${slot.emoji}</span><small>${slot.short || "QR"}</small>`;
-        dBtn.addEventListener("click", () => showTicketById(slot.id));
-        dock.appendChild(dBtn);
+    // Группировка по дню
+    const groups = new Map();
+    filtered.forEach(item => {
+      const key = item.slot.dayLabel || "Другое";
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(item);
+    });
+
+    groups.forEach((items, label) => {
+      const block = el("div", "qr-day");
+      block.appendChild(el("div", "qr-day__title", label));
+      const grid = el("div", "qr-day__grid");
+      items.forEach(({ slot }) => {
+        const btn = el("button", "qr-widget" + (slot.who !== "shared" ? ` qr-widget--${slot.who}` : ""));
+        btn.type = "button";
+        btn.innerHTML = `
+          ${whoBadge(slot.who)}
+          <span class="qr-widget__emoji">${slot.emoji}</span>
+          <span class="qr-widget__name">${slot.short || slot.name}</span>
+          <span class="qr-widget__hint">${slot.hint || "Показать сканеру"}</span>
+          <span class="qr-widget__cta">Показать QR</span>
+        `;
+        btn.addEventListener("click", () => showTicketById(slot.id));
+        grid.appendChild(btn);
+      });
+      block.appendChild(grid);
+      wrap.appendChild(block);
+    });
+  }
+
+  function makeTicketCard(slot, saved) {
+    const card = el("div", "ticket-card" + (saved ? " has-photo" : "") + (slot.who !== "shared" ? ` ticket-card--${slot.who}` : ""));
+    card.innerHTML = `
+      <div class="ticket-card__head">
+        <span class="ticket-card__emoji">${slot.emoji}</span>
+        <div>
+          <div class="ticket-card__name">${slot.name}</div>
+          <div class="ticket-card__meta">${whoBadge(slot.who)} · ${slot.hint || ""}</div>
+        </div>
+      </div>
+      <div class="ticket-card__preview">
+        ${saved
+          ? `<img src="${saved.dataUrl}" alt="${slot.name}">`
+          : `<span class="ticket-card__empty">Нет фото · добавьте скрин</span>`}
+      </div>
+      <div class="ticket-card__actions">
+        <label class="ticket-card__btn">
+          ${saved ? "↻ Заменить" : "+ Добавить"}
+          <input type="file" accept="image/*" capture="environment" hidden data-slot="${slot.id}">
+        </label>
+        ${saved ? `
+          <button type="button" class="ticket-card__btn ticket-card__btn--primary" data-view="${slot.id}">Показать QR</button>
+          <button type="button" class="ticket-card__btn ticket-card__btn--danger" data-del="${slot.id}">Удалить</button>
+        ` : ""}
+      </div>
+    `;
+
+    const input = card.querySelector('input[type="file"]');
+    input.addEventListener("change", async () => {
+      const file = input.files && input.files[0];
+      if (!file) return;
+      try {
+        const dataUrl = await compressImage(file);
+        await ticketPut({ id: slot.id, name: slot.name, dataUrl, ts: Date.now() });
+        await renderTickets();
+      } catch (e) {
+        alert("Не удалось сохранить фото. Попробуйте другое изображение.");
       }
     });
+
+    const viewBtn = card.querySelector("[data-view]");
+    if (viewBtn) viewBtn.addEventListener("click", () => showTicketById(slot.id));
+    const preview = card.querySelector(".ticket-card__preview");
+    if (saved && preview) preview.addEventListener("click", () => showTicketById(slot.id));
+    const delBtn = card.querySelector("[data-del]");
+    if (delBtn) {
+      delBtn.addEventListener("click", async () => {
+        if (!confirm("Удалить это фото?")) return;
+        await ticketDel(slot.id);
+        await renderTickets();
+      });
+    }
+    return card;
   }
 
   async function renderTickets() {
     const wrap = $("#ticketsGrid");
     if (!wrap || typeof TICKET_SLOTS === "undefined") return;
+    await migrateOldUsjTickets();
     wrap.innerHTML = "";
 
-    for (const slot of TICKET_SLOTS) {
-      const saved = await ticketGet(slot.id).catch(() => null);
-      const card = el("div", "ticket-card" + (saved ? " has-photo" : ""));
-      card.innerHTML = `
-        <div class="ticket-card__head">
-          <span class="ticket-card__emoji">${slot.emoji}</span>
-          <div>
-            <div class="ticket-card__name">${slot.name}</div>
-            <div class="ticket-card__meta">${slot.hint || ""}</div>
-          </div>
-        </div>
-        <div class="ticket-card__preview">
-          ${saved
-            ? `<img src="${saved.dataUrl}" alt="${slot.name}">`
-            : `<span class="ticket-card__empty">Нет фото · добавьте скрин</span>`}
-        </div>
-        <div class="ticket-card__actions">
-          <label class="ticket-card__btn">
-            ${saved ? "↻ Заменить" : "+ Добавить"}
-            <input type="file" accept="image/*" capture="environment" hidden data-slot="${slot.id}">
-          </label>
-          ${saved ? `
-            <button type="button" class="ticket-card__btn ticket-card__btn--primary" data-view="${slot.id}">Показать QR</button>
-            <button type="button" class="ticket-card__btn ticket-card__btn--danger" data-del="${slot.id}">Удалить</button>
-          ` : ""}
-        </div>
-      `;
+    const groups = new Map();
+    TICKET_SLOTS.forEach(slot => {
+      const key = slot.dayLabel || "Другое";
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(slot);
+    });
 
-      const input = card.querySelector('input[type="file"]');
-      input.addEventListener("change", async () => {
-        const file = input.files && input.files[0];
-        if (!file) return;
-        try {
-          const dataUrl = await compressImage(file);
-          await ticketPut({ id: slot.id, name: slot.name, dataUrl, ts: Date.now() });
-          await renderTickets();
-          await renderQrWidgets();
-        } catch (e) {
-          alert("Не удалось сохранить фото. Попробуйте другое изображение.");
-        }
-      });
-
-      const viewBtn = card.querySelector("[data-view]");
-      if (viewBtn) viewBtn.addEventListener("click", () => showTicketById(slot.id));
-      const preview = card.querySelector(".ticket-card__preview");
-      if (saved && preview) preview.addEventListener("click", () => showTicketById(slot.id));
-      const delBtn = card.querySelector("[data-del]");
-      if (delBtn) {
-        delBtn.addEventListener("click", async () => {
-          if (!confirm("Удалить это фото?")) return;
-          await ticketDel(slot.id);
-          await renderTickets();
-          await renderQrWidgets();
-        });
+    for (const [label, slots] of groups) {
+      const block = el("div", "ticket-day");
+      block.appendChild(el("div", "ticket-day__title", label));
+      if (label.includes("USJ")) {
+        block.appendChild(el("p", "ticket-day__note",
+          "Здесь нужны <b>разные</b> QR: у каждого свой Studio Pass и Express Pass. Загрузите 4 скрина."));
       }
-
-      wrap.appendChild(card);
+      const grid = el("div", "ticket-day__grid");
+      for (const slot of slots) {
+        const saved = await ticketGet(slot.id).catch(() => null);
+        grid.appendChild(makeTicketCard(slot, saved));
+      }
+      block.appendChild(grid);
+      wrap.appendChild(block);
     }
 
     await renderQrWidgets();

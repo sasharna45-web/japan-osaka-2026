@@ -874,16 +874,23 @@ const FIRST_HOUR_KIX = [
   { n: "6", t: "Домой", d: "Nankai → Namba или JR Haruka, дальше метро до Tanimachi 6-chome. Заселение с 16:00." }
 ];
 
-/** Слоты для скринов QR / билетов (фото хранятся только на этом телефоне). */
+/**
+ * Слоты QR / билетов.
+ * who: "shared" — один на двоих; "sasha" / "rita" — личные (только USJ).
+ * dayN: номер дня поездки (1–17); 0 = любой день (страховка и т.п.).
+ * Фото хранятся в IndexedDB браузера на ЭТОМ телефоне — не в облаке и не на GitHub.
+ */
 const TICKET_SLOTS = [
-  { id: "vjw", emoji: "🛂", name: "Visit Japan Web QR", short: "VJW", hint: "Паспортный контроль в KIX" },
-  { id: "usj-pass", emoji: "🎢", name: "USJ Studio Pass", short: "USJ", hint: "Вход в парк · 15 сент" },
-  { id: "usj-express", emoji: "⚡", name: "USJ Express Pass", short: "Express", hint: "Слот Nintendo 11:50" },
-  { id: "abeno", emoji: "🌆", name: "Abeno Harukas 300", short: "Harukas", hint: "11 сент · 17:00" },
-  { id: "umeda", emoji: "🏙️", name: "Umeda Sky", short: "Umeda", hint: "22 сентября" },
-  { id: "insurance", emoji: "🩺", name: "Страховка", short: "Полис", hint: "На всякий случай" },
-  { id: "airbnb", emoji: "🏠", name: "Airbnb / ваучер", short: "Дом", hint: "Заселение / выселение" },
-  { id: "other", emoji: "📎", name: "Другое", short: "Ещё", hint: "Любой другой QR" }
+  { id: "vjw", emoji: "🛂", name: "Visit Japan Web QR", short: "VJW", hint: "Паспортный контроль в KIX", who: "shared", dayN: 1, dayLabel: "День 1 · 9 сент · прилёт" },
+  { id: "airbnb", emoji: "🏠", name: "Airbnb / ваучер", short: "Дом", hint: "Заселение и выселение", who: "shared", dayN: 1, dayLabel: "День 1 · 9 сент · прилёт" },
+  { id: "abeno", emoji: "🌆", name: "Abeno Harukas 300", short: "Harukas", hint: "Общий билет · 17:00", who: "shared", dayN: 3, dayLabel: "День 3 · 11 сент · Harukas" },
+  { id: "usj-pass-sasha", emoji: "🎢", name: "USJ Studio Pass · Александр", short: "USJ · А", hint: "Личный вход Александра", who: "sasha", dayN: 7, dayLabel: "День 7 · 15 сент · USJ" },
+  { id: "usj-pass-rita", emoji: "🎢", name: "USJ Studio Pass · Рита", short: "USJ · Р", hint: "Личный вход Риты", who: "rita", dayN: 7, dayLabel: "День 7 · 15 сент · USJ" },
+  { id: "usj-express-sasha", emoji: "⚡", name: "USJ Express Pass · Александр", short: "Exp · А", hint: "Слот Nintendo 11:50 · Александр", who: "sasha", dayN: 7, dayLabel: "День 7 · 15 сент · USJ" },
+  { id: "usj-express-rita", emoji: "⚡", name: "USJ Express Pass · Рита", short: "Exp · Р", hint: "Слот Nintendo 11:50 · Рита", who: "rita", dayN: 7, dayLabel: "День 7 · 15 сент · USJ" },
+  { id: "umeda", emoji: "🏙️", name: "Umeda Sky", short: "Umeda", hint: "Общий билет", who: "shared", dayN: 14, dayLabel: "День 14 · 22 сент · Umeda Sky" },
+  { id: "insurance", emoji: "🩺", name: "Страховка", short: "Полис", hint: "На любой день", who: "shared", dayN: 0, dayLabel: "Всегда под рукой" },
+  { id: "other", emoji: "📎", name: "Другое", short: "Ещё", hint: "Любой другой QR", who: "shared", dayN: 0, dayLabel: "Всегда под рукой" }
 ];
 
 /**

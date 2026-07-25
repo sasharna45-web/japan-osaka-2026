@@ -81,10 +81,14 @@
     <section class="section section--tight" id="qr">
       <div class="section__head">
         <h2 class="section__title">QR у входа</h2>
-        <p class="section__sub">Крупные кнопки для показа билета сканеру. Сначала добавьте фото ниже — потом жмите виджет.</p>
+        <p class="section__sub">По дням и по человеку. USJ — отдельно у Александра и у Риты; остальные билеты общие.</p>
       </div>
+      <div class="qr-storage">
+        💾 Хранение: только на <b>этом телефоне</b> (IndexedDB в браузере). Не уходит в интернет и не синхронизируется с телефоном Риты — каждому загрузите свои USJ-QR.
+      </div>
+      <div class="qr-toolbar" id="qrToolbar"></div>
       <div class="qr-widgets" id="qrWidgets"></div>
-      <p class="qr-widgets__hint" id="qrWidgetsHint">Пока нет загруженных билетов — добавьте скрины в блоке «Билеты» чуть ниже.</p>
+      <p class="qr-widgets__hint" id="qrWidgetsHint">Пока нет загруженных билетов — добавьте скрины в блоке «Билеты» ниже.</p>
     </section>
 
     <!-- 8 · РЯДОМ С ДОМОМ -->
@@ -174,7 +178,10 @@
     <section class="section" id="tickets">
       <div class="section__head">
         <h2 class="section__title">Билеты · загрузить фото</h2>
-        <p class="section__sub">Скрины QR остаются только на этом телефоне. После загрузки появятся виджеты в блоке «QR у входа» и быстрая панель внизу.</p>
+        <p class="section__sub">Сгруппировано по дням. В день USJ — 4 слота: Studio Pass и Express для Александра и для Риты. Общие билеты (Harukas, Umeda…) — по одному на двоих.</p>
+      </div>
+      <div class="qr-storage qr-storage--soft">
+        Файлы не загружаются на сервер: лежат в памяти браузера этого устройства. С телефона Риты их не видно — ей нужны свои скрины USJ.
       </div>
       <div class="tickets" id="ticketsGrid"></div>
     </section>

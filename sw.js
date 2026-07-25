@@ -1,5 +1,5 @@
 /* Офлайн-кэш путеводителя (GitHub Pages). */
-const CACHE = "japan2026-v4";
+const CACHE = "japan2026-v5";
 const ASSETS = [
   "./",
   "./index.html",
