@@ -284,7 +284,10 @@
       `));
     }
 
-    // День 1: шаги KIX прямо в карточке дня
+    const details = el("div", "day-details");
+    details.hidden = true;
+
+    // KIX / вылет — только в «Подробнее», чтобы не засорять день
     if (day.n === 1 && typeof FIRST_HOUR_KIX !== "undefined") {
       const kixBox = el("div", "day-kix");
       kixBox.appendChild(el("div", "day-kix__title", "Первый час в KIX · прилёт"));
@@ -294,10 +297,9 @@
           `<b>${s.n}. ${s.t}</b><span>${s.d}</span>`));
       });
       kixBox.appendChild(kixList);
-      bodyWrap.appendChild(kixBox);
+      details.appendChild(kixBox);
     }
 
-    // День 17 / 25 сент: вылет в Шанхай (только в этой карточке)
     if (day.n === 17 && typeof DEPARTURE_DAY !== "undefined") {
       const dep = DEPARTURE_DAY;
       const depBox = el("div", "day-dep");
@@ -313,11 +315,8 @@
         </div>
         <a class="day-dep__cn" href="china.html">Дальше → слайд Китай / Шанхай</a>
       `;
-      bodyWrap.appendChild(depBox);
+      details.appendChild(depBox);
     }
-
-    const details = el("div", "day-details");
-    details.hidden = true;
 
     if (day.intro) {
       details.appendChild(el("p", "day__intro", day.intro));
@@ -731,11 +730,14 @@
     const wrap = $("#checklist-body");
     if (!wrap || typeof CHECKLIST === "undefined") return;
     wrap.innerHTML = "";
-    CHECKLIST.forEach(g => {
-      const group = el("div", "cl-group");
-      group.appendChild(el("div", `cl-step cl-step--${g.tone}`,
-        `<span class="cl-step__tag">${g.step}</span>${g.title}`));
-      const list = el("div", "cl-list");
+    CHECKLIST.forEach((g, gi) => {
+      const group = el("div", "cl-group fold-group");
+      const head = document.createElement("button");
+      head.type = "button";
+      head.className = `cl-step cl-step--${g.tone} fold-group__btn`;
+      head.innerHTML = `<span class="cl-step__tag">${g.step}</span><span class="fold-group__label">${g.title}</span><span class="fold-group__chevron">▾</span>`;
+      const list = el("div", "cl-list fold-group__panel");
+      list.hidden = true;
       g.items.forEach(it => {
         if (it.sub && it.sub.length) {
           list.appendChild(el("div", "cl-subhead", it.text));
@@ -746,7 +748,8 @@
           list.appendChild(makeCheckItem(it.id, it.text));
         }
       });
-      group.appendChild(list);
+      bindGroupFold(group, head, list, `cl-${gi}`, gi === 0);
+      group.append(head, list);
       wrap.appendChild(group);
     });
     updateClProgress();
@@ -815,11 +818,14 @@
       return;
     }
     wrap.innerHTML = "";
-    PACKING.forEach(g => {
-      const group = el("div", "pack-group");
-      const head = el("div", "pack-group__head");
-      head.textContent = g.title;
-      const list = el("div", "pack-group__list");
+    PACKING.forEach((g, gi) => {
+      const group = el("div", "pack-group fold-group");
+      const head = document.createElement("button");
+      head.type = "button";
+      head.className = "pack-group__head fold-group__btn";
+      head.innerHTML = `<span class="fold-group__label">${g.title}</span><span class="fold-group__chevron">▾</span>`;
+      const list = el("div", "pack-group__list fold-group__panel");
+      list.hidden = true;
       g.items.forEach(it => {
         if (it.sub && it.sub.length) {
           list.appendChild(el("div", "cl-subhead", it.text));
@@ -830,10 +836,93 @@
           list.appendChild(makePackItem(it.id, it.text));
         }
       });
+      bindGroupFold(group, head, list, `pack-${g.id || gi}`, false);
       group.append(head, list);
       wrap.appendChild(group);
     });
     updatePackProgress();
+  }
+
+  // ======================= ВЫКИДУШКИ (сворачиваемые блоки) =======================
+  const FOLD_KEY = "japan2026.folds.v1";
+  const GROUP_FOLD_KEY = "japan2026.groupFolds.v1";
+  let foldState = {};
+  let groupFoldState = {};
+  try { foldState = JSON.parse(localStorage.getItem(FOLD_KEY)) || {}; } catch (e) { foldState = {}; }
+  try { groupFoldState = JSON.parse(localStorage.getItem(GROUP_FOLD_KEY)) || {}; } catch (e) { groupFoldState = {}; }
+
+  function saveFolds() {
+    try { localStorage.setItem(FOLD_KEY, JSON.stringify(foldState)); } catch (e) {}
+  }
+  function saveGroupFolds() {
+    try { localStorage.setItem(GROUP_FOLD_KEY, JSON.stringify(groupFoldState)); } catch (e) {}
+  }
+
+  function setSectionOpen(sec, open) {
+    if (!sec) return;
+    const btn = sec.querySelector(":scope > .fold__btn");
+    const panel = sec.querySelector(":scope > .fold__panel");
+    if (!btn || !panel) return;
+    sec.classList.toggle("is-open", open);
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+    panel.hidden = !open;
+    if (open && sec.id === "map" && typeof map !== "undefined" && map) {
+      setTimeout(() => { try { map.invalidateSize(); } catch (e) {} }, 180);
+    }
+  }
+
+  function openSection(id) {
+    const sec = document.getElementById(id);
+    if (!sec || !sec.classList.contains("fold")) return;
+    setSectionOpen(sec, true);
+    foldState[id] = true;
+    saveFolds();
+  }
+
+  function setupSectionFolds() {
+    $$("main > .section.fold").forEach(sec => {
+      const id = sec.id;
+      const btn = sec.querySelector(":scope > .fold__btn");
+      if (!btn || btn.dataset.ready) return;
+      btn.dataset.ready = "1";
+
+      const defOpen = sec.dataset.fold === "open";
+      const open = foldState[id] !== undefined ? !!foldState[id] : defOpen;
+      setSectionOpen(sec, open);
+
+      btn.addEventListener("click", () => {
+        const next = !sec.classList.contains("is-open");
+        setSectionOpen(sec, next);
+        foldState[id] = next;
+        saveFolds();
+      });
+    });
+
+    // Пункт меню сразу раскрывает нужный блок
+    $$(".nav__links a[href^='#']").forEach(a => {
+      a.addEventListener("click", () => {
+        const id = (a.getAttribute("href") || "").slice(1);
+        if (id) openSection(id);
+      });
+    });
+
+    const hash = (location.hash || "").replace("#", "");
+    if (hash) openSection(hash);
+  }
+
+  function bindGroupFold(group, head, panel, key, defaultOpen) {
+    const open = groupFoldState[key] !== undefined ? !!groupFoldState[key] : !!defaultOpen;
+    group.classList.toggle("is-open", open);
+    panel.hidden = !open;
+    head.setAttribute("aria-expanded", open ? "true" : "false");
+    head.addEventListener("click", () => {
+      const next = !group.classList.contains("is-open");
+      group.classList.toggle("is-open", next);
+      panel.hidden = !next;
+      head.setAttribute("aria-expanded", next ? "true" : "false");
+      groupFoldState[key] = next;
+      saveGroupFolds();
+    });
   }
 
   function setupComfort() {
@@ -1020,6 +1109,7 @@
 
   function openDayInTimeline(idx) {
     if (idx < 0) return;
+    openSection("route");
     const card = document.querySelector(`.day[data-index="${idx}"]`);
     if (!card) return;
     card.classList.add("open");
@@ -1181,6 +1271,7 @@
 
   // ======================= INIT =======================
   function init() {
+    setupSectionFolds();
     renderStats();
     renderNextDay();
     renderTransitOut();
