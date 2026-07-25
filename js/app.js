@@ -1241,23 +1241,27 @@
       <div class="ticket-card__preview">
         ${saved
           ? `<img src="${saved.dataUrl}" alt="${slot.name}">`
-          : `<span class="ticket-card__empty">Нет фото · добавьте скрин</span>`}
+          : `<span class="ticket-card__empty">Скрин из галереи</span>`}
       </div>
       <div class="ticket-card__actions">
+        <label class="ticket-card__btn ticket-card__btn--primary">
+          ${saved ? "🖼 Галерея" : "🖼 Из галереи"}
+          <input type="file" accept="image/*" hidden data-from="gallery" data-slot="${slot.id}">
+        </label>
         <label class="ticket-card__btn">
-          ${saved ? "↻ Заменить" : "+ Добавить"}
-          <input type="file" accept="image/*" capture="environment" hidden data-slot="${slot.id}">
+          📷 Камера
+          <input type="file" accept="image/*" capture="environment" hidden data-from="camera" data-slot="${slot.id}">
         </label>
         ${saved ? `
-          <button type="button" class="ticket-card__btn ticket-card__btn--primary" data-view="${slot.id}">Показать QR</button>
+          <button type="button" class="ticket-card__btn" data-view="${slot.id}">Показать</button>
           <button type="button" class="ticket-card__btn ticket-card__btn--danger" data-del="${slot.id}">Удалить</button>
         ` : ""}
       </div>
     `;
 
-    const input = card.querySelector('input[type="file"]');
-    input.addEventListener("change", async () => {
+    const onFile = async (input) => {
       const file = input.files && input.files[0];
+      input.value = "";
       if (!file) return;
       try {
         const dataUrl = await compressImage(file);
@@ -1266,6 +1270,9 @@
       } catch (e) {
         alert("Не удалось сохранить фото. Попробуйте другое изображение.");
       }
+    };
+    card.querySelectorAll('input[type="file"]').forEach(input => {
+      input.addEventListener("change", () => onFile(input));
     });
 
     const viewBtn = card.querySelector("[data-view]");
