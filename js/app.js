@@ -1181,6 +1181,53 @@
     return "дней";
   }
 
+  // ======================= ДЕНЬГИ / БЮДЖЕТ =======================
+  function renderBudget() {
+    const wrap = $("#budgetBody");
+    if (!wrap || typeof BUDGET === "undefined") return;
+    const b = BUDGET;
+    wrap.innerHTML = `
+      <div class="wx-card wx-card--hero">
+        <div class="wx-card__title">${b.title}</div>
+        <p class="wx-card__text">${b.note}</p>
+        <p class="wx-card__text">${b.rateNote}</p>
+      </div>
+      <div class="budget-hero">
+        <div class="budget-hero__num">${b.calm.perDay}</div>
+        <div class="budget-hero__who">${b.calm.who}</div>
+        <p class="budget-hero__text">${b.calm.meaning}</p>
+        <p class="budget-hero__reserve">${b.calm.reserve}</p>
+      </div>
+      <div class="wx-card">
+        <div class="wx-card__title">📌 Правило</div>
+        <p class="wx-card__text">${b.rule}</p>
+      </div>
+      <div class="wx-grid budget-grid">
+        ${b.envelopes.map(x => `
+          <div class="wx-card">
+            <div class="wx-card__title">${x.e} ${x.t}</div>
+            <p class="wx-card__text">${x.d}</p>
+          </div>`).join("")}
+      </div>
+      <div class="wx-card">
+        <div class="wx-card__title">📅 По типам дней</div>
+        <ul class="wx-list">
+          ${b.dayTypes.map(x => `<li><b>${x.t}:</b> ${x.d}</li>`).join("")}
+        </ul>
+      </div>
+      <div class="wx-card">
+        <div class="wx-card__title">💱 Если меняете сразу</div>
+        <ul class="wx-list">
+          ${b.exchange.map(i => `<li>${i}</li>`).join("")}
+        </ul>
+      </div>
+      <div class="wx-card wx-card--rain">
+        <div class="wx-card__title">✅ Проверка раз в 3 дня</div>
+        <p class="wx-card__text">${b.check}</p>
+      </div>
+    `;
+  }
+
   // ======================= 1. ПОГОДА =======================
   function renderWeather() {
     const wrap = $("#weatherBody");
@@ -1275,6 +1322,7 @@
     renderStats();
     renderNextDay();
     renderTransitOut();
+    renderBudget();
     renderNearby();
     renderWeather();
     renderFilters();

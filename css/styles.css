@@ -2111,6 +2111,39 @@ a { color: inherit; text-decoration: none; }
 .wx-rain__item b { color: var(--text); }
 .wx-rain__item span { color: var(--text-dim); line-height: 1.45; }
 
+/* Деньги / бюджет */
+.budget-hero {
+  background: linear-gradient(160deg, rgba(230, 57, 70, 0.14), var(--bg-soft));
+  border: 1px solid rgba(230, 57, 70, 0.45);
+  border-radius: var(--radius);
+  padding: 20px 16px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+.budget-hero__num {
+  font-family: "Noto Serif JP", serif;
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--text);
+}
+.budget-hero__who {
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--red);
+}
+.budget-hero__text,
+.budget-hero__reserve {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.5;
+  text-align: left;
+}
+.budget-hero__reserve { color: var(--gold); }
+.budget-grid .wx-card { margin-bottom: 0; }
+
 /* 3 · Вылет */
 .dep-hero {
   background: var(--bg-soft);
