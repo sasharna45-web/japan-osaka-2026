@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0d0d0f">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <title>Япония 2026 — демо-гид</title>
+  <meta name="description" content="Демонстрационная версия интерактивного путеводителя по Осаке и Кансаю. Личные данные обезличены.">
+  <meta name="robots" content="noindex, nofollow">
+
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Япония демо">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css?v=demo1">
+</head>
+<body class="ios-feel demo-site">
+
+  <div class="demo-banner" role="status">
+    <strong>DEMO</strong>
+    <span>Публичная копия для показа. Личный гид и его данные не затрагиваются.</span>
+  </div>
+
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <header class="hero" id="top">
+    <div class="hero__bg" aria-hidden="true">
+      <span class="hero__kanji">日本</span>
+      <div class="hero__sun"></div>
+    </div>
+    <div class="hero__content">
+      <p class="hero__eyebrow">Alex & Maria · демо v1</p>
+      <h1 class="hero__title">Япония <span>2026</span></h1>
+      <p class="hero__subtitle">Осака · Кансай · демо-маршрут</p>
+      <div class="hero__meta">
+        <span>Tanimachi (демо)</span>
+        <span>17 дней</span>
+      </div>
+      <div class="hero__stats" id="heroStats"></div>
+      <a class="hero__cta" href="#next">Начать</a>
+      <button type="button" class="hero__refresh" id="forceRefresh">Обновить гид</button>
+    </div>
+  </header>
+
+  <nav class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="#top" class="nav__brand">日本</a>
+      <div class="nav__links">
+        <a href="#next">Сегодня</a>
+        <a href="#transit">Пекин</a>
+        <a href="#packing">Чек-лист</a>
+        <a href="#budget">Деньги</a>
+        <a href="#route">Маршрут</a>
+        <a href="#home">Дом</a>
+      </div>
+      <button type="button" class="comfort-btn" id="comfortToggle" aria-pressed="false" title="Крупный шрифт">Aa</button>
+    </div>
+  </nav>
+
+  <main>
+    <section class="section section--tight fold" id="next" data-fold="open">
+      <button type="button" class="fold__btn" aria-expanded="true">
+        <span class="fold__text">
+          <span class="fold__title">Сейчас</span>
+          <span class="fold__sub">Три строки — и понятно, что делать.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel">
+        <div id="nextDay" class="next-day"></div>
+      </div>
+    </section>
+
+    <section class="section section--tight fold" id="transit" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Через Пекин → Осака</span>
+          <span class="fold__sub">7–9 сентября · сутки в Пекине по пути в Японию.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div id="transitBody"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="packing" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Чек-лист перед поездкой</span>
+          <span class="fold__sub">Отмечайте пункты — галочки сохраняются на этом телефоне.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div class="cl-progress">
+          <div class="cl-progress__bar"><span id="packBarFill"></span></div>
+          <div class="cl-progress__label" id="packProgressLabel">0 из 0</div>
+        </div>
+        <div class="packing" id="packingBody"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="budget" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Деньги</span>
+          <span class="fold__sub">$3000 на Японию · 15 000 ¥/день на двоих · запас не трогать.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div id="budgetBody"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="nearby" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Рядом с домом</span>
+          <span class="fold__sub">7-Eleven, аптеки и зарядка у Tanimachi 6-chome.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div class="nearby-filters" id="nearbyFilters"></div>
+        <div class="nearby-grid" id="nearbyGrid"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="weather" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Погода и что надеть</span>
+          <span class="fold__sub">Сентябрь в Кансае + план Б на дождь.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div id="weatherBody"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="filters-section" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Что вам интересно?</span>
+          <span class="fold__sub">Выберите тему — подсветим места в маршруте.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div class="filters" id="filters"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="map" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Карта маршрута</span>
+          <span class="fold__sub">Все точки поездки. Нажмите на маркер — откроется место.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div id="leafletMap" class="map"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="route" data-fold="open">
+      <button type="button" class="fold__btn" aria-expanded="true">
+        <span class="fold__text">
+          <span class="fold__title">Маршрут по дням</span>
+          <span class="fold__sub">17 дней. Откройте день — потом «Подробнее», если нужно.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel">
+        <div class="route-toolbar">
+          <button type="button" class="route-toggle" id="todayOnlyBtn" aria-pressed="false">
+            Только сегодня
+          </button>
+          <button class="link-btn" id="editToggle" type="button">✏️ Изменить план</button>
+          <span class="route-toggle__hint" id="todayOnlyHint">Показать все 17 дней</span>
+        </div>
+        <p class="legend-fixed">
+          <span class="legend-fixed__mark">⏰ ФИКС</span>
+          Красные карточки — фиксированные пункты.
+        </p>
+        <div class="edit-hint" id="editHint" hidden>
+          Режим редактирования: стрелки ⬆⬇ меняют порядок дней.
+          <button class="link-btn" id="resetPlan" type="button">↺ Сбросить</button>
+        </div>
+        <div class="timeline" id="timeline"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="home" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Дом и экстренное</span>
+          <span class="fold__sub">Адрес для такси и важные номера.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div class="home-sos" id="homeSos"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="checklist" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Чеклист подготовки</span>
+          <span class="fold__sub">Задачи до поездки (eSIM, Alipay, документы).</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div class="cl-progress">
+          <div class="cl-progress__bar"><span id="clBarFill"></span></div>
+          <div class="cl-progress__label" id="clProgressLabel">0 из 0 выполнено</div>
+        </div>
+        <div class="checklist" id="checklist-body"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="phrases" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Японские фразы</span>
+          <span class="fold__sub">Метро, кафе, магазины, помощь.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div class="phrase-tabs" id="phraseTabs"></div>
+        <div class="phrase-grid" id="phraseGrid"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="tips" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Полезные советы</span>
+          <span class="fold__sub">Мелочи, которые сделают поездку комфортнее.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div class="tips-grid" id="tipsGrid"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__jp">よい旅を</p>
+    <p>Демо-версия гида · для показа возможностей</p>
+    <p class="footer__small">Личные данные заменены. Галочки демо не смешиваются с личным гидом.</p>
+    <a href="#top" class="footer__up">↑ Наверх</a>
+  </footer>
+
+  <div class="modal" id="placeModal" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__card" role="dialog" aria-modal="true">
+      <button class="modal__close" data-close aria-label="Закрыть">✕</button>
+      <div class="modal__body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <nav class="country-dock country-dock--jp" aria-label="Страна">
+    <a class="country-dock__btn is-active" href="index.html">
+      <span class="country-dock__flag">🇯🇵</span>
+      <span class="country-dock__label">Япония</span>
+    </a>
+    <a class="country-dock__btn" href="china.html">
+      <span class="country-dock__flag">🇨🇳</span>
+      <span class="country-dock__label">Китай</span>
+    </a>
+  </nav>
+
+  <div class="gallery-view" id="galleryView" hidden>
+    <button type="button" class="gallery-view__close" id="galleryClose" aria-label="Закрыть">✕</button>
+    <button type="button" class="gallery-view__nav gallery-view__nav--prev" id="galleryPrev" aria-label="Назад">‹</button>
+    <img class="gallery-view__img" id="galleryImg" alt="">
+    <button type="button" class="gallery-view__nav gallery-view__nav--next" id="galleryNext" aria-label="Вперёд">›</button>
+    <p class="gallery-view__cap" id="galleryCap"></p>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/data.js?v=demo1"></script>
+  <script src="js/photos.js?v=demo1"></script>
+  <script src="js/app.js?v=demo1"></script>
+  <script>
+    /* Демо без Service Worker: не трогаем кэш и SW личного гида на том же домене. */
+    (function () {
+      var btn = document.getElementById("forceRefresh");
+      if (btn) {
+        btn.addEventListener("click", function () {
+          var url = new URL(location.href);
+          url.searchParams.set("v", "demo1");
+          url.searchParams.set("fresh", String(Date.now()));
+          location.replace(url.toString());
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
