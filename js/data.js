@@ -967,7 +967,7 @@ const PACKING = [
       { id: "pk-cash-usd", text: "Наличные доллары (новыми купюрами)" },
       { id: "pk-cards", text: "Банковские карты" },
       { id: "pk-yen-kix", text: "Обменять часть денег на йены в KIX" },
-      { id: "pk-esim-jp", text: "Японский eSIM активирован" },
+      { id: "pk-esim-jp", text: "Японский eSIM установлен (включить линию в KIX)" },
       { id: "pk-esim-cn", text: "Китайский eSIM / план на 25–27 сентября" },
       { id: "pk-alipay", text: "Alipay настроен на обоих телефонах" },
       { id: "pk-icoca", text: "ICOCA купить и пополнить после прилёта" }
@@ -1055,8 +1055,7 @@ const PACKING = [
     id: "buy-jp",
     title: "🛍️ Купить уже в Японии",
     items: [
-      { id: "pk-buy-umbrella", text: "Зонт" },
-      { id: "pk-buy-icoca", text: "Карта ICOCA" }
+      { id: "pk-buy-umbrella", text: "Зонт" }
     ]
   },
   {
