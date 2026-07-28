@@ -373,8 +373,23 @@
 
   // ======================= 6. РЕЖИМ «ТОЛЬКО СЕГОДНЯ» =======================
   const TODAY_ONLY_KEY = "japan2026demo.todayOnly.v1";
+
+  function isDuringTrip(now = new Date()) {
+    const cur = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const start = new Date(2026, 8, 9);
+    const end = new Date(2026, 8, 25);
+    return cur >= start && cur <= end;
+  }
+
+  // По умолчанию во время поездки — только сегодняшний день (если пользователь ещё не выбирал)
   let todayOnly = false;
-  try { todayOnly = localStorage.getItem(TODAY_ONLY_KEY) === "1"; } catch (e) {}
+  try {
+    const stored = localStorage.getItem(TODAY_ONLY_KEY);
+    if (stored === null) todayOnly = isDuringTrip();
+    else todayOnly = stored === "1";
+  } catch (e) {
+    todayOnly = isDuringTrip();
+  }
 
   function focusDayIndex() {
     const focus = tripFocus();
@@ -411,6 +426,11 @@
     const btn = $("#todayOnlyBtn");
     if (!btn) return;
     applyTodayOnly();
+    // Во время поездки сразу раскрыть сегодняшний день
+    if (todayOnly && isDuringTrip()) {
+      const card = document.querySelector(`.day[data-index="${focusDayIndex()}"]`);
+      if (card) card.classList.add("open");
+    }
     btn.addEventListener("click", () => {
       todayOnly = !todayOnly;
       try { localStorage.setItem(TODAY_ONLY_KEY, todayOnly ? "1" : "0"); } catch (e) {}
@@ -607,7 +627,7 @@
   // ======================= СОВЕТЫ =======================
   const TIPS = [
     { e: "💳", t: "IC-карта ICOCA", d: "Купите в аэропорту — оплата метро, автобусов и конбини одним касанием." },
-    { e: "📶", t: "eSIM заранее", d: "Активируйте eSIM ещё дома, чтобы сразу быть онлайн в KIX." },
+    { e: "📶", t: "eSIM", d: "Установите профиль eSIM дома. Активацию (включить линию) удобнее в KIX на Wi‑Fi аэропорта — так и в чек-листе." },
     { e: "🧾", t: "Tax-free", d: "В крупных магазинах берите паспорт — вернут налог от 5 000 ¥ покупок." },
     { e: "💴", t: "Наличные", d: "Многие мелкие места и рынки — только кэш. Снимайте в 7-Eleven ATM." },
     { e: "🎟️", t: "Билеты онлайн", d: "USJ, Nijigen no Mori, Hello Kitty Smile — бронируйте слоты заранее." },

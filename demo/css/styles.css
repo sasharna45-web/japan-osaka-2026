@@ -2111,32 +2111,6 @@ a { color: inherit; text-decoration: none; }
 .wx-rain__item b { color: var(--text); }
 .wx-rain__item span { color: var(--text-dim); line-height: 1.45; }
 
-/* Демо-баннер (только /demo/) */
-.demo-banner {
-  position: sticky;
-  top: 0;
-  z-index: 60;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  padding: 8px 14px;
-  background: linear-gradient(90deg, #7a1f28, #c43c3c);
-  color: #fff;
-  font-size: 13px;
-  line-height: 1.35;
-  text-align: center;
-}
-.demo-banner strong {
-  letter-spacing: 0.06em;
-  font-size: 12px;
-  padding: 2px 8px;
-  border: 1px solid rgba(255,255,255,.55);
-  border-radius: 999px;
-}
-.demo-site .nav { top: 0; }
-
 /* Деньги / бюджет */
 .budget-hero {
   background: linear-gradient(160deg, rgba(230, 57, 70, 0.14), var(--bg-soft));
@@ -2256,3 +2230,31 @@ a { color: inherit; text-decoration: none; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   html { scroll-behavior: auto; }
 }
+
+
+/* Демо-баннер (только /demo/) */
+.demo-banner {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 8px 14px;
+  background: linear-gradient(90deg, #7a1f28, #c43c3c);
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.35;
+  text-align: center;
+}
+.demo-banner strong {
+  letter-spacing: 0.06em;
+  font-size: 12px;
+  padding: 2px 8px;
+  border: 1px solid rgba(255,255,255,.55);
+  border-radius: 999px;
+}
+.demo-site .nav { top: 0; }
+.demo-site .c-nav { top: 0; }

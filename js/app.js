@@ -373,8 +373,23 @@
 
   // ======================= 6. РЕЖИМ «ТОЛЬКО СЕГОДНЯ» =======================
   const TODAY_ONLY_KEY = "japan2026.todayOnly.v1";
+
+  function isDuringTrip(now = new Date()) {
+    const cur = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const start = new Date(2026, 8, 9);
+    const end = new Date(2026, 8, 25);
+    return cur >= start && cur <= end;
+  }
+
+  // По умолчанию во время поездки — только сегодняшний день (если пользователь ещё не выбирал)
   let todayOnly = false;
-  try { todayOnly = localStorage.getItem(TODAY_ONLY_KEY) === "1"; } catch (e) {}
+  try {
+    const stored = localStorage.getItem(TODAY_ONLY_KEY);
+    if (stored === null) todayOnly = isDuringTrip();
+    else todayOnly = stored === "1";
+  } catch (e) {
+    todayOnly = isDuringTrip();
+  }
 
   function focusDayIndex() {
     const focus = tripFocus();
@@ -411,6 +426,11 @@
     const btn = $("#todayOnlyBtn");
     if (!btn) return;
     applyTodayOnly();
+    // Во время поездки сразу раскрыть сегодняшний день
+    if (todayOnly && isDuringTrip()) {
+      const card = document.querySelector(`.day[data-index="${focusDayIndex()}"]`);
+      if (card) card.classList.add("open");
+    }
     btn.addEventListener("click", () => {
       todayOnly = !todayOnly;
       try { localStorage.setItem(TODAY_ONLY_KEY, todayOnly ? "1" : "0"); } catch (e) {}

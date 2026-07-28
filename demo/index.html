@@ -7,8 +7,8 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Япония 2026 — демо-гид</title>
-  <meta name="description" content="Демонстрационная версия интерактивного путеводителя по Осаке и Кансаю. Личные данные обезличены.">
   <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Демонстрационная версия интерактивного путеводителя по Осаке и Кансаю. Личные данные обезличены.">
 
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
@@ -23,7 +23,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/styles.css?v=demo1">
+  <link rel="stylesheet" href="css/styles.css?v=demo21">
 </head>
 <body class="ios-feel demo-site">
 
@@ -40,11 +40,11 @@
       <div class="hero__sun"></div>
     </div>
     <div class="hero__content">
-      <p class="hero__eyebrow">Alex & Maria · демо v1</p>
+      <p class="hero__eyebrow">Alex & Maria · демо v21</p>
       <h1 class="hero__title">Япония <span>2026</span></h1>
       <p class="hero__subtitle">Осака · Кансай · демо-маршрут</p>
       <div class="hero__meta">
-        <span>Tanimachi (демо)</span>
+        <span>Tanimachi 6-chome</span>
         <span>17 дней</span>
       </div>
       <div class="hero__stats" id="heroStats"></div>
@@ -266,8 +266,8 @@
 
   <footer class="footer">
     <p class="footer__jp">よい旅を</p>
-    <p>Демо-версия гида · для показа возможностей</p>
-    <p class="footer__small">Личные данные заменены. Галочки демо не смешиваются с личным гидом.</p>
+    <p>Хорошего путешествия, Алекс и Мария ❤️</p>
+    <p class="footer__small">Часы работы и цены — ориентировочные, проверяйте перед визитом.</p>
     <a href="#top" class="footer__up">↑ Наверх</a>
   </footer>
 
@@ -299,9 +299,9 @@
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="js/data.js?v=demo1"></script>
-  <script src="js/photos.js?v=demo1"></script>
-  <script src="js/app.js?v=demo1"></script>
+  <script src="js/data.js?v=demo21"></script>
+  <script src="js/photos.js?v=demo21"></script>
+  <script src="js/app.js?v=demo21"></script>
   <script>
     /* Демо без Service Worker: не трогаем кэш и SW личного гида на том же домене. */
     (function () {
@@ -309,7 +309,7 @@
       if (btn) {
         btn.addEventListener("click", function () {
           var url = new URL(location.href);
-          url.searchParams.set("v", "demo1");
+          url.searchParams.set("v", "demo21");
           url.searchParams.set("fresh", String(Date.now()));
           location.replace(url.toString());
         });

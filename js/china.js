@@ -165,9 +165,62 @@
     });
   }
 
+  function setupFolds() {
+    const KEY = "japan2026.chinaFolds.v1";
+    let state = {};
+    try { state = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
+
+    function setOpen(sec, open) {
+      const btn = sec.querySelector(":scope > .fold__btn");
+      const panel = sec.querySelector(":scope > .fold__panel");
+      if (!btn || !panel) return;
+      sec.classList.toggle("is-open", open);
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+      panel.hidden = !open;
+    }
+
+    document.querySelectorAll("main > .c-section.fold").forEach(sec => {
+      const id = sec.id;
+      const btn = sec.querySelector(":scope > .fold__btn");
+      if (!btn || btn.dataset.ready) return;
+      btn.dataset.ready = "1";
+      const defOpen = sec.dataset.fold === "open";
+      const open = state[id] !== undefined ? !!state[id] : defOpen;
+      setOpen(sec, open);
+      btn.addEventListener("click", () => {
+        const next = !sec.classList.contains("is-open");
+        setOpen(sec, next);
+        state[id] = next;
+        try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+      });
+    });
+
+    document.querySelectorAll(".c-nav__inner a[href^='#']").forEach(a => {
+      a.addEventListener("click", () => {
+        const id = (a.getAttribute("href") || "").slice(1);
+        const sec = document.getElementById(id);
+        if (!sec || !sec.classList.contains("fold")) return;
+        setOpen(sec, true);
+        state[id] = true;
+        try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+      });
+    });
+
+    const hash = (location.hash || "").replace("#", "");
+    if (hash) {
+      const sec = document.getElementById(hash);
+      if (sec && sec.classList.contains("fold")) {
+        setOpen(sec, true);
+        state[hash] = true;
+        try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+      }
+    }
+  }
+
   function init() {
     if (typeof CHINA === "undefined") return;
     document.body.classList.add("china-slide-in");
+    setupFolds();
     renderIntro();
     renderHotel();
     renderDays();
