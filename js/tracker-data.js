@@ -156,8 +156,7 @@ const TRACKER = {
       goal: "Замок и сад",
       soft: 22000,
       places: [
-        { id: "d12-castle", name: "Замок Химэдзи + Koko-en", emoji: "🦢", time: "день", fixed: true, est: 5200, estNote: "комбо 2 600 ¥ × 2" },
-        { id: "d12-garden", name: "Сад Koko-en", emoji: "🌿", prepaid: false }
+        { id: "d12-castle", name: "Замок Химэдзи + сад Koko-en", emoji: "🦢", time: "день", fixed: true, est: 5200, estNote: "комбо 2 600 ¥ × 2" }
       ]
     },
     {
