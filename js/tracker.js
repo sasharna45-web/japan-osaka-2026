@@ -123,10 +123,12 @@
     fill.classList.toggle("is-danger", pct >= 90);
     bar.setAttribute("aria-valuenow", String(Math.round(pct)));
 
+    const yenMin = TRACKER.budgetYenMin || TRACKER.budgetYen;
+    const yenMax = TRACKER.budgetYenMax || TRACKER.budgetYen;
     nums.innerHTML = `
-      <div><span class="muted">Потрачено</span><strong>${yen(spent)}</strong></div>
-      <div><span class="muted">Осталось</span><strong class="${left < 0 ? "t-bad" : ""}">${yen(left)}</strong></div>
-      <div><span class="muted">Потолок</span><strong>${yen(TRACKER.budgetYen)}</strong></div>
+      <div><span class="muted">Потрачено ¥</span><strong>${yen(spent)}</strong></div>
+      <div><span class="muted">Осталось ¥</span><strong class="${left < 0 ? "t-bad" : ""}">${yen(left)}</strong></div>
+      <div><span class="muted">Конверт ¥</span><strong>${yen(TRACKER.budgetYen)}</strong></div>
     `;
 
     const softLabel =
@@ -134,10 +136,15 @@
         ? `в спокойном темпе (запас ${yen(Math.abs(vsSoft))})`
         : `выше спокойного темпа на ${yen(vsSoft)}`;
 
+    const usdBit = TRACKER.totalUsd
+      ? `Всего $${TRACKER.totalUsd}: резерв $${TRACKER.reserveUsd.min}–${TRACKER.reserveUsd.max} не в трекере. Рабочие йены ≈ ${yenMin.toLocaleString("ru-RU")}–${yenMax.toLocaleString("ru-RU")} ¥.`
+      : "";
+
     pace.textContent =
-      daysLeft > 0
+      (daysLeft > 0
         ? `Можно ≈ ${yen(avgLeft)}/день на ${daysLeft} дн. · ${softLabel}`
-        : `Дни бюджета завершены · ${softLabel}`;
+        : `Дни бюджета завершены · ${softLabel}`) +
+      (usdBit ? ` · ${usdBit}` : "");
   }
 
   function renderToday() {
