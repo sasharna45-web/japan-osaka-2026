@@ -174,34 +174,37 @@
       ` · ${modeLabel}. ${moneyBit}`;
   }
 
-  function fillExchangeForm() {
+  function syncExchangeInputs() {
     const ex = state.exchange;
     const usdChanged = document.getElementById("exUsdChanged");
     const yenGot = document.getElementById("exYenGot");
     const usdLeft = document.getElementById("exUsdLeft");
-    const rateHint = document.getElementById("exchangeRateHint");
     if (!usdChanged) return;
-
     if (ex) {
       usdChanged.value = ex.usdChanged;
       yenGot.value = ex.yenGot;
       usdLeft.value = ex.usdLeft;
     }
+    updateExchangeRateHint();
+  }
 
-    function updateRate() {
-      const u = Number(usdChanged.value);
-      const y = Number(yenGot.value);
-      if (u > 0 && y > 0) {
-        rateHint.hidden = false;
-        rateHint.textContent = `Курс по чеку ≈ ${Math.round(y / u)} ¥ за $1. Сумма с резервом: $${u + Number(usdLeft.value || 0)} (ожидали $${TRACKER.totalUsd}).`;
-      } else {
-        rateHint.hidden = true;
-      }
+  function updateExchangeRateHint() {
+    const rateHint = document.getElementById("exchangeRateHint");
+    const u = Number(document.getElementById("exUsdChanged").value);
+    const y = Number(document.getElementById("exYenGot").value);
+    const left = Number(document.getElementById("exUsdLeft").value || 0);
+    if (!rateHint) return;
+    if (u > 0 && y > 0) {
+      rateHint.hidden = false;
+      const sum = u + left;
+      const sumNote =
+        TRACKER.totalUsd && Math.abs(sum - TRACKER.totalUsd) > 50
+          ? ` Сумма $${sum.toLocaleString("ru-RU")} (в плане было $${TRACKER.totalUsd}) — ок, если часть уже потратили/на карте.`
+          : ` Сумма с резервом ≈ $${sum.toLocaleString("ru-RU")}.`;
+      rateHint.textContent = `Курс по чеку ≈ ${Math.round(y / u)} ¥ за $1.` + sumNote;
+    } else {
+      rateHint.hidden = true;
     }
-    usdChanged.addEventListener("input", updateRate);
-    yenGot.addEventListener("input", updateRate);
-    usdLeft.addEventListener("input", updateRate);
-    updateRate();
   }
 
   function renderToday() {
@@ -372,6 +375,7 @@
     renderDays();
     renderCats();
     fillDaySelect();
+    syncExchangeInputs();
   }
 
   function onReady() {
@@ -379,6 +383,40 @@
     renderResearch();
     state.viewDay = state.viewDay || activeDay().n;
     renderAll();
+
+    ["exUsdChanged", "exYenGot", "exUsdLeft"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener("input", updateExchangeRateHint);
+    });
+
+    document.getElementById("exchangeForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const usdChanged = Number(document.getElementById("exUsdChanged").value);
+      const yenGot = Number(document.getElementById("exYenGot").value);
+      const usdLeft = Number(document.getElementById("exUsdLeft").value);
+      if (!(usdChanged > 0) || !(yenGot > 0) || usdLeft < 0) return;
+      state.exchange = {
+        usdChanged,
+        yenGot,
+        usdLeft,
+        at: Date.now()
+      };
+      save();
+      renderAll();
+      openFold("today");
+      document.getElementById("today").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    document.getElementById("clearExchange").addEventListener("click", () => {
+      if (!state.exchange) return;
+      if (!confirm("Сбросить факт обмена и снова считать по плану (~380k ¥)?")) return;
+      state.exchange = null;
+      document.getElementById("exUsdChanged").value = "";
+      document.getElementById("exYenGot").value = "";
+      document.getElementById("exUsdLeft").value = "";
+      save();
+      renderAll();
+    });
 
     document.getElementById("todayPanel").addEventListener("change", (e) => {
       const t = e.target;
