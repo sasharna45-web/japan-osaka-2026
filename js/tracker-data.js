@@ -213,13 +213,13 @@ const TRACKER = {
         title: "Авадзи · бесплатный шаттл (западное побережье)",
         facts: [
           "Бесплатный shuttle между Awaji IC / Iwaya Port / Nijigen no Mori / Hello Kitty Smile и др. остановками западного побережья.",
-          "21 сент 2026 — воскресенье → смотреть расписание Sat/Sun & Holidays.",
-          "Последнее опубликованное holiday-расписание (поправка 2026.4.4): рейсы примерно с 09:20 до ≈20:00–20:14; интервал днём около 20–30 мин; между Nijigen и Hello Kitty Smile — короткий перегон (несколько минут).",
-          "Отдельного PDF именно на 21.09.2026 нет — ближе к дате сверьте holiday timetable на сайте."
+          "21 сент 2026 — понедельник → смотреть расписание Weekdays (не weekend/holiday).",
+          "Последнее опубликованное weekday-расписание (поправка 2026.4.1): рейсы примерно с ~09:20 до ≈20:00; интервал днём около 20–30 мин; между Nijigen и Hello Kitty Smile — короткий перегон (несколько минут).",
+          "Отдельного PDF именно на 21.09.2026 нет — ближе к дате сверьте weekday timetable на сайте. Если попадёт японский праздник — тогда holiday PDF."
         ],
         source: "Awaji Island West Coast — Access Free Shuttle Bus",
         url: "https://en.awajishima-resort.com/access_freebus/",
-        asOf: "расписание от 2026-04-04 (holiday PDF)"
+        asOf: "расписание от 2026-04-01 (weekday PDF); 21.09.2026 = пн"
       },
       {
         id: "awaji-bus",
