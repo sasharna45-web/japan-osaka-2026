@@ -3,83 +3,246 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#070708">
-  <title>Трекер · Кансай 2026</title>
-  <meta name="description" content="Трекер дней и бюджета поездки в Кансай: 500 000 ¥ на двоих, чек-листы и справочник цен.">
+  <meta name="theme-color" content="#0d0d0f">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <title>Трекер · Япония 2026</title>
+  <meta name="description" content="Трекер дней и бюджета Кансай: чек-листы, траты, потолок 500 000 ¥.">
+
   <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Трекер 2026">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/tracker.css?v=1">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css?v=22">
+  <link rel="stylesheet" href="css/tracker.css?v=22">
 </head>
-<body>
-  <div class="app">
-    <header class="top">
-      <div>
-        <p class="eyebrow">Александр & Рита</p>
-        <h1>Трекер поездки</h1>
-        <p class="muted">9–24 сентября · 500 000 ¥ на двоих</p>
-      </div>
-      <a class="back" href="index.html">← Гид</a>
-    </header>
+<body class="ios-feel tracker-page">
 
-    <section class="budget" aria-label="Бюджет">
-      <div class="budget__nums" id="budgetNums"></div>
-      <div class="budget__bar" id="budgetBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-        <div class="budget__fill" id="budgetFill"></div>
-      </div>
-      <p class="budget__pace" id="budgetPace"></p>
-    </section>
-
-    <nav class="tabs" role="tablist" aria-label="Разделы трекера">
-      <button type="button" data-tab="today" class="is-active" aria-selected="true">День</button>
-      <button type="button" data-tab="add" aria-selected="false">Трата</button>
-      <button type="button" data-tab="days" aria-selected="false">Все дни</button>
-      <button type="button" data-tab="research" aria-selected="false">Цены</button>
-    </nav>
-
-    <section class="panel" data-panel="today" id="todayPanel"></section>
-
-    <section class="panel" data-panel="add" hidden>
-      <form class="form" id="expForm">
-        <label>
-          День
-          <select id="expDay" required></select>
-        </label>
-        <label>
-          Категория
-          <select id="expCat" required></select>
-        </label>
-        <label>
-          Сумма, ¥ (на двоих)
-          <input id="expAmount" type="number" inputmode="numeric" min="1" step="1" placeholder="например 1800" required>
-        </label>
-        <label>
-          Заметка
-          <input id="expNote" type="text" maxlength="80" placeholder="рамен, JR, Donki…">
-        </label>
-        <button class="btn full" type="submit">Добавить трату</button>
-      </form>
-      <div class="quick">
-        <button type="button" class="btn ghost" id="quickSoft">Подставить мягкий лимит дня</button>
-      </div>
-      <h3 class="block-title">По категориям</h3>
-      <div class="cats" id="catBars"></div>
-    </section>
-
-    <section class="panel" data-panel="days" hidden>
-      <div class="days" id="daysList"></div>
-    </section>
-
-    <section class="panel" data-panel="research" hidden id="researchPanel"></section>
-
-    <div class="tools">
-      <button type="button" class="btn ghost" id="exportJson">Экспорт JSON</button>
-      <button type="button" class="btn ghost" id="resetTracker">Сбросить трекер</button>
+  <header class="hero hero--tracker" id="top">
+    <div class="hero__bg" aria-hidden="true">
+      <span class="hero__kanji">記帳</span>
+      <div class="hero__sun"></div>
     </div>
-  </div>
+    <div class="hero__content">
+      <p class="hero__eyebrow">Alexander & Rita · трекер · версия 22</p>
+      <h1 class="hero__title">Трекер <span>2026</span></h1>
+      <p class="hero__subtitle">Дни · бюджет 500 000 ¥ · Кансай</p>
+      <div class="hero__meta">
+        <span>9–24 сентября</span>
+        <span>16 дней</span>
+        <span>на двоих</span>
+      </div>
+      <div class="t-budget" id="budgetCard" aria-label="Бюджет">
+        <div class="t-budget__nums" id="budgetNums"></div>
+        <div class="t-budget__bar" id="budgetBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="t-budget__fill" id="budgetFill"></div>
+        </div>
+        <p class="t-budget__pace" id="budgetPace"></p>
+      </div>
+      <button type="button" class="hero__refresh" id="forceRefresh">Обновить трекер</button>
+    </div>
+  </header>
 
-  <script src="js/tracker-data.js?v=1"></script>
-  <script src="js/tracker.js?v=1"></script>
+  <nav class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__brand">日本</a>
+      <div class="nav__links">
+        <a href="#today">День</a>
+        <a href="#add">Трата</a>
+        <a href="#days">Все дни</a>
+        <a href="#research">Цены</a>
+        <a href="index.html">Гид</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="section section--tight fold" id="today" data-fold="open">
+      <button type="button" class="fold__btn" aria-expanded="true">
+        <span class="fold__text">
+          <span class="fold__title">Сегодня / день</span>
+          <span class="fold__sub">Галочки по местам и траты выбранного дня</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel">
+        <div id="todayPanel"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="add" data-fold="open">
+      <button type="button" class="fold__btn" aria-expanded="true">
+        <span class="fold__text">
+          <span class="fold__title">Добавить трату</span>
+          <span class="fold__sub">Еда, транспорт, входы, шопинг — сумма на двоих</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel">
+        <form class="t-form" id="expForm">
+          <label>
+            <span>День</span>
+            <select id="expDay" required></select>
+          </label>
+          <label>
+            <span>Категория</span>
+            <select id="expCat" required></select>
+          </label>
+          <label>
+            <span>Сумма, ¥</span>
+            <input id="expAmount" type="number" inputmode="numeric" min="1" step="1" placeholder="1800" required>
+          </label>
+          <label>
+            <span>Заметка</span>
+            <input id="expNote" type="text" maxlength="80" placeholder="рамен, JR, Donki…">
+          </label>
+          <button class="t-btn" type="submit">Сохранить трату</button>
+        </form>
+        <div class="t-quick">
+          <button type="button" class="link-btn" id="quickSoft">Подставить мягкий лимит дня</button>
+        </div>
+        <h3 class="t-h">По категориям</h3>
+        <div class="t-cats" id="catBars"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="days" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Все 16 дней</span>
+          <span class="fold__sub">Прогресс галочек и сколько уже потратили</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div class="t-days" id="daysList"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="research" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Цены и логистика</span>
+          <span class="fold__sub">Авадзи, JR, входы, еда — со источниками</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div id="researchPanel"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="tools" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Сервис</span>
+          <span class="fold__sub">Экспорт и сброс локальных данных</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div class="t-tools">
+          <button type="button" class="link-btn" id="exportJson">Экспорт JSON</button>
+          <button type="button" class="link-btn" id="resetTracker">Сбросить трекер</button>
+        </div>
+        <p class="t-note">Данные только в этом браузере (localStorage), как галочки в гиде. На телефон — откройте эту же страницу с GitHub Pages.</p>
+      </div>
+    </section>
+  </main>
+
+  <nav class="country-dock country-dock--jp" aria-label="Страна">
+    <a class="country-dock__btn is-active" href="tracker.html">
+      <span class="country-dock__flag">📊</span>
+      <span class="country-dock__label">Трекер</span>
+    </a>
+    <a class="country-dock__btn" href="index.html">
+      <span class="country-dock__flag">🇯🇵</span>
+      <span class="country-dock__label">Гид</span>
+    </a>
+    <a class="country-dock__btn" href="china.html">
+      <span class="country-dock__flag">🇨🇳</span>
+      <span class="country-dock__label">Китай</span>
+    </a>
+  </nav>
+
+  <script src="js/tracker-data.js?v=22"></script>
+  <script src="js/tracker.js?v=22"></script>
+  <script>
+    (function () {
+      var VER = "22";
+      var KEY = "japan2026.tracker.cleared." + VER;
+
+      function initFolds() {
+        document.querySelectorAll(".fold").forEach(function (fold) {
+          var btn = fold.querySelector(".fold__btn");
+          var panel = fold.querySelector(".fold__panel");
+          if (!btn || !panel) return;
+          btn.addEventListener("click", function () {
+            var open = fold.getAttribute("data-fold") !== "open";
+            fold.setAttribute("data-fold", open ? "open" : "closed");
+            btn.setAttribute("aria-expanded", open ? "true" : "false");
+            panel.hidden = !open;
+          });
+        });
+      }
+
+      async function wipe() {
+        try {
+          if (window.caches) {
+            var keys = await caches.keys();
+            await Promise.all(keys.map(function (k) { return caches.delete(k); }));
+          }
+        } catch (e) {}
+        try {
+          if ("serviceWorker" in navigator) {
+            var regs = await navigator.serviceWorker.getRegistrations();
+            await Promise.all(regs.map(function (r) { return r.unregister(); }));
+          }
+        } catch (e) {}
+      }
+
+      async function boot() {
+        initFolds();
+        var already = false;
+        try { already = localStorage.getItem(KEY) === "1"; } catch (e) {}
+
+        if (!already) {
+          await wipe();
+          try { localStorage.setItem(KEY, "1"); } catch (e) {}
+          var url = new URL(location.href);
+          url.searchParams.set("v", VER);
+          url.searchParams.set("fresh", String(Date.now()));
+          location.replace(url.toString());
+          return;
+        }
+
+        if ("serviceWorker" in navigator) {
+          navigator.serviceWorker.register("./sw.js?v=" + VER).catch(function () {});
+        }
+      }
+
+      var btn = document.getElementById("forceRefresh");
+      if (btn) {
+        btn.addEventListener("click", function () {
+          try { localStorage.removeItem(KEY); } catch (e) {}
+          wipe().then(function () {
+            var url = new URL(location.href);
+            url.searchParams.set("v", VER);
+            url.searchParams.set("fresh", String(Date.now()));
+            location.replace(url.toString());
+          });
+        });
+      }
+
+      boot();
+    })();
+  </script>
 </body>
 </html>
