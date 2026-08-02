@@ -20,8 +20,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/styles.css?v=22">
-  <link rel="stylesheet" href="css/tracker.css?v=22">
+  <link rel="stylesheet" href="css/styles.css?v=23">
+  <link rel="stylesheet" href="css/tracker.css?v=23">
 </head>
 <body class="ios-feel tracker-page">
 
@@ -31,13 +31,13 @@
       <div class="hero__sun"></div>
     </div>
     <div class="hero__content">
-      <p class="hero__eyebrow">Alexander & Rita · трекер · версия 22</p>
+      <p class="hero__eyebrow">Alexander & Rita · трекер · версия 23</p>
       <h1 class="hero__title">Трекер <span>2026</span></h1>
-      <p class="hero__subtitle">Дни · $3225 · рабочие йены ≈ 380k · Кансай</p>
+      <p class="hero__subtitle">Дни · бюджет после обмена в KIX · Кансай</p>
       <div class="hero__meta">
         <span>9–24 сентября</span>
         <span>16 дней</span>
-        <span>резерв $700–1000</span>
+        <span id="heroExchangeMeta">обмен ещё не введён</span>
       </div>
       <div class="t-budget" id="budgetCard" aria-label="Бюджет">
         <div class="t-budget__nums" id="budgetNums"></div>
@@ -54,6 +54,7 @@
     <div class="nav__inner">
       <a href="index.html" class="nav__brand">日本</a>
       <div class="nav__links">
+        <a href="#exchange">Обмен</a>
         <a href="#today">День</a>
         <a href="#add">Трата</a>
         <a href="#days">Все дни</a>
@@ -64,6 +65,41 @@
   </nav>
 
   <main>
+    <section class="section section--tight fold" id="exchange" data-fold="open">
+      <button type="button" class="fold__btn" aria-expanded="true">
+        <span class="fold__text">
+          <span class="fold__title">Обмен в KIX</span>
+          <span class="fold__sub" id="exchangeFoldSub">Введите факт после первого обмена — конверт йен станет вашим</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel">
+        <p class="t-note" id="exchangeHint">
+          План до поездки: из $3225 поменять примерно $2225–2525, оставить $700–1000 долларами.
+          После обмена в аэропорту впишите реальные цифры с чека — трекер будет считать от них.
+        </p>
+        <form class="t-form" id="exchangeForm">
+          <label>
+            <span>Сколько долларов поменял</span>
+            <input id="exUsdChanged" type="number" inputmode="decimal" min="1" step="1" placeholder="например 2400" required>
+          </label>
+          <label>
+            <span>Сколько йен получил</span>
+            <input id="exYenGot" type="number" inputmode="numeric" min="1" step="1" placeholder="например 378000" required>
+          </label>
+          <label>
+            <span>Сколько долларов осталось</span>
+            <input id="exUsdLeft" type="number" inputmode="decimal" min="0" step="1" placeholder="например 825" required>
+          </label>
+          <p class="t-note" id="exchangeRateHint" hidden></p>
+          <button class="t-btn" type="submit">Сохранить обмен</button>
+        </form>
+        <div class="t-quick">
+          <button type="button" class="link-btn" id="clearExchange">Сбросить обмен (вернуться к плану)</button>
+        </div>
+      </div>
+    </section>
+
     <section class="section section--tight fold" id="today" data-fold="open">
       <button type="button" class="fold__btn" aria-expanded="true">
         <span class="fold__text">
@@ -172,11 +208,11 @@
     </a>
   </nav>
 
-  <script src="js/tracker-data.js?v=22"></script>
-  <script src="js/tracker.js?v=22"></script>
+  <script src="js/tracker-data.js?v=23"></script>
+  <script src="js/tracker.js?v=23"></script>
   <script>
     (function () {
-      var VER = "22";
+      var VER = "23";
       var KEY = "japan2026.tracker.cleared." + VER;
 
       function initFolds() {

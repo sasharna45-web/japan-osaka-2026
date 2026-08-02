@@ -17,8 +17,20 @@
       done: {},
       expenses: [],
       softDaily: TRACKER.softDailyYen,
-      viewDay: null
+      viewDay: null,
+      /** Факт первого обмена в KIX. null = ещё план. */
+      exchange: null // { usdChanged, yenGot, usdLeft, at }
     };
+  }
+
+  function hasExchange() {
+    return !!(state.exchange && state.exchange.yenGot > 0);
+  }
+
+  /** Рабочий конверт йен: факт с чека или план. */
+  function envelopeYen() {
+    if (hasExchange()) return Number(state.exchange.yenGot) || 0;
+    return TRACKER.budgetYen;
   }
 
   function load() {
@@ -85,7 +97,8 @@
 
   function paceStatus() {
     const spent = spentTotal();
-    const left = TRACKER.budgetYen - spent;
+    const envelope = envelopeYen();
+    const left = envelope - spent;
     const elapsed = Math.max(1, daysElapsedOrToday());
     let daysLeft = TRACKER.spendDays;
     if (todayIso() >= TRACKER.dateFrom && todayIso() <= TRACKER.dateTo) {
@@ -97,7 +110,7 @@
     const avgLeft = daysLeft > 0 ? left / daysLeft : left;
     const softUsed = state.softDaily * elapsed;
     const vsSoft = spent - softUsed;
-    return { spent, left, daysLeft, avgLeft, vsSoft, elapsed };
+    return { spent, left, daysLeft, avgLeft, vsSoft, elapsed, envelope };
   }
 
   function openFold(id) {
@@ -111,24 +124,25 @@
   }
 
   function renderBudget() {
-    const { spent, left, daysLeft, avgLeft, vsSoft } = paceStatus();
-    const pct = Math.min(100, (spent / TRACKER.budgetYen) * 100);
+    const { spent, left, daysLeft, avgLeft, vsSoft, envelope } = paceStatus();
+    const pct = envelope > 0 ? Math.min(100, (spent / envelope) * 100) : 0;
     const fill = document.getElementById("budgetFill");
     const nums = document.getElementById("budgetNums");
     const pace = document.getElementById("budgetPace");
     const bar = document.getElementById("budgetBar");
+    const heroMeta = document.getElementById("heroExchangeMeta");
+    const foldSub = document.getElementById("exchangeFoldSub");
 
     fill.style.width = pct + "%";
     fill.classList.toggle("is-warn", pct >= 70 && pct < 90);
     fill.classList.toggle("is-danger", pct >= 90);
     bar.setAttribute("aria-valuenow", String(Math.round(pct)));
 
-    const yenMin = TRACKER.budgetYenMin || TRACKER.budgetYen;
-    const yenMax = TRACKER.budgetYenMax || TRACKER.budgetYen;
+    const modeLabel = hasExchange() ? "факт с чека" : "план (ещё не вводили)";
     nums.innerHTML = `
       <div><span class="muted">Потрачено ¥</span><strong>${yen(spent)}</strong></div>
       <div><span class="muted">Осталось ¥</span><strong class="${left < 0 ? "t-bad" : ""}">${yen(left)}</strong></div>
-      <div><span class="muted">Конверт ¥</span><strong>${yen(TRACKER.budgetYen)}</strong></div>
+      <div><span class="muted">Конверт ¥</span><strong>${yen(envelope)}</strong></div>
     `;
 
     const softLabel =
@@ -136,15 +150,58 @@
         ? `в спокойном темпе (запас ${yen(Math.abs(vsSoft))})`
         : `выше спокойного темпа на ${yen(vsSoft)}`;
 
-    const usdBit = TRACKER.totalUsd
-      ? `Всего $${TRACKER.totalUsd}: резерв $${TRACKER.reserveUsd.min}–${TRACKER.reserveUsd.max} не в трекере. Рабочие йены ≈ ${yenMin.toLocaleString("ru-RU")}–${yenMax.toLocaleString("ru-RU")} ¥.`
-      : "";
+    let moneyBit;
+    if (hasExchange()) {
+      const ex = state.exchange;
+      const rate = ex.usdChanged > 0 ? Math.round(ex.yenGot / ex.usdChanged) : null;
+      moneyBit = `Обмен: $${Number(ex.usdChanged).toLocaleString("ru-RU")} → ${yen(ex.yenGot)}${rate ? ` (~${rate} ¥/$)` : ""}. Долларов осталось: $${Number(ex.usdLeft).toLocaleString("ru-RU")} (не в трекере).`;
+      if (heroMeta) heroMeta.textContent = `факт · осталось $${Number(ex.usdLeft).toLocaleString("ru-RU")}`;
+      if (foldSub) foldSub.textContent = `Сохранено: $${ex.usdChanged} → ${yen(ex.yenGot)}, осталось $${ex.usdLeft}`;
+    } else {
+      const yenMin = TRACKER.budgetYenMin || TRACKER.budgetYen;
+      const yenMax = TRACKER.budgetYenMax || TRACKER.budgetYen;
+      const toMin = TRACKER.totalUsd - TRACKER.reserveUsd.max;
+      const toMax = TRACKER.totalUsd - TRACKER.reserveUsd.min;
+      moneyBit = `Пока план: из $${TRACKER.totalUsd} поменять ~$${toMin}–${toMax} → ≈${yenMin.toLocaleString("ru-RU")}–${yenMax.toLocaleString("ru-RU")} ¥. После KIX заполните блок «Обмен».`;
+      if (heroMeta) heroMeta.textContent = "обмен ещё не введён";
+      if (foldSub) foldSub.textContent = "Введите факт после первого обмена — конверт йен станет вашим";
+    }
 
     pace.textContent =
       (daysLeft > 0
         ? `Можно ≈ ${yen(avgLeft)}/день на ${daysLeft} дн. · ${softLabel}`
         : `Дни бюджета завершены · ${softLabel}`) +
-      (usdBit ? ` · ${usdBit}` : "");
+      ` · ${modeLabel}. ${moneyBit}`;
+  }
+
+  function fillExchangeForm() {
+    const ex = state.exchange;
+    const usdChanged = document.getElementById("exUsdChanged");
+    const yenGot = document.getElementById("exYenGot");
+    const usdLeft = document.getElementById("exUsdLeft");
+    const rateHint = document.getElementById("exchangeRateHint");
+    if (!usdChanged) return;
+
+    if (ex) {
+      usdChanged.value = ex.usdChanged;
+      yenGot.value = ex.yenGot;
+      usdLeft.value = ex.usdLeft;
+    }
+
+    function updateRate() {
+      const u = Number(usdChanged.value);
+      const y = Number(yenGot.value);
+      if (u > 0 && y > 0) {
+        rateHint.hidden = false;
+        rateHint.textContent = `Курс по чеку ≈ ${Math.round(y / u)} ¥ за $1. Сумма с резервом: $${u + Number(usdLeft.value || 0)} (ожидали $${TRACKER.totalUsd}).`;
+      } else {
+        rateHint.hidden = true;
+      }
+    }
+    usdChanged.addEventListener("input", updateRate);
+    yenGot.addEventListener("input", updateRate);
+    usdLeft.addEventListener("input", updateRate);
+    updateRate();
   }
 
   function renderToday() {

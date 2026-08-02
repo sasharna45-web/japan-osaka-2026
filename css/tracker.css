@@ -416,6 +416,16 @@ body.tracker-page {
   line-height: 1.4;
 }
 
+#exchange .t-note { margin: 0 0 12px; }
+#exchangeRateHint {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 214, 10, 0.08);
+  border: 1px solid rgba(255, 214, 10, 0.22);
+  color: var(--gold);
+}
+
 .country-dock--jp .country-dock__btn.is-active {
   background: var(--red);
   color: #fff;
