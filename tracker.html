@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#070708">
+  <title>Трекер · Кансай 2026</title>
+  <meta name="description" content="Трекер дней и бюджета поездки в Кансай: 500 000 ¥ на двоих, чек-листы и справочник цен.">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tracker.css?v=1">
+</head>
+<body>
+  <div class="app">
+    <header class="top">
+      <div>
+        <p class="eyebrow">Александр & Рита</p>
+        <h1>Трекер поездки</h1>
+        <p class="muted">9–24 сентября · 500 000 ¥ на двоих</p>
+      </div>
+      <a class="back" href="index.html">← Гид</a>
+    </header>
+
+    <section class="budget" aria-label="Бюджет">
+      <div class="budget__nums" id="budgetNums"></div>
+      <div class="budget__bar" id="budgetBar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="budget__fill" id="budgetFill"></div>
+      </div>
+      <p class="budget__pace" id="budgetPace"></p>
+    </section>
+
+    <nav class="tabs" role="tablist" aria-label="Разделы трекера">
+      <button type="button" data-tab="today" class="is-active" aria-selected="true">День</button>
+      <button type="button" data-tab="add" aria-selected="false">Трата</button>
+      <button type="button" data-tab="days" aria-selected="false">Все дни</button>
+      <button type="button" data-tab="research" aria-selected="false">Цены</button>
+    </nav>
+
+    <section class="panel" data-panel="today" id="todayPanel"></section>
+
+    <section class="panel" data-panel="add" hidden>
+      <form class="form" id="expForm">
+        <label>
+          День
+          <select id="expDay" required></select>
+        </label>
+        <label>
+          Категория
+          <select id="expCat" required></select>
+        </label>
+        <label>
+          Сумма, ¥ (на двоих)
+          <input id="expAmount" type="number" inputmode="numeric" min="1" step="1" placeholder="например 1800" required>
+        </label>
+        <label>
+          Заметка
+          <input id="expNote" type="text" maxlength="80" placeholder="рамен, JR, Donki…">
+        </label>
+        <button class="btn full" type="submit">Добавить трату</button>
+      </form>
+      <div class="quick">
+        <button type="button" class="btn ghost" id="quickSoft">Подставить мягкий лимит дня</button>
+      </div>
+      <h3 class="block-title">По категориям</h3>
+      <div class="cats" id="catBars"></div>
+    </section>
+
+    <section class="panel" data-panel="days" hidden>
+      <div class="days" id="daysList"></div>
+    </section>
+
+    <section class="panel" data-panel="research" hidden id="researchPanel"></section>
+
+    <div class="tools">
+      <button type="button" class="btn ghost" id="exportJson">Экспорт JSON</button>
+      <button type="button" class="btn ghost" id="resetTracker">Сбросить трекер</button>
+    </div>
+  </div>
+
+  <script src="js/tracker-data.js?v=1"></script>
+  <script src="js/tracker.js?v=1"></script>
+</body>
+</html>
