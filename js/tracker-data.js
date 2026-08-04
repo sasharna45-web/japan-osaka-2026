@@ -108,11 +108,12 @@ const TRACKER = {
     },
     {
       n: 8, iso: "2026-09-16", date: "16 сентября", weekday: "Ср",
-      title: "Восстановление + Kuromon",
-      goal: "Отдых и рынок",
+      title: "Восстановление + Kuromon + Capcom",
+      goal: "Рынок днём, лёгкий Capcom вечером",
       soft: 16000,
       places: [
-        { id: "d8-kuromon", name: "Kuromon Ichiba", emoji: "🐟", time: "день" }
+        { id: "d8-kuromon", name: "Kuromon Ichiba", emoji: "🐟", time: "день" },
+        { id: "d8-capcom", name: "Capcom Store Umeda", emoji: "🎮", time: "вечер" }
       ]
     },
     {

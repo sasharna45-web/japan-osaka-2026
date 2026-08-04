@@ -2,7 +2,7 @@
   "name": "Япония 2026 — демо",
   "short_name": "Япония демо",
   "description": "Демо-версия путеводителя по Осаке и Кансаю",
-  "start_url": "./index.html?v=demo22",
+  "start_url": "./index.html?v=demo24",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
