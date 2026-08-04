@@ -87,7 +87,7 @@ const TRIP = {
           how: "Из аэропорта в город: Nankai Airport Express до Namba (~45 мин) — наш дефолт; JR Haruka только если удобнее с багажом. Дальше метро до Tanimachi 6-chome.",
           duration: "≈ 2 ч на формальности и дорогу",
           lat: 34.4342, lng: 135.2441,
-          hours: "Прилёт 12:45 · HU473",
+          hours: "Прилёт 12:45 · HU473 · KIX Terminal 1 · PNR NXSTDT",
           price: "Поезд до города ≈ 970–1200 ¥",
           tips: "QR Visit Japan Web — ещё дома. На iPhone у вас Mobile PASMO: пополните ~15 000 ¥ на телефон (автомат/конбини/приложением). Ночь до вылета — Huiqiang у PEK T1; HU473 — из T2.",
           tags: ["culture"]
