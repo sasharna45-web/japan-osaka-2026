@@ -59,8 +59,8 @@ const TRACKER = {
       goal: "Океанариум и закат с высоты",
       soft: 22000,
       places: [
-        { id: "d3-kaiyu", name: "Kaiyukan", emoji: "🐋", time: "10:00", est: 5400, estNote: "≈2 700 ¥ × 2" },
-        { id: "d3-wheel", name: "Колесо Tempozan", emoji: "🎡", time: "≈12:30", est: 2000, estNote: "≈1 000 ¥ × 2" },
+        { id: "d3-kaiyu", name: "Kaiyukan", emoji: "🐋", time: "10:00", est: 6000, estNote: "≈2 700–3 500 ¥ × 2 (динамика; берите онлайн)" },
+        { id: "d3-wheel", name: "Колесо Tempozan", emoji: "🎡", time: "≈12:30", est: 2000, estNote: "1 000 ¥ × 2" },
         { id: "d3-harukas", name: "Abeno Harukas 300", emoji: "🏙️", time: "17:00", fixed: true, prepaid: true }
       ]
     },
@@ -177,7 +177,7 @@ const TRACKER = {
       places: [
         { id: "d14-expo", name: "Expo '70 Park", emoji: "🌳", time: "~11:00" },
         { id: "d14-sun", name: "Tower of the Sun (снаружи)", emoji: "☀️", time: "~12:00" },
-        { id: "d14-sky", name: "Umeda Sky Building", emoji: "🌆", time: "закат", fixed: true, prepaid: true }
+        { id: "d14-sky", name: "Umeda Sky Building", emoji: "🌆", time: "~17:30", fixed: true, prepaid: true }
       ]
     },
     {
@@ -243,7 +243,7 @@ const TRACKER = {
         ],
         source: "Ekitan / Visit Himeji travel notes (IC fare)",
         url: "https://ekitan.com/en/article/osaka-to-himeji-shinkansen",
-        asOf: "2026 (IC ≈1 460–1 490 ¥; точную сумму покажет автомат/ICOCA в день поездки)"
+        asOf: "2026 (IC ≈1 460–1 490 ¥; спишется с Mobile PASMO / IC)"
       },
       {
         id: "tickets",
