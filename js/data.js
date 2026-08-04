@@ -35,7 +35,7 @@ const TRANSIT_OUT = {
     {
       t: "7 сент · 20:05 (Пн)",
       title: "Москва → Пекин",
-      d: "SVO Terminal C → PEK Terminal 2 · Hainan HU7986 · вылет 20:05 · прилёт 8 сент 08:55."
+      d: "SVO Terminal C → PEK Terminal 2 · Hainan HU7986 · PNR NXSTDT · вылет 20:05 · прилёт 8 сент 08:55."
     },
     {
       t: "8–9 сент (Вт–Ср)",
@@ -45,7 +45,7 @@ const TRANSIT_OUT = {
     {
       t: "9 сент · 08:45 (Ср)",
       title: "Пекин → Осака",
-      d: "PEK Terminal 2 → KIX · Hainan HU473 · вылет 08:45 · прилёт 12:45 — дальше день 1."
+      d: "PEK Terminal 2 → KIX Terminal 1 · Hainan HU473 · PNR NXSTDT · вылет 08:45 · прилёт 12:45 — дальше день 1."
     }
   ],
   hotel: {
@@ -222,8 +222,8 @@ const TRIP = {
           duration: "1–1.5 ч",
           lat: 34.6459, lng: 135.5138,
           hours: "09:00–22:00 · ваш подъём в 17:00",
-          price: "Билет куплен",
-          tips: "Билет подтверждён на 11 сентября · подъём 17:00. Приходите за 20–30 минут, займите место у стекла с западной стороны.",
+          price: "Билет куплен (Trip.com: 2=1 Standard)",
+          tips: "Билет на 11 сентября · подъём 17:00. Приходите за 20–30 минут, западная сторона у стекла.",
           tags: ["photo", "culture"]
         }
       ],
@@ -374,7 +374,7 @@ const TRIP = {
       n: 7, date: "15 сентября", weekday: "Вт",
       title: "Universal Studios Japan",
       goal: "Главный день: Super Nintendo World и аттракционы до заката",
-      intro: "Главный день. Билеты (2 взрослых) и Express Pass 4 уже куплены — SNW 11:50–12:50, Mine Cart Madness 11:50–12:20. К входу к 07:30 (очередь до открытия парка, обычно ~09:00 — смотрите приложение USJ на день). До слота SNW: Harry Potter и Jurassic Park. Вода, перекус, телефон 100%.",
+      intro: "Главный день. Куплено: Studio Pass 1-day ×2 + Universal Express Pass 4: Minions and Hollywood Dream (слоты SNW 11:50–12:50, Mine Cart Madness 11:50–12:20). К входу к 07:30 (очередь до открытия ~09:00 — смотрите app USJ). До SNW: Harry Potter и Jurassic Park. Вода, перекус, телефон 100%.",
       load: 5,
       color: "#c1121f",
       places: [
@@ -385,8 +385,8 @@ const TRIP = {
           duration: "Весь день",
           lat: 34.6654, lng: 135.4323,
           hours: "Открытие по приложению USJ (часто ~09:00–21:00) · вы у входа с 07:30",
-          price: "Билеты (2 взр.) и Express Pass 4 уже куплены",
-          tips: "Studio Pass + Express Pass 4 уже куплены. Power-Up Band (~4200 ¥) — отдельно, по желанию. До слота SNW 11:50 — Harry Potter и Jurassic Park.",
+          price: "Studio Pass ×2 + Express Pass 4 (Minions & Hollywood Dream) — куплены",
+          tips: "Точный продукт: Express Pass 4 · Minions and Hollywood Dream. Power-Up Band (~4200 ¥) — отдельно. До SNW 11:50 — Harry Potter и Jurassic Park.",
           food: "Быстрый фудкорт / зона Minion; Kinopio's только если очередь короткая",
           tags: ["nintendo", "games", "photo", "culture"]
         },
@@ -404,7 +404,7 @@ const TRIP = {
       ],
       options: [
         { emoji: "⏳", title: "До слота Nintendo World", desc: "07:30 у входа → открытие парка → Harry Potter + Jurassic Park → к 11:50 у входа в SNW." },
-        { emoji: "🎢", title: "Express Pass 4", desc: "Уже куплен: покрывает Minion, Hollywood Dream, Nintendo World и Mine Cart Madness. Проверьте порядок слотов в приложении USJ." },
+        { emoji: "🎢", title: "Express Pass 4", desc: "Куплен: «Minions and Hollywood Dream». Слоты в билете: SNW 11:50–12:50 · Mine Cart 11:50–12:20. Остальное по app USJ." },
         { emoji: "🍔", title: "Еда в парке (дефолт)", desc: "Не стоим в Kinopio's. Обед ~14:00 в зоне Minion / Food Court у центральной улицы — быстро и сытно. Kinopio's только если очередь <20 мин." }
       ]
     },
@@ -807,26 +807,26 @@ const TRIP = {
     {
       n: 17, date: "25 сентября", weekday: "Пт",
       title: "В Шанхай",
-      goal: "Рейс 14:00 из KIX — спокойно добраться и улететь",
-      intro: "Вылет в Шанхай: Spring 9C6566 в 14:00 (по публичному расписанию на авг–окт 2026; сверьте с посадочным). Квартиру освободить до 10:00, выезд ~09:30, в KIX к ~11:00.",
+      goal: "Рейс 15:00 из KIX — спокойно добраться и улететь",
+      intro: "Вылет в Шанхай по билету: Spring 9C6566 в 15:00 (KIX Terminal 2 → PVG Terminal 2, PNR BLKALYX). Квартиру освободить до 10:00, выезд ~10:30, в KIX к ~12:00.",
       load: 3,
       color: "#457b9d",
       places: [
         {
-          name: "Вылет KIX → Шанхай", emoji: "🛫", time: "14:00", fixed: true, who: "both",
-          desc: "Spring Airlines 9C6566 KIX → PVG. Регистрация, багаж, tax-free при необходимости, контроль, гейт. Истина по времени — ваш посадочный.",
-          how: "Дефолт: Nankai до KIX (~45 мин). Выезд ~09:30, на месте ~11:00 (международный вылет — запас 3 ч).",
+          name: "Вылет KIX → Шанхай", emoji: "🛫", time: "15:00", fixed: true, who: "both",
+          desc: "Spring Airlines 9C6566: KIX Terminal 2 → PVG Terminal 2. Регистрация, багаж, tax-free при необходимости, контроль, гейт.",
+          how: "Дефолт: Nankai до KIX (~45 мин). Выезд ~10:30, на месте ~12:00 (запас ~3 ч до вылета).",
           duration: "Дорога ~1 ч + запас в аэропорту",
           lat: 34.4342, lng: 135.2441,
-          hours: "Вылет 14:00 · Spring 9C6566 · прилёт PVG ≈ 16:30",
+          hours: "Вылет 15:00 · Spring 9C6566 · PNR BLKALYX · PVG ≈ 16:30 T2",
           price: "До KIX ≈ 970–1200 ¥",
-          tips: "Сверьте время с билетом/приложением авиакомпании. Tax-free — в ручной клади. Дальше слайд «Китай».",
+          tips: "Терминал KIX — 2. Tax-free в ручной клади. Дальше слайд «Китай».",
           tags: ["culture"]
         }
       ],
       options: [
         { emoji: "🏠", title: "Утро до 10:00", desc: "Освободить квартиру, проверить зарядки и шкафы. Чемоданы лучше собрать вечером 24-го." },
-        { emoji: "⏱️", title: "Тайминг в KIX", desc: "К ~11:00 на месте при вылете 14:00: регистрация, багаж, контроль — без нервов." },
+        { emoji: "⏱️", title: "Тайминг в KIX", desc: "К ~12:00 на месте при вылете 15:00: регистрация, багаж, контроль — без нервов." },
         { emoji: "🧾", title: "Tax-free", desc: "Покупки без налога держите под рукой, не в сданном чемодане." }
       ]
     }
@@ -926,8 +926,8 @@ const DAY_BRIEFS = {
     remember: "Бронь ужина до 22–23 сент · весы багажа · tax-free в ручную."
   },
   17: {
-    main: "Вылет 14:00 KIX → PVG (9C6566) · сверьте посадочный.",
-    leave: "Квартиру до 10:00 · Nankai ~09:30 · в KIX к ~11:00.",
+    main: "Вылет 15:00 KIX T2 → PVG (9C6566 · BLKALYX).",
+    leave: "Квартиру до 10:00 · Nankai ~10:30 · в KIX к ~12:00.",
     remember: "Паспорта · билеты · tax-free в ручной · слайд «Китай»."
   }
 };
@@ -946,14 +946,14 @@ const PACKING = [
       { id: "pk-flights", text: "Авиабилеты / посадочные талоны (в приложении + распечатка)" },
       { id: "pk-airbnb", text: "Ваучер Airbnb и адрес квартиры" },
       { id: "pk-beijing-hotel", text: "Ваучер отеля Пекин · Beijing Huiqiang (8–9 сент, транзит)" },
-      { id: "pk-shanghai-hotel", text: "Ваучер отеля Шанхай · Elong Anyue у PVG (25–27 сент)" },
+      { id: "pk-shanghai-hotel", text: "Ваучер Elong Anyue у PVG (25–27 сент) · 2 номера" },
       {
         text: "Билеты:",
         sub: [
-          { id: "pk-tix-harukas", text: "✅ Harukas" },
+          { id: "pk-tix-harukas", text: "✅ Harukas 300 (11 сент · 2=1 Standard · подъём 17:00)" },
           { id: "pk-tix-osaka-castle", text: "✅ Замок Осаки" },
-          { id: "pk-tix-usj", text: "✅ Universal Studios Japan ×2 + Express Pass 4" },
-          { id: "pk-tix-umeda", text: "✅ Umeda Sky Building" }
+          { id: "pk-tix-usj", text: "✅ USJ ×2 + Express Pass 4 Minions & Hollywood Dream (SNW 11:50)" },
+          { id: "pk-tix-umeda", text: "✅ Umeda Sky Kuchu Teien (22 сент)" }
         ]
       },
       { id: "pk-insurance", text: "Страховка (фото полиса)" },
@@ -1087,18 +1087,18 @@ const CHECKLIST = [
       { id: "esim-jp", text: "Japan eSIM: продлить или докупить интернет на 22–25 сентября (текущий SoftBank-пакет обычно до ~21 сент — иначе последние дни в Осаке без сети)." },
       { id: "esim-cn", text: "China eSIM (Шанхай): купить покрытие на обратный транзит 25–27 сентября." },
       { id: "book-steakland", text: "Кобе 18 сент: забронировать Steakland Kobe (или Mouriya) на обед ~12:30." },
-      { id: "book-gyukaku", text: "24 сент: забронировать Gyu-Kaku Namba (якинику) на 18:30 — до 22–23 сентября." },
-      { id: "verify-flights", text: "Сверить все авиабилеты с приложением авиакомпании (особенно 9C6566: в расписании Spring на авг–окт 2026 стоит 14:00, не 15:00)." }
+      { id: "book-gyukaku", text: "24 сент: забронировать Gyu-Kaku Namba (якинику) на 18:30 — до 22–23 сентября." }
     ]
   },
   {
     step: "Готово", tone: "green",
     title: "Уже закрыто",
     items: [
-      { id: "abeno", text: "✅ Abeno Harukas 300: билет подтверждён на 11 сентября · 17:00." },
+      { id: "abeno", text: "✅ Abeno Harukas 300: Trip.com 2=1 Standard · 11 сентября · подъём 17:00." },
       { id: "osaka-castle-tix", text: "✅ Осакский замок: билет куплен." },
-      { id: "usj-tix", text: "✅ USJ: Studio Pass ×2 + Express Pass 4 (SNW 11:50–12:50 · Mine Cart 11:50–12:20)." },
-      { id: "umeda-sky-tix", text: "✅ Umeda Sky (Kuchu Teien): билет на 22 сентября куплен." },
+      { id: "usj-tix", text: "✅ USJ 15 сент: Studio Pass ×2 + Express Pass 4 Minions & Hollywood Dream (SNW 11:50–12:50 · Mine Cart 11:50–12:20)." },
+      { id: "umeda-sky-tix", text: "✅ Umeda Sky Kuchu Teien: билет на 22 сентября (adult)." },
+      { id: "flights-booked", text: "✅ Авиа: HU7986 / HU473 (PNR NXSTDT) · 9C6566 15:00 (BLKALYX) · MU5232+MU8298 (PKM0R3)." },
       { id: "cash", text: "Наличные доллары куплены (новые купюры) — для обмена на йены в KIX." }
     ]
   },
@@ -1129,7 +1129,7 @@ const CHECKLIST = [
         text: "Бумажные документы (распечатать на A4):",
         sub: [
           { id: "doc-flights", text: "Маршрутные квитанции всех авиабилетов." },
-          { id: "doc-hotels", text: "Ваучеры отелей: Пекин Huiqiang (8–9 сент, транзит туда) и Шанхай PVG (25–27 сент, обратно)." },
+          { id: "doc-hotels", text: "Ваучеры отелей: Пекин Huiqiang (8–9 сент) и Шанхай Elong Anyue PVG (25–27 сент, 2 номера)." },
           { id: "doc-airbnb", text: "Квитанция на квартиру Airbnb в Осаке." },
           { id: "doc-ins", text: "Медицинская страховка." },
           { id: "doc-view", text: "Билеты на смотровые площадки." },
@@ -1228,13 +1228,13 @@ const WEATHER = {
  */
 const DEPARTURE_DAY = {
   title: "Цель дня — рейс в Шанхай",
-  flight: "Spring Airlines 9C6566 · KIX → PVG · 14:00 (сверьте посадочный)",
+  flight: "Spring Airlines 9C6566 · KIX T2 → PVG T2 · 15:00 · PNR BLKALYX",
   steps: [
     { t: "утро", title: "Сборы", d: "Чемоданы лучше с вечера 24-го. До 10:00 освободить квартиру (дедлайн Airbnb), проверить зарядки." },
-    { t: "~09:30", title: "Дорога в KIX", d: "Метро → Namba → Nankai (~45 мин). Цель — быть в аэропорту около 11:00." },
-    { t: "~11:00", title: "Регистрация", d: "Spring Airlines, багаж, tax-free при необходимости (товары в ручной клади)." },
-    { t: "до 14:00", title: "Контроль и гейт", d: "Паспортный контроль, досмотр, ожидание. Гейт — на табло." },
-    { t: "14:00", title: "Вылет → Шанхай", d: "9C6566 → PVG ≈ 16:30. Дальше — слайд «Китай»: отель, Alipay, первый час." }
+    { t: "~10:30", title: "Дорога в KIX", d: "Метро → Namba → Nankai (~45 мин). Цель — быть в аэропорту около 12:00 · Terminal 2." },
+    { t: "~12:00", title: "Регистрация", d: "Spring Airlines (PNR BLKALYX), багаж, tax-free при необходимости (товары в ручной клади)." },
+    { t: "до 15:00", title: "Контроль и гейт", d: "Паспортный контроль, досмотр, ожидание. Гейт — на табло." },
+    { t: "15:00", title: "Вылет → Шанхай", d: "9C6566 → PVG T2 ≈ 16:30. Дальше — слайд «Китай»: отель, Alipay, первый час." }
   ]
 };
 
