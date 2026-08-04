@@ -47,7 +47,7 @@ const TRACKER = {
       goal: "Замок утром, игровой район днём",
       soft: 18000,
       places: [
-        { id: "d2-castle", name: "Осакский замок", emoji: "🏯", time: "утро", fixed: true, prepaid: true },
+        { id: "d2-castle", name: "Осакский замок", emoji: "🏯", time: "~09:00", fixed: true, prepaid: true },
         { id: "d2-denden", name: "Den Den Town", emoji: "🎮", time: "день" },
         { id: "d2-potato", name: "Super Potato Osaka", emoji: "🕹️" },
         { id: "d2-shin", name: "Shinsekai + Tsutenkaku", emoji: "🗼", time: "вечер" }
@@ -109,33 +109,32 @@ const TRACKER = {
     {
       n: 8, iso: "2026-09-16", date: "16 сентября", weekday: "Ср",
       title: "Восстановление + Kuromon + Capcom",
-      goal: "Рынок днём, лёгкий Capcom вечером",
+      goal: "Kuromon ~12:30 · Capcom ~17:00",
       soft: 16000,
       places: [
-        { id: "d8-kuromon", name: "Kuromon Ichiba", emoji: "🐟", time: "день" },
-        { id: "d8-capcom", name: "Capcom Store Umeda", emoji: "🎮", time: "вечер" }
+        { id: "d8-kuromon", name: "Kuromon Ichiba", emoji: "🐟", time: "~12:30" },
+        { id: "d8-capcom", name: "Capcom Store Umeda", emoji: "🎮", time: "~17:00" }
       ]
     },
     {
       n: 9, iso: "2026-09-17", date: "17 сентября", weekday: "Чт",
       title: "Киото №2 — Арасияма",
-      goal: "Бамбук, дзен, Золотой павильон",
+      goal: "Бамбук, Tenryu-ji, Kinkaku-ji (Ryoan-ji пропускаем)",
       soft: 22000,
       places: [
-        { id: "d9-arashi", name: "Arashiyama · бамбук", emoji: "🎋", est: 0 },
-        { id: "d9-tenryu", name: "Tenryu-ji (сад)", emoji: "🏯", est: 1000, estNote: "500 ¥ × 2" },
-        { id: "d9-kinkaku", name: "Kinkaku-ji", emoji: "✨", est: 1000, estNote: "500 ¥ × 2" },
-        { id: "d9-ryoan", name: "Ryoan-ji", emoji: "🪨", est: 1200, estNote: "600 ¥ × 2" }
+        { id: "d9-arashi", name: "Arashiyama · бамбук", emoji: "🎋", time: "~08:30", est: 0 },
+        { id: "d9-tenryu", name: "Tenryu-ji (сад)", emoji: "🍃", time: "~09:30", est: 1000, estNote: "500 ¥ × 2" },
+        { id: "d9-kinkaku", name: "Kinkaku-ji", emoji: "✨", time: "~12:30", est: 1000, estNote: "500 ¥ × 2" }
       ]
     },
     {
       n: 10, iso: "2026-09-18", date: "18 сентября", weekday: "Пт",
       title: "Кобе",
-      goal: "Порт и теппаньяки",
+      goal: "Обед Steakland + порт",
       soft: 28000,
       places: [
-        { id: "d10-harbor", name: "Harborland + Kobe Tower", emoji: "⚓", time: "день" },
-        { id: "d10-beef", name: "Тэппаньяки: Kobe beef", emoji: "🥩", time: "вечер", est: 20000, estNote: "средний ресторан ≈ 8–15 тыс ¥/чел" }
+        { id: "d10-beef", name: "Steakland Kobe (обед)", emoji: "🥩", time: "~12:30", est: 16000, estNote: "обеденный сет ориентир ≈ 6–10 тыс ¥/чел · уточнить при брони" },
+        { id: "d10-harbor", name: "Harborland + Kobe Tower", emoji: "⚓", time: "~14:30" }
       ]
     },
     {
@@ -144,11 +143,11 @@ const TRACKER = {
       goal: "Шопинг и каваий",
       soft: 25000,
       places: [
-        { id: "d11-hardoff", name: "Hard Off Yao", emoji: "💿", time: "утро" },
-        { id: "d11-yodo", name: "Yodobashi Camera Umeda", emoji: "📷" },
-        { id: "d11-poke", name: "Pokemon Center Osaka", emoji: "⚡" },
-        { id: "d11-sylv", name: "Sylvanian Families", emoji: "🐰" },
-        { id: "d11-hep", name: "HEP Five", emoji: "🎡" }
+        { id: "d11-hardoff", name: "Hard Off Yao", emoji: "💿", time: "~10:30" },
+        { id: "d11-yodo", name: "Yodobashi Camera Umeda", emoji: "📷", time: "~14:00" },
+        { id: "d11-poke", name: "Pokemon Center Osaka", emoji: "⚡", time: "~16:00" },
+        { id: "d11-sylv", name: "Sylvanian Families", emoji: "🐰", time: "~17:00" },
+        { id: "d11-hep", name: "HEP Five", emoji: "🎡", time: "~18:00" }
       ]
     },
     {
@@ -157,7 +156,7 @@ const TRACKER = {
       goal: "Замок и сад",
       soft: 22000,
       places: [
-        { id: "d12-castle", name: "Замок Химэдзи + сад Koko-en", emoji: "🦢", time: "день", fixed: true, est: 5200, estNote: "комбо 2 600 ¥ × 2" }
+        { id: "d12-castle", name: "Замок Химэдзи + сад Koko-en", emoji: "🦢", time: "~10:00", est: 5200, estNote: "комбо 2 600 ¥ × 2 (с 2026-03-01)" }
       ]
     },
     {
@@ -176,29 +175,29 @@ const TRACKER = {
       goal: "Парк и панорама",
       soft: 16000,
       places: [
-        { id: "d14-expo", name: "Expo '70 Park", emoji: "🌳", time: "день" },
-        { id: "d14-sun", name: "Tower of the Sun", emoji: "☀️" },
-        { id: "d14-sky", name: "Umeda Sky Building", emoji: "🌆", time: "вечер", fixed: true, prepaid: true }
+        { id: "d14-expo", name: "Expo '70 Park", emoji: "🌳", time: "~11:00" },
+        { id: "d14-sun", name: "Tower of the Sun (снаружи)", emoji: "☀️", time: "~12:00" },
+        { id: "d14-sky", name: "Umeda Sky Building", emoji: "🌆", time: "закат", fixed: true, prepaid: true }
       ]
     },
     {
       n: 15, iso: "2026-09-23", date: "23 сентября", weekday: "Ср",
       title: "Sylvanian + море",
-      goal: "Лёгкий день",
+      goal: "Harvest Hill ~10:00 · Nishikinohama если ясно",
       soft: 16000,
       places: [
-        { id: "d15-harvest", name: "Harvest Hill", emoji: "🐰", time: "утро" },
-        { id: "d15-beach", name: "Nishikinohama Beach", emoji: "🏖️" }
+        { id: "d15-harvest", name: "Harvest Hill", emoji: "🐰", time: "~10:00" },
+        { id: "d15-beach", name: "Nishikinohama Beach", emoji: "🏖️", time: "~14:00" }
       ]
     },
     {
       n: 16, iso: "2026-09-24", date: "24 сентября", weekday: "Чт",
       title: "Последний день",
-      goal: "Сувениры и прощальный ужин",
+      goal: "Donki ~14:00 · Gyu-Kaku 18:30",
       soft: 20000,
       places: [
-        { id: "d16-donki", name: "Don Quijote Dotonbori", emoji: "🛒", time: "день" },
-        { id: "d16-dinner", name: "Прощальный ужин", emoji: "🍖", time: "вечер" }
+        { id: "d16-donki", name: "Don Quijote Dotonbori", emoji: "🛒", time: "~14:00" },
+        { id: "d16-dinner", name: "Gyu-Kaku Namba (якинику)", emoji: "🍖", time: "18:30", est: 10000, estNote: "сет на двоих · бронь заранее" }
       ]
     }
   ],
@@ -285,7 +284,7 @@ const TRACKER = {
           "Рамен на человека: обычно 900–1 500 ¥ (простая миска); с топпингами до ≈ 1 800 ¥.",
           "Кайтен-суши (обед/ужин): типично 1 500–3 000 ¥/чел; плотный заход 3 000–4 000 ¥.",
           "Тэппаньяки с кобе-говядиной среднего уровня: ужин ≈ 8 000–15 000 ¥/чел → на двоих ≈ 16 000–30 000 ¥ (без алкоголя). Курсы «премиум» легко уходят за 20 000+/чел.",
-          "Для бюджета 500k: Kobe beef лучше планировать как одну «дорогую» статью из запаса, не из дневных 18k."
+          "Kobe beef (обед Steakland ~12:30) — одна «дорогая» статья: soft дня 28k уже с запасом; если выйдете выше — из долларового резерва."
         ],
         source: "Tabelog bands / типичные цены Кансая 2025–2026",
         url: "https://tabelog.com/",
@@ -309,7 +308,7 @@ const TRACKER = {
       { item: "Hello Kitty Smile общий / чел", range: "≈ 2 000 ¥", source: "планы/обзоры 2025–26" },
       { item: "Рамен / чел", range: "900–1 500 ¥", source: "типичные цены Кансая" },
       { item: "Кайтен-суши / чел", range: "1 500–3 000 ¥", source: "типичные цены Кансая" },
-      { item: "Kobe teppanyaki ужин / чел", range: "8 000–15 000 ¥ (средний)", source: "Tabelog mid-range" }
+      { item: "Kobe teppanyaki обед / чел", range: "≈ 6 000–10 000 ¥ (сет; ужин дороже 8–15k)", source: "Tabelog mid-range / lunch sets" }
     ]
   }
 };
