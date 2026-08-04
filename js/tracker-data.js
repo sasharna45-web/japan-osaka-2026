@@ -133,7 +133,7 @@ const TRACKER = {
       goal: "Обед Steakland + порт",
       soft: 28000,
       places: [
-        { id: "d10-beef", name: "Steakland Kobe (обед)", emoji: "🥩", time: "~12:30", est: 16000, estNote: "обеденный сет ориентир ≈ 6–10 тыс ¥/чел · уточнить при брони" },
+        { id: "d10-beef", name: "Steakland Kobe (обед)", emoji: "🥩", time: "~12:30", est: 16000, estNote: "обеденный сет ориентир ≈ 6–10 тыс ¥/чел · без обязательной брони" },
         { id: "d10-harbor", name: "Harborland + Kobe Tower", emoji: "⚓", time: "~14:30" }
       ]
     },
@@ -193,11 +193,11 @@ const TRACKER = {
     {
       n: 16, iso: "2026-09-24", date: "24 сентября", weekday: "Чт",
       title: "Последний день",
-      goal: "Donki ~14:00 · Gyu-Kaku 18:30",
+      goal: "Donki ~14:00 · якинику ~18:30",
       soft: 20000,
       places: [
         { id: "d16-donki", name: "Don Quijote Dotonbori", emoji: "🛒", time: "~14:00" },
-        { id: "d16-dinner", name: "Gyu-Kaku Namba (якинику)", emoji: "🍖", time: "18:30", est: 10000, estNote: "сет на двоих · бронь заранее" }
+        { id: "d16-dinner", name: "Gyu-Kaku Namba (якинику)", emoji: "🍖", time: "~18:30", est: 10000, estNote: "сет на двоих · без обязательной брони" }
       ]
     }
   ],
