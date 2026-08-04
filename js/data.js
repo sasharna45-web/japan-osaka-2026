@@ -9,7 +9,7 @@
  *   load   — нагрузка 1..5
  *   color  — акцент
  *   places — массив мест
- *   options— «на выбор / по желанию»: [{emoji, title, desc}]
+ *   options— подсказки дня с дефолтом: [{emoji, title, desc}]
  *
  * Место (place):
  *   name, emoji
@@ -938,7 +938,7 @@ const DAY_BRIEFS = {
   },
   17: {
     main: "Вылет 15:00 KIX → Шанхай (Spring Airlines).",
-    leave: "Из дома ~10:30 · в аэропорту к ~12:00 (квартиру освободить до 10:00).",
+    leave: "Квартиру до 10:00 · Nankai ~10:30 · в KIX к ~12:00.",
     remember: "Паспорта · билеты · tax-free в ручной · открыть слайд «Китай»."
   }
 };
