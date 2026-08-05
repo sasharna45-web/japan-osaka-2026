@@ -44,14 +44,14 @@ const TRACKER = {
     },
     {
       n: 2, iso: "2026-09-10", date: "10 сентября", weekday: "Чт",
-      title: "Замок Осаки + Den Den Town",
-      goal: "Замок утром, игровой район днём",
-      soft: 18000,
+      title: "Киото №1 — классика",
+      goal: "Тории, старый Киото, обмен у вокзала, Nintendo",
+      soft: 20000,
       places: [
-        { id: "d2-castle", name: "Осакский замок", emoji: "🏯", time: "~09:00", est: 1200, estNote: "~600 ¥ × 2 · на месте" },
-        { id: "d2-denden", name: "Den Den Town", emoji: "🎮", time: "день" },
-        { id: "d2-potato", name: "Super Potato Osaka", emoji: "🕹️" },
-        { id: "d2-shin", name: "Shinsekai + Tsutenkaku", emoji: "🗼", time: "вечер" }
+        { id: "d4-inari", name: "Fushimi Inari", emoji: "⛩️", time: "рано", est: 0, estNote: "бесплатно" },
+        { id: "d4-kiyomizu", name: "Kiyomizu-dera", emoji: "🛕", time: "день", est: 1000, estNote: "500 ¥ × 2" },
+        { id: "d4-ninen", name: "Ninenzaka / Sannenzaka", emoji: "🏮" },
+        { id: "d4-nintendo", name: "Nintendo Kyoto", emoji: "🎮", time: "вечер" }
       ]
     },
     {
@@ -67,14 +67,14 @@ const TRACKER = {
     },
     {
       n: 4, iso: "2026-09-12", date: "12 сентября", weekday: "Сб",
-      title: "Киото №1 — классика",
-      goal: "Тории, старый Киото, Nintendo",
-      soft: 20000,
+      title: "Замок Осаки + Den Den Town",
+      goal: "Замок утром, игровой район днём",
+      soft: 18000,
       places: [
-        { id: "d4-inari", name: "Fushimi Inari", emoji: "⛩️", time: "рано", est: 0, estNote: "бесплатно" },
-        { id: "d4-kiyomizu", name: "Kiyomizu-dera", emoji: "🛕", time: "день", est: 1000, estNote: "500 ¥ × 2" },
-        { id: "d4-ninen", name: "Ninenzaka / Sannenzaka", emoji: "🏮" },
-        { id: "d4-nintendo", name: "Nintendo Kyoto", emoji: "🎮", time: "вечер" }
+        { id: "d2-castle", name: "Осакский замок", emoji: "🏯", time: "~09:00", est: 1200, estNote: "~600 ¥ × 2 · на месте" },
+        { id: "d2-denden", name: "Den Den Town", emoji: "🎮", time: "день" },
+        { id: "d2-potato", name: "Super Potato Osaka", emoji: "🕹️" },
+        { id: "d2-shin", name: "Shinsekai + Tsutenkaku", emoji: "🗼", time: "вечер" }
       ]
     },
     {
