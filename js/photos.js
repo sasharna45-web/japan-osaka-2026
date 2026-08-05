@@ -67,11 +67,6 @@ const PLACE_PHOTOS = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Kinkaku-ji_in_November_2016_-02.jpg/960px-Kinkaku-ji_in_November_2016_-02.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Water_reflection_of_Kinkaku-ji_Temple_a_sunny_day%2C_Kyoto%2C_Japan.jpg/960px-Water_reflection_of_Kinkaku-ji_Temple_a_sunny_day%2C_Kyoto%2C_Japan.jpg"
   ],
-  "Ryoan-ji": [
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Ninna-ji_and_Ryoan-ji%2C_Kyoto_-_Ryoanji7753.jpg/960px-Ninna-ji_and_Ryoan-ji%2C_Kyoto_-_Ryoanji7753.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/RyoanJi-Dry_garden.jpg/960px-RyoanJi-Dry_garden.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Ry%C5%8Dan-ji_rock_garden_with_silhouettes_of_tourists%2C_Kyoto%2C_2016.jpg/960px-Ry%C5%8Dan-ji_rock_garden_with_silhouettes_of_tourists%2C_Kyoto%2C_2016.jpg"
-  ],
   "Harborland + Kobe Tower": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Kobe_Port_Tower_and_Harborland_at_night_20190202-1.jpg/960px-Kobe_Port_Tower_and_Harborland_at_night_20190202-1.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Kobe_Port_Tower_and_Harborland_at_night_20190202-2.jpg/960px-Kobe_Port_Tower_and_Harborland_at_night_20190202-2.jpg",

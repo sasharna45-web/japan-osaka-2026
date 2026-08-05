@@ -18,7 +18,7 @@
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
 
-  <link rel="stylesheet" href="css/styles.css?v=34">
+  <link rel="stylesheet" href="css/styles.css?v=35">
 </head>
 <body class="ios-feel">
 
@@ -283,19 +283,19 @@
     <p class="gallery-view__cap" id="galleryCap"></p>
   </div>
 
-  <script src="js/data.js?v=34"></script>
-  <script src="js/photos.js?v=34"></script>
-  <script src="js/app.js?v=34"></script>
+  <script src="js/data.js?v=35"></script>
+  <script src="js/photos.js?v=35"></script>
+  <script src="js/app.js?v=35"></script>
   <script>
     (function () {
-      var VER = "34";
+      var VER = "35";
 
       async function clearOldCaches() {
         try {
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v34"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v35"
               ? caches.delete(k)
               : Promise.resolve();
           }));

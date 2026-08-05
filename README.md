@@ -55,9 +55,10 @@ japan-osaka-2026/
 ├── china.html         # транзит Шанхай
 ├── tracker.html       # трекер дней и бюджета
 ├── update.html        # сброс кэша на телефоне
-├── sw.js / manifest   # PWA / offline cache (v34)
+├── sw.js / manifest   # PWA / offline cache (v35)
 ├── css/               # styles, china, tracker
 ├── js/                # data, app, photos, china-*, tracker-*
+├── vendor/fonts/      # офлайн Noto JP/SC
 ├── demo/              # публичная копия без личных данных
 └── README.md
 ```
