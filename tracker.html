@@ -16,12 +16,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Трекер 2026">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="css/styles.css?v=31">
-  <link rel="stylesheet" href="css/tracker.css?v=31">
+  <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
+  <link rel="stylesheet" href="css/styles.css?v=32">
+  <link rel="stylesheet" href="css/tracker.css?v=32">
 </head>
 <body class="ios-feel tracker-page">
 
@@ -35,8 +32,8 @@
       <h1 class="hero__title">Трекер <span>2026</span></h1>
       <p class="hero__subtitle">Дни · бюджет после обмена в KIX · Кансай</p>
       <div class="hero__meta">
-        <span>9–24 сентября</span>
-        <span>16 дней</span>
+        <span>9–25 сентября</span>
+        <span>17 дней</span>
         <span id="heroExchangeMeta">обмен ещё не введён</span>
       </div>
       <div class="t-budget" id="budgetCard" aria-label="Бюджет">
@@ -208,12 +205,11 @@
     </a>
   </nav>
 
-  <script src="js/tracker-data.js?v=31"></script>
-  <script src="js/tracker.js?v=31"></script>
+  <script src="js/tracker-data.js?v=32"></script>
+  <script src="js/tracker.js?v=32"></script>
   <script>
     (function () {
-      var VER = "31";
-      var KEY = "japan2026.tracker.cleared." + VER;
+      var VER = "32";
 
       function initFolds() {
         document.querySelectorAll(".fold").forEach(function (fold) {
@@ -229,36 +225,19 @@
         });
       }
 
-      async function wipe() {
+      async function clearOldCaches() {
         try {
-          if (window.caches) {
-            var keys = await caches.keys();
-            await Promise.all(keys.map(function (k) { return caches.delete(k); }));
-          }
-        } catch (e) {}
-        try {
-          if ("serviceWorker" in navigator) {
-            var regs = await navigator.serviceWorker.getRegistrations();
-            await Promise.all(regs.map(function (r) { return r.unregister(); }));
-          }
+          if (!window.caches) return;
+          var keys = await caches.keys();
+          await Promise.all(keys.map(function (k) {
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v32"
+              ? caches.delete(k)
+              : Promise.resolve();
+          }));
         } catch (e) {}
       }
 
-      async function boot() {
-        initFolds();
-        var already = false;
-        try { already = localStorage.getItem(KEY) === "1"; } catch (e) {}
-
-        if (!already) {
-          await wipe();
-          try { localStorage.setItem(KEY, "1"); } catch (e) {}
-          var url = new URL(location.href);
-          url.searchParams.set("v", VER);
-          url.searchParams.set("fresh", String(Date.now()));
-          location.replace(url.toString());
-          return;
-        }
-
+      function registerSW() {
         if ("serviceWorker" in navigator) {
           navigator.serviceWorker.register("./sw.js?v=" + VER).catch(function () {});
         }
@@ -267,8 +246,7 @@
       var btn = document.getElementById("forceRefresh");
       if (btn) {
         btn.addEventListener("click", function () {
-          try { localStorage.removeItem(KEY); } catch (e) {}
-          wipe().then(function () {
+          clearOldCaches().then(function () {
             var url = new URL(location.href);
             url.searchParams.set("v", VER);
             url.searchParams.set("fresh", String(Date.now()));
@@ -277,7 +255,8 @@
         });
       }
 
-      boot();
+      initFolds();
+      clearOldCaches().then(registerSW);
     })();
   </script>
 </body>

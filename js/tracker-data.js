@@ -16,9 +16,9 @@ const TRACKER = {
   budgetYenMin: 356000,
   budgetYenMax: 404000,
   softDailyYen: 18000,
-  spendDays: 16,
+  spendDays: 17,
   dateFrom: "2026-09-09",
-  dateTo: "2026-09-24",
+  dateTo: "2026-09-25",
   note: "Трекер считает уже обменянные йены. План: $3225 всего → $700–1000 оставить долларами → в йены ~$2225–2525 (≈356–404k ¥). Спокойный темп ≈ 18 000 ¥/день. Крупное — из долларового резерва.",
 
   categories: [
@@ -198,6 +198,15 @@ const TRACKER = {
       places: [
         { id: "d16-donki", name: "Don Quijote Dotonbori", emoji: "🛒", time: "~14:00" },
         { id: "d16-dinner", name: "Gyu-Kaku Namba (якинику)", emoji: "🍖", time: "~18:30", est: 10000, estNote: "сет на двоих · без обязательной брони" }
+      ]
+    },
+    {
+      n: 17, iso: "2026-09-25", date: "25 сентября", weekday: "Пт",
+      title: "Вылет / лёгкие траты",
+      goal: "Выезд в KIX · лёгкие траты до рейса",
+      soft: 6000,
+      places: [
+        { id: "d17-depart", name: "Вылет KIX → Шанхай", emoji: "✈️", time: "15:00", fixed: true }
       ]
     }
   ],

@@ -374,11 +374,26 @@
   // ======================= 6. РЕЖИМ «ТОЛЬКО СЕГОДНЯ» =======================
   const TODAY_ONLY_KEY = "japan2026.todayOnly.v1";
 
+  /** Календарная дата в Asia/Tokyo (YYYY-MM-DD), не локаль устройства. */
+  function tokyoYmd(now = new Date()) {
+    const parts = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Tokyo",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit"
+    }).formatToParts(now);
+    const get = (type) => Number(parts.find((p) => p.type === type).value);
+    return { y: get("year"), m: get("month"), d: get("day") };
+  }
+
+  function tokyoIso(now = new Date()) {
+    const { y, m, d } = tokyoYmd(now);
+    return `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+  }
+
   function isDuringTrip(now = new Date()) {
-    const cur = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const start = new Date(2026, 8, 9);
-    const end = new Date(2026, 8, 25);
-    return cur >= start && cur <= end;
+    const cur = tokyoIso(now);
+    return cur >= "2026-09-09" && cur <= "2026-09-25";
   }
 
   // По умолчанию во время поездки — только сегодняшний день (если пользователь ещё не выбирал)
@@ -1042,10 +1057,16 @@
         <div class="hs-nums">
           <a class="hs-num" href="tel:110"><b>110</b><span>Полиция</span></a>
           <a class="hs-num" href="tel:119"><b>119</b><span>Скорая / пожарные</span></a>
+          <a class="hs-num" href="tel:+81668483451"><b>+81-6-6848-3451</b><span>Консульство РФ · Осака</span></a>
+          <a class="hs-num" href="tel:+818083166088"><b>+81-80-8316-6088</b><span>Консульство · экстренный</span></a>
         </div>
-        <p class="hs-card__text" style="margin-top:12px;margin-bottom:0">
+        <p class="hs-card__text" style="margin-top:12px;margin-bottom:8px">
           Покажите паспорт и адрес на экране. В аптеке: «薬局» (яккёку) / drugstore, или Maps → pharmacy.
-          Страховку держите в телефоне (фото полиса).
+          Консульство РФ в Осаке: <a href="https://osaka.kdmid.ru/" target="_blank" rel="noopener">osaka.kdmid.ru</a>.
+        </p>
+        <p class="hs-card__text" style="margin-bottom:0">
+          Страховка / ассистанс: <a href="#" id="insuranceAssistLink">добавить ссылку на полис</a>
+          (фото полиса и номер ассистанса — в телефоне).
         </p>
       </div>
       <div class="hs-card">
@@ -1107,21 +1128,19 @@
   }
 
   function tripFocus(now = new Date()) {
-    const y = now.getFullYear();
-    const m = now.getMonth();
-    const d = now.getDate();
-    const start = new Date(2026, 8, 9);
-    const end = new Date(2026, 8, 25);
-    const cur = new Date(y, m, d);
+    const { y, m, d } = tokyoYmd(now);
+    const curUtc = Date.UTC(y, m - 1, d);
+    const startUtc = Date.UTC(2026, 8, 9);
+    const endUtc = Date.UTC(2026, 8, 25);
     const ms = 86400000;
 
-    if (cur < start) {
-      return { mode: "before", daysLeft: Math.round((start - cur) / ms), todayIdx: dayIndexByN(1), tomorrowIdx: dayIndexByN(2) };
+    if (curUtc < startUtc) {
+      return { mode: "before", daysLeft: Math.round((startUtc - curUtc) / ms), todayIdx: dayIndexByN(1), tomorrowIdx: dayIndexByN(2) };
     }
-    if (cur > end) {
+    if (curUtc > endUtc) {
       return { mode: "after" };
     }
-    const n = d - 8; // 9 сент → день 1
+    const n = Math.round((curUtc - startUtc) / ms) + 1; // 9 сент → день 1
     const todayIdx = dayIndexByN(n);
     const tomorrowIdx = n < 17 ? dayIndexByN(n + 1) : -1;
     return { mode: "during", todayIdx, tomorrowIdx };
