@@ -17,8 +17,8 @@
   <meta name="apple-mobile-web-app-title" content="Трекер 2026">
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
-  <link rel="stylesheet" href="css/styles.css?v=33">
-  <link rel="stylesheet" href="css/tracker.css?v=33">
+  <link rel="stylesheet" href="css/styles.css?v=34">
+  <link rel="stylesheet" href="css/tracker.css?v=34">
 </head>
 <body class="ios-feel tracker-page">
 
@@ -205,11 +205,11 @@
     </a>
   </nav>
 
-  <script src="js/tracker-data.js?v=33"></script>
-  <script src="js/tracker.js?v=33"></script>
+  <script src="js/tracker-data.js?v=34"></script>
+  <script src="js/tracker.js?v=34"></script>
   <script>
     (function () {
-      var VER = "33";
+      var VER = "34";
 
       function initFolds() {
         document.querySelectorAll(".fold").forEach(function (fold) {
@@ -230,7 +230,7 @@
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v33"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v34"
               ? caches.delete(k)
               : Promise.resolve();
           }));

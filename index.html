@@ -18,7 +18,7 @@
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
 
-  <link rel="stylesheet" href="css/styles.css?v=33">
+  <link rel="stylesheet" href="css/styles.css?v=34">
 </head>
 <body class="ios-feel">
 
@@ -159,30 +159,6 @@
       </div>
     </section>
 
-    <section class="section fold" id="map" data-fold="closed">
-      <button type="button" class="fold__btn" aria-expanded="false">
-        <span class="fold__text">
-          <span class="fold__title">Схема маршрута</span>
-          <span class="fold__sub">Выезды из Осаки — статичная картинка, без интерактивной карты.</span>
-        </span>
-        <span class="fold__chevron" aria-hidden="true">▾</span>
-      </button>
-      <div class="fold__panel" hidden>
-        <figure class="route-map">
-          <img
-            class="route-map__img"
-            src="img/route-map.svg?v=33"
-            alt="Схема маршрута Кансай: Осака — база, выезды в Киото, Нару, USJ, Кобе, Химэдзи, Авадзи"
-            width="900"
-            height="560"
-            loading="lazy"
-            decoding="async"
-          >
-          <figcaption class="route-map__cap">База — Tanimachi 6-chome · маршруты в Google Maps — в карточках мест («Из дома → сюда»).</figcaption>
-        </figure>
-      </div>
-    </section>
-
     <section class="section fold" id="route" data-fold="open">
       <button type="button" class="fold__btn" aria-expanded="true">
         <span class="fold__text">
@@ -307,19 +283,19 @@
     <p class="gallery-view__cap" id="galleryCap"></p>
   </div>
 
-  <script src="js/data.js?v=33"></script>
-  <script src="js/photos.js?v=33"></script>
-  <script src="js/app.js?v=33"></script>
+  <script src="js/data.js?v=34"></script>
+  <script src="js/photos.js?v=34"></script>
+  <script src="js/app.js?v=34"></script>
   <script>
     (function () {
-      var VER = "33";
+      var VER = "34";
 
       async function clearOldCaches() {
         try {
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v33"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v34"
               ? caches.delete(k)
               : Promise.resolve();
           }));

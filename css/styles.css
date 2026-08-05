@@ -537,30 +537,6 @@ a { color: inherit; text-decoration: none; }
 }
 .chip .emo { font-size: 16px; }
 
-/* ============================ СХЕМА МАРШРУТА ============================ */
-.route-map {
-  margin: 0;
-  border-radius: var(--radius);
-  overflow: hidden;
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow);
-  background: var(--bg-soft);
-}
-.route-map__img {
-  display: block;
-  width: 100%;
-  height: auto;
-  vertical-align: middle;
-}
-.route-map__cap {
-  padding: 12px 14px 14px;
-  font-size: 13px;
-  line-height: 1.45;
-  color: var(--muted);
-  text-align: center;
-  border-top: 1px solid var(--line);
-}
-
 /* ============================ TIMELINE ============================ */
 .timeline { display: flex; flex-direction: column; gap: 10px; }
 

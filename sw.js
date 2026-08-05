@@ -1,11 +1,10 @@
 /* Offline-first PWA for japan-osaka-2026 */
-const CACHE = "japan2026-offline-v33";
+const CACHE = "japan2026-offline-v34";
 const PRECACHE = [
   './index.html',
   './tracker.html',
   './china.html',
   './icon.svg',
-  './img/route-map.svg',
   './manifest.webmanifest',
   './update.html',
   './css/china.css',
@@ -469,8 +468,7 @@ const PRECACHE = [
   './vendor/fonts/noto-sc-97.woff2',
   './vendor/fonts/noto-sc-98.woff2',
   './vendor/fonts/noto-sc-99.woff2',
-  './vendor/fonts/noto-sc.css',
-  './vendor/leaflet/leaflet.js'
+  './vendor/fonts/noto-sc.css'
 ];
 
 self.addEventListener("install", (event) => {
