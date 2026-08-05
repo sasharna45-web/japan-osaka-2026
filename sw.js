@@ -1,10 +1,11 @@
 /* Offline-first PWA for japan-osaka-2026 */
-const CACHE = "japan2026-offline-v32";
+const CACHE = "japan2026-offline-v33";
 const PRECACHE = [
   './index.html',
   './tracker.html',
   './china.html',
   './icon.svg',
+  './img/route-map.svg',
   './manifest.webmanifest',
   './update.html',
   './css/china.css',
@@ -469,12 +470,6 @@ const PRECACHE = [
   './vendor/fonts/noto-sc-98.woff2',
   './vendor/fonts/noto-sc-99.woff2',
   './vendor/fonts/noto-sc.css',
-  './vendor/leaflet/images/layers-2x.png',
-  './vendor/leaflet/images/layers.png',
-  './vendor/leaflet/images/marker-icon-2x.png',
-  './vendor/leaflet/images/marker-icon.png',
-  './vendor/leaflet/images/marker-shadow.png',
-  './vendor/leaflet/leaflet.css',
   './vendor/leaflet/leaflet.js'
 ];
 
@@ -497,7 +492,7 @@ self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET") return;
   const url = new URL(req.url);
-  // Only same-origin (pages, css, js, fonts, leaflet). Map tiles stay online.
+  // Only same-origin (pages, css, js, fonts, images).
   if (url.origin !== self.location.origin) return;
 
   event.respondWith(
