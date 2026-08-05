@@ -984,7 +984,7 @@ const PACKING = [
       { id: "pk-cards", text: "Банковские карты" },
       { id: "pk-yen-kix", text: "Обменять часть денег на йены в KIX" },
       { id: "pk-esim-jp", text: "Японский eSIM установлен (включить линию в KIX)" },
-      { id: "pk-esim-cn", text: "Китайский eSIM / план на 25–27 сентября" },
+      { id: "pk-esim-cn", text: "✅ Китайский eSIM куплен (включить в PVG 25 сент)" },
       { id: "pk-alipay", text: "Alipay зарегистрирован (осталось пополнить юани)" },
       { id: "pk-wechat", text: "WeChat Pay зарегистрирован" },
       { id: "pk-yunpay", text: "Карта РСХБ Юньпэй открыта" },
@@ -1096,13 +1096,6 @@ const PACKING = [
 // id стабильный — галочки в localStorage не ломаются при правке текста.
 const CHECKLIST = [
   {
-    step: "Сейчас", tone: "red",
-    title: "Важно до поездки",
-    items: [
-      { id: "esim-cn", text: "China eSIM (Шанхай): купить покрытие на обратный транзит 25–27 сентября." }
-    ]
-  },
-  {
     step: "Готово", tone: "green",
     title: "Уже закрыто",
     items: [
@@ -1111,6 +1104,7 @@ const CHECKLIST = [
       { id: "umeda-sky-tix", text: "✅ Umeda Sky Kuchu Teien: билет на 22 сентября (adult)." },
       { id: "flights-booked", text: "✅ Авиа: HU7986 / HU473 (PNR NXSTDT) · 9C6566 15:00 (BLKALYX) · MU5232+MU8298 (PKM0R3)." },
       { id: "esim-jp", text: "✅ Japan eSIM SoftBank: 20 дней / 2 ГБ в сутки ×2. Активировать в KIX 9 сентября (не дома). Срок «до 21 сент» — дедлайн старта; отсчёт 20 дней с активации хватает до вылета 25-го." },
+      { id: "esim-cn", text: "✅ China eSIM 5G: куплен (Trip.com · заказы 1539366590947691 / 1539366313703604). На транзит 25–27 сент · активировать в PVG после прилёта, не раньше." },
       { id: "cash", text: "Наличные доллары куплены (новые купюры) — для обмена на йены в KIX." }
     ]
   },
