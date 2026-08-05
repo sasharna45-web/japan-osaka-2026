@@ -16,13 +16,11 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Япония 2026">
 
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/styles.css?v=31">
+  <link rel="stylesheet" href="css/styles.css?v=32">
 </head>
 <body class="ios-feel">
 
@@ -166,13 +164,24 @@
     <section class="section fold" id="map" data-fold="closed">
       <button type="button" class="fold__btn" aria-expanded="false">
         <span class="fold__text">
-          <span class="fold__title">Карта маршрута</span>
-          <span class="fold__sub">Все точки поездки. Нажмите на маркер — откроется место.</span>
+          <span class="fold__title">Схема маршрута</span>
+          <span class="fold__sub">Выезды из Осаки — статичная картинка, без интерактивной карты.</span>
         </span>
         <span class="fold__chevron" aria-hidden="true">▾</span>
       </button>
       <div class="fold__panel" hidden>
-        <div id="leafletMap" class="map"></div>
+        <figure class="route-map">
+          <img
+            class="route-map__img"
+            src="img/route-map.svg?v=32"
+            alt="Схема маршрута Кансай: Осака — база, выезды в Киото, Нару, USJ, Кобе, Химэдзи, Авадзи"
+            width="900"
+            height="560"
+            loading="lazy"
+            decoding="async"
+          >
+          <figcaption class="route-map__cap">База — Tanimachi 6-chome · маршруты в Google Maps — в карточках мест («Из дома → сюда»).</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -300,13 +309,12 @@
     <p class="gallery-view__cap" id="galleryCap"></p>
   </div>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="js/data.js?v=31"></script>
-  <script src="js/photos.js?v=31"></script>
-  <script src="js/app.js?v=31"></script>
+  <script src="js/data.js?v=32"></script>
+  <script src="js/photos.js?v=32"></script>
+  <script src="js/app.js?v=32"></script>
   <script>
     (function () {
-      var VER = "31";
+      var VER = "32";
       var KEY = "japan2026.cleared." + VER;
 
       async function wipe() {

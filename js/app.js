@@ -1,7 +1,7 @@
 /* ============================================================
    Япония 2026 — логика интерфейса.
    Отвечает за: рендер дней и мест, фильтры по интересам,
-   карту Leaflet, модалку места, режим редактирования порядка
+   карточку места, режим редактирования порядка
    дней с сохранением в localStorage, анимации появления.
    ============================================================ */
 
@@ -21,8 +21,6 @@
   const STORAGE_KEY = "japan2026.order.v1";
   let activeFilter = "all";
   let editing = false;
-  let markers = {};   // ключ "день-место" -> маркер Leaflet
-  let map = null;
 
   // Порядок дней: массив индексов в TRIP.days. Берём из localStorage или по умолчанию.
   function loadOrder() {
@@ -543,7 +541,6 @@
     const modal = $("#placeModal");
     modal.hidden = false;
     document.body.style.overflow = "hidden";
-    if (map && p.lat) map.flyTo([p.lat, p.lng], 13, { duration: .8 });
   }
 
   function row(ic, k, v) {
@@ -589,39 +586,6 @@
       </div>
       <a class="transit__link" href="#route">Дальше → день 1 в Осаке</a>
     `;
-  }
-
-  // ======================= КАРТА (Leaflet) =======================
-  function renderMap() {
-    map = L.map("leafletMap", { scrollWheelZoom: false }).setView([34.75, 135.35], 9);
-
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-      attribution: '&copy; OpenStreetMap &copy; CARTO',
-      maxZoom: 19
-    }).addTo(map);
-
-    const bounds = [];
-    TRIP.days.forEach((day, di) => {
-      day.places.forEach((p) => {
-        if (p.lat == null) return;
-        const icon = L.divIcon({
-          className: "",
-          html: `<div class="map-pin"><span>${day.n}</span></div>`,
-          iconSize: [26, 26],
-          iconAnchor: [13, 26]
-        });
-        const m = L.marker([p.lat, p.lng], { icon }).addTo(map);
-        m.bindPopup(`<b>День ${day.n} · ${p.name}</b><br>${p.desc || ""}<br>
-          <a href="${gmapsLink(p)}" target="_blank" rel="noopener" style="color:#ff5a67">Google Maps →</a>`);
-        markers[di] = m;
-        bounds.push([p.lat, p.lng]);
-      });
-    });
-    if (bounds.length) map.fitBounds(bounds, { padding: [40, 40] });
-
-    // включаем колесо только по клику на карту (чтобы не мешало прокрутке страницы)
-    map.on("focus", () => map.scrollWheelZoom.enable());
-    map.on("blur",  () => map.scrollWheelZoom.disable());
   }
 
   // ======================= СОВЕТЫ =======================
@@ -886,9 +850,6 @@
     sec.classList.toggle("is-open", open);
     btn.setAttribute("aria-expanded", open ? "true" : "false");
     panel.hidden = !open;
-    if (open && sec.id === "map" && typeof map !== "undefined" && map) {
-      setTimeout(() => { try { map.invalidateSize(); } catch (e) {} }, 180);
-    }
   }
 
   function openSection(id) {
@@ -998,22 +959,6 @@
       node.addEventListener("click", () => node.classList.toggle("open"));
       grid.appendChild(node);
     });
-  }
-
-  // ======================= КАРТА (Leaflet) — безопасно =======================
-  function renderMapSafe() {
-    try {
-      if (typeof L === "undefined") {
-        const mapEl = $("#leafletMap");
-        if (mapEl) mapEl.innerHTML = "<p style='padding:20px;color:#a2a2ad;text-align:center'>Карта временно недоступна (нет сети или блокировка CDN).</p>";
-        return;
-      }
-      renderMap();
-    } catch (err) {
-      console.warn("Map failed:", err);
-      const mapEl = $("#leafletMap");
-      if (mapEl) mapEl.innerHTML = "<p style='padding:20px;color:#a2a2ad;text-align:center'>Карта не загрузилась — остальной путеводитель работает.</p>";
-    }
   }
 
   // ======================= ДОМ + SOS =======================
@@ -1358,7 +1303,6 @@
     setupGallery();
     setupComfort();
     setupScrollProgress();
-    renderMapSafe();
     observeReveals();
     highlightToday();
   }
