@@ -627,7 +627,7 @@
 
   // ======================= ЧЕКЛИСТ ПОДГОТОВКИ =======================
   const CL_KEY = "japan2026.checklist.v2";
-  const CL_DONE_DEFAULT = { abeno: true, cash: true }; // уже закрыто по факту
+  const CL_DONE_DEFAULT = { abeno: true, cash: true, "esim-jp": true }; // уже закрыто по факту
 
   function storageAvailable() {
     try {

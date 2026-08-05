@@ -1100,7 +1100,6 @@ const CHECKLIST = [
     step: "Сейчас", tone: "red",
     title: "Важно до поездки",
     items: [
-      { id: "esim-jp", text: "Japan eSIM: продлить или докупить интернет на 22–25 сентября (текущий SoftBank-пакет обычно до ~21 сент — иначе последние дни в Осаке без сети)." },
       { id: "esim-cn", text: "China eSIM (Шанхай): купить покрытие на обратный транзит 25–27 сентября." }
     ]
   },
@@ -1113,6 +1112,7 @@ const CHECKLIST = [
       { id: "usj-tix", text: "✅ USJ 15 сент: Studio Pass ×2 + Express Pass 4 Minions & Hollywood Dream (SNW 11:50–12:50 · Mine Cart 11:50–12:20)." },
       { id: "umeda-sky-tix", text: "✅ Umeda Sky Kuchu Teien: билет на 22 сентября (adult)." },
       { id: "flights-booked", text: "✅ Авиа: HU7986 / HU473 (PNR NXSTDT) · 9C6566 15:00 (BLKALYX) · MU5232+MU8298 (PKM0R3)." },
+      { id: "esim-jp", text: "✅ Japan eSIM SoftBank: 20 дней / 2 ГБ в сутки ×2. Активировать в KIX 9 сентября (не дома). Срок «до 21 сент» — дедлайн старта; отсчёт 20 дней с активации хватает до вылета 25-го." },
       { id: "cash", text: "Наличные доллары куплены (новые купюры) — для обмена на йены в KIX." }
     ]
   },
