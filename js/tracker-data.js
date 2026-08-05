@@ -2,7 +2,8 @@
  * Данные трекера поездки: маршрут + исследование цен (авг 2026).
  * Деньги: всего $3225. В трекере считаем РАБОЧИЕ ЙЕНЫ после обмена
  * (~$2225–2525 → ≈356–404k ¥ при ~160). Резерв $700–1000 долларами — отдельно.
- * Уже оплачено отдельно: жильё, самолёты, USJ, Umeda Sky, Harukas, Osaka Castle.
+ * Уже оплачено отдельно: жильё, самолёты, USJ, Umeda Sky, Harukas.
+ * Осакский замок — на месте (~600 ¥ × 2).
  */
 
 const TRACKER = {
@@ -47,7 +48,7 @@ const TRACKER = {
       goal: "Замок утром, игровой район днём",
       soft: 18000,
       places: [
-        { id: "d2-castle", name: "Осакский замок", emoji: "🏯", time: "~09:00", fixed: true, prepaid: true },
+        { id: "d2-castle", name: "Осакский замок", emoji: "🏯", time: "~09:00", est: 1200, estNote: "~600 ¥ × 2 · на месте" },
         { id: "d2-denden", name: "Den Den Town", emoji: "🎮", time: "день" },
         { id: "d2-potato", name: "Super Potato Osaka", emoji: "🕹️" },
         { id: "d2-shin", name: "Shinsekai + Tsutenkaku", emoji: "🗼", time: "вечер" }
