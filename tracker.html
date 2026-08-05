@@ -7,7 +7,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Трекер · Япония 2026</title>
-  <meta name="description" content="Трекер дней и бюджета Кансай: чек-листы, траты в йенах, бюджет $3225 с резервом $700–1000.">
+  <meta name="description" content="Трекер дней и бюджета Кансай: чек-листы, траты в йенах, бюджет $3225 → в йены $2825, резерв $400.">
 
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
@@ -17,8 +17,8 @@
   <meta name="apple-mobile-web-app-title" content="Трекер 2026">
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
-  <link rel="stylesheet" href="css/styles.css?v=38">
-  <link rel="stylesheet" href="css/tracker.css?v=38">
+  <link rel="stylesheet" href="css/styles.css?v=39">
+  <link rel="stylesheet" href="css/tracker.css?v=39">
 </head>
 <body class="ios-feel tracker-page">
 
@@ -72,7 +72,7 @@
       </button>
       <div class="fold__panel">
         <p class="t-note" id="exchangeHint">
-          План до поездки: из $3225 поменять примерно $2225–2525, оставить $700–1000 долларами.
+          План до поездки: из $3225 поменять ровно $2825, оставить $400 долларами.
           После обмена в аэропорту впишите реальные цифры с чека — трекер будет считать от них.
         </p>
         <form class="t-form" id="exchangeForm">
@@ -205,11 +205,11 @@
     </a>
   </nav>
 
-  <script src="js/tracker-data.js?v=38"></script>
-  <script src="js/tracker.js?v=38"></script>
+  <script src="js/tracker-data.js?v=39"></script>
+  <script src="js/tracker.js?v=39"></script>
   <script>
     (function () {
-      var VER = "38";
+      var VER = "39";
 
       function initFolds() {
         document.querySelectorAll(".fold").forEach(function (fold) {
@@ -230,7 +230,7 @@
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v38"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v39"
               ? caches.delete(k)
               : Promise.resolve();
           }));

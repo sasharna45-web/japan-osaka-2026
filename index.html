@@ -18,7 +18,7 @@
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
 
-  <link rel="stylesheet" href="css/styles.css?v=38">
+  <link rel="stylesheet" href="css/styles.css?v=39">
 </head>
 <body class="ios-feel">
 
@@ -107,7 +107,7 @@
       <button type="button" class="fold__btn" aria-expanded="false">
         <span class="fold__text">
           <span class="fold__title">Деньги</span>
-          <span class="fold__sub">$3225 · в йены ~$2225–2525 · резерв $700–1000 · 18 000 ¥/день на двоих.</span>
+          <span class="fold__sub">$3225 · в йены $2825 · резерв $400 · 18 000 ¥/день на двоих.</span>
         </span>
         <span class="fold__chevron" aria-hidden="true">▾</span>
       </button>
@@ -283,19 +283,19 @@
     <p class="gallery-view__cap" id="galleryCap"></p>
   </div>
 
-  <script src="js/data.js?v=38"></script>
-  <script src="js/photos.js?v=38"></script>
-  <script src="js/app.js?v=38"></script>
+  <script src="js/data.js?v=39"></script>
+  <script src="js/photos.js?v=39"></script>
+  <script src="js/app.js?v=39"></script>
   <script>
     (function () {
-      var VER = "38";
+      var VER = "39";
 
       async function clearOldCaches() {
         try {
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v38"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v39"
               ? caches.delete(k)
               : Promise.resolve();
           }));

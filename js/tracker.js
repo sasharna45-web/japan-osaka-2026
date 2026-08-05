@@ -409,7 +409,7 @@
 
     document.getElementById("clearExchange").addEventListener("click", () => {
       if (!state.exchange) return;
-      if (!confirm("Сбросить факт обмена и снова считать по плану (~380k ¥)?")) return;
+      if (!confirm("Сбросить факт обмена и снова считать по плану (~452k ¥)?")) return;
       state.exchange = null;
       document.getElementById("exUsdChanged").value = "";
       document.getElementById("exYenGot").value = "";
