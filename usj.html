@@ -6,34 +6,34 @@
   <meta name="theme-color" content="#0d0d0f">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
-  <title>Еда · Япония 2026</title>
-  <meta name="description" content="План еды по дням: Осака и Кансай, 9–25 сентября 2026.">
+  <title>USJ · Япония 2026</title>
+  <meta name="description" content="Маршруты Universal Studios Japan 15 сентября 2026 под Express Pass 4.">
 
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Еда 2026">
+  <meta name="apple-mobile-web-app-title" content="USJ 2026">
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
   <link rel="stylesheet" href="css/styles.css?v=45">
-  <link rel="stylesheet" href="css/food.css?v=45">
+  <link rel="stylesheet" href="css/usj.css?v=45">
 </head>
-<body class="ios-feel food-page">
+<body class="ios-feel usj-page">
 
-  <header class="hero hero--food" id="top">
+  <header class="hero hero--usj" id="top">
     <div class="hero__bg" aria-hidden="true">
-      <span class="hero__kanji">食</span>
+      <span class="hero__kanji">遊</span>
       <div class="hero__sun"></div>
     </div>
     <div class="hero__content">
-      <p class="hero__eyebrow">Alexander & Rita · еда · версия 29</p>
-      <h1 class="hero__title">Еда <span>2026</span></h1>
-      <p class="hero__subtitle">Один день — одна плитка · Кансай</p>
+      <p class="hero__eyebrow">Alexander & Rita · USJ · версия 29</p>
+      <h1 class="hero__title">USJ <span>15 сен</span></h1>
+      <p class="hero__subtitle">Express Pass 4 · выберите сценарий</p>
       <div class="hero__meta">
-        <span>9–25 сентября</span>
-        <span>17 дней</span>
+        <span>SNW 11:50–12:50</span>
+        <span>Mine Cart 11:50–12:20</span>
       </div>
       <button type="button" class="hero__refresh" id="forceRefresh">Обновить</button>
     </div>
@@ -43,61 +43,73 @@
     <div class="nav__inner">
       <a href="index.html" class="nav__brand">日本</a>
       <div class="nav__links">
-        <a href="#day">День</a>
+        <a href="#plan">План</a>
+        <a href="#pass">Билет</a>
         <a href="#rules">Правила</a>
         <a href="index.html">Гид</a>
-        <a href="tracker.html">Трекер</a>
       </div>
     </div>
   </nav>
 
   <main>
-    <section class="section section--tight" id="day">
-      <div class="food-switch" aria-label="Выбор дня">
-        <button type="button" class="food-switch__arrow" id="foodPrev" aria-label="Предыдущий день">‹</button>
-        <div class="food-switch__now" id="foodNow">
-          <div class="food-switch__date" id="foodNowDate">—</div>
-          <div class="food-switch__title" id="foodNowTitle">—</div>
+    <section class="section section--tight" id="plan">
+      <div class="usj-switch" aria-label="Сценарий">
+        <button type="button" class="usj-switch__arrow" id="usjPrev" aria-label="Предыдущий сценарий">‹</button>
+        <div class="usj-switch__now">
+          <div class="usj-switch__date" id="usjNowLabel">Сценарий</div>
+          <div class="usj-switch__title" id="usjNowTitle">—</div>
         </div>
-        <button type="button" class="food-switch__arrow" id="foodNext" aria-label="Следующий день">›</button>
+        <button type="button" class="usj-switch__arrow" id="usjNext" aria-label="Следующий сценарий">›</button>
       </div>
 
-      <div class="food-chips" id="foodChips" role="tablist" aria-label="Дни поездки"></div>
+      <div class="usj-chips" id="usjChips" role="tablist" aria-label="Сценарии USJ"></div>
 
-      <article class="food-tile" id="foodTile" aria-live="polite"></article>
+      <article class="usj-tile" id="usjTile" aria-live="polite"></article>
+    </section>
+
+    <section class="section fold" id="pass" data-fold="open">
+      <button type="button" class="fold__btn" aria-expanded="true">
+        <span class="fold__text">
+          <span class="fold__title">Ваш билет</span>
+          <span class="fold__sub">Слоты и что входит в Express Pass 4.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel">
+        <div id="usjPass"></div>
+      </div>
     </section>
 
     <section class="section fold" id="rules" data-fold="closed">
       <button type="button" class="fold__btn" aria-expanded="false">
         <span class="fold__text">
-          <span class="fold__title">Правила еды</span>
-          <span class="fold__sub">Коротко: якорь, кэш, темп маршрута.</span>
+          <span class="fold__title">Правила дня</span>
+          <span class="fold__sub">Якорь SNW, app, что взять с собой.</span>
         </span>
         <span class="fold__chevron" aria-hidden="true">▾</span>
       </button>
       <div class="fold__panel" hidden>
-        <p class="food-plan__intro" id="foodIntro"></p>
-        <div class="food-plan__rules" id="foodRules"></div>
+        <div id="usjRules"></div>
       </div>
     </section>
   </main>
 
   <footer class="footer">
-    <p class="footer__jp">いただきます</p>
-    <p>Приятного аппетита, Александр и Рита</p>
+    <p class="footer__jp">楽しんで</p>
+    <p>Кайфового дня в парке</p>
     <a href="#top" class="footer__up">↑ Наверх</a>
   </footer>
 
-    <nav class="country-dock country-dock--jp country-dock--5" aria-label="Навигация">
+  <nav class="country-dock country-dock--jp country-dock--5" aria-label="Навигация">
     <a class="country-dock__btn" href="index.html">
       <span class="country-dock__flag">🇯🇵</span>
       <span class="country-dock__label">Гид</span>
     </a>
-    <a class="country-dock__btn is-active" href="food.html">
+    <a class="country-dock__btn" href="food.html">
       <span class="country-dock__flag">🍜</span>
       <span class="country-dock__label">Еда</span>
     </a>
-    <a class="country-dock__btn" href="usj.html">
+    <a class="country-dock__btn is-active" href="usj.html">
       <span class="country-dock__flag">🎢</span>
       <span class="country-dock__label">USJ</span>
     </a>
@@ -111,8 +123,8 @@
     </a>
   </nav>
 
-  <script src="js/food-data.js?v=45"></script>
-  <script src="js/food.js?v=45"></script>
+  <script src="js/usj-data.js?v=45"></script>
+  <script src="js/usj.js?v=45"></script>
   <script>
     (function () {
       var VER = "45";

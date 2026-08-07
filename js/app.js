@@ -603,103 +603,6 @@
     `;
   }
 
-  // ======================= USJ (отдельная вкладка) =======================
-  let activeUsjVariant = "default";
-
-  function renderUsjPlan() {
-    const wrap = $("#usjBody");
-    if (!wrap || typeof USJ_PLAN === "undefined") return;
-    wrap.innerHTML = "";
-
-    const pass = USJ_PLAN.pass;
-    const head = el("div", "usj-head");
-    head.innerHTML = `
-      <p class="usj-head__date">${USJ_PLAN.date}</p>
-      <p class="usj-head__pass">${pass.name}</p>
-      <p class="usj-head__studio">${pass.studio}</p>
-      <div class="usj-slots">
-        ${pass.slots.map(s => `
-          <div class="usj-slot">
-            <div class="usj-slot__time">${s.time}</div>
-            <div class="usj-slot__label">${s.label}</div>
-            <div class="usj-slot__note">${s.note}</div>
-          </div>
-        `).join("")}
-      </div>
-      <div class="usj-express">
-        <div class="usj-express__title">В Express Pass 4</div>
-        <ul>${pass.express.map(x => `<li><b>${x.name}</b> — ${x.tip}</li>`).join("")}</ul>
-      </div>
-      <div class="usj-not">
-        <div class="usj-express__title">Не в этом Express</div>
-        <ul>${pass.notIncluded.map(x => `<li>${x}</li>`).join("")}</ul>
-      </div>
-    `;
-    wrap.appendChild(head);
-
-    if (USJ_PLAN.rules && USJ_PLAN.rules.length) {
-      const rules = el("div", "usj-rules");
-      USJ_PLAN.rules.forEach(r => {
-        rules.appendChild(el("div", "food-rule", `
-          <span class="food-rule__e">${r.e}</span>
-          <div>
-            <div class="food-rule__t">${r.t}</div>
-            <div class="food-rule__d">${r.d}</div>
-          </div>
-        `));
-      });
-      wrap.appendChild(rules);
-    }
-
-    const tabs = el("div", "usj-tabs phrase-tabs");
-    const panel = el("div", "usj-variant");
-    wrap.appendChild(tabs);
-    wrap.appendChild(panel);
-
-    const paint = () => {
-      tabs.innerHTML = "";
-      USJ_PLAN.variants.forEach(v => {
-        const tab = el("button", "chip" + (v.key === activeUsjVariant ? " active" : ""), v.title);
-        tab.type = "button";
-        tab.addEventListener("click", () => {
-          activeUsjVariant = v.key;
-          paint();
-          if (typeof observeReveals === "function") observeReveals();
-        });
-        tabs.appendChild(tab);
-      });
-
-      const v = USJ_PLAN.variants.find(x => x.key === activeUsjVariant) || USJ_PLAN.variants[0];
-      panel.innerHTML = `
-        <div class="usj-variant__head reveal">
-          <h3 class="usj-variant__title">${v.title}</h3>
-          <p class="usj-variant__vibe">${v.vibe}</p>
-          <p class="usj-variant__best">${v.bestFor}</p>
-          <p class="usj-variant__score">${v.score}</p>
-        </div>
-        <ol class="usj-timeline">
-          ${v.timeline.map(step => `
-            <li class="usj-step reveal">
-              <div class="usj-step__t">${step.t}</div>
-              <div class="usj-step__body">
-                <div class="usj-step__what">${step.what}</div>
-                <div class="usj-step__detail">${step.detail}</div>
-              </div>
-            </li>
-          `).join("")}
-        </ol>
-        ${v.skip && v.skip.length ? `
-          <div class="usj-skip reveal">
-            <div class="usj-skip__title">Не сегодня</div>
-            <ul>${v.skip.map(s => `<li>${s}</li>`).join("")}</ul>
-          </div>
-        ` : ""}
-      `;
-    };
-
-    paint();
-  }
-
   // ======================= СОВЕТЫ =======================
   const TIPS = [
     { e: "💳", t: "Mobile PASMO", d: "На обоих iPhone: пополнить ~15 000 ¥ — метро, JR, автобусы и конбини." },
@@ -1244,7 +1147,8 @@
     if (focusDay && focusDay.n === 7) {
       html += `
         <div class="next-day__usj">
-          <div class="next-day__usj-title">⚡ USJ сегодня · слот Nintendo 11:50 · билеты в приложении</div>
+          <div class="next-day__usj-title">⚡ USJ сегодня · слот Nintendo 11:50</div>
+          <a class="link-btn" href="usj.html">Открыть сценарии дня →</a>
         </div>`;
     }
 
@@ -1405,7 +1309,6 @@
     renderNextDay();
     renderTransitOut();
     renderBudget();
-    renderUsjPlan();
     renderNearby();
     renderWeather();
     renderFilters();
