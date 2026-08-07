@@ -166,7 +166,10 @@
   margin-bottom: 4px;
   color: var(--text-dim);
 }
-.usj-page .usj-express li b { color: var(--text); font-weight: 700; }
+.usj-page .usj-not--gone {
+  border-color: rgba(230,57,70,.35);
+  background: rgba(230,57,70,.08);
+}
 
 .usj-page .usj-timeline {
   list-style: none;
