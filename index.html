@@ -18,7 +18,7 @@
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
 
-  <link rel="stylesheet" href="css/styles.css?v=43">
+  <link rel="stylesheet" href="css/styles.css?v=44">
 </head>
 <body class="ios-feel">
 
@@ -30,7 +30,7 @@
       <div class="hero__sun"></div>
     </div>
     <div class="hero__content">
-      <p class="hero__eyebrow">Alexander & Rita · версия 27</p>
+      <p class="hero__eyebrow">Alexander & Rita · версия 28</p>
       <h1 class="hero__title">Япония <span>2026</span></h1>
       <p class="hero__subtitle">Осака · Кансай · 9–25 сентября</p>
       <div class="hero__meta">
@@ -51,7 +51,6 @@
         <a href="#transit">Пекин</a>
         <a href="#packing">Чек-лист</a>
         <a href="#budget">Деньги</a>
-        <a href="#food">Еда</a>
         <a href="#usj">USJ</a>
         <a href="tracker.html">Трекер</a>
         <a href="#route">Маршрут</a>
@@ -118,19 +117,6 @@
         <p class="budget-tracker-link">
           <a class="link-btn" href="tracker.html">📊 Открыть трекер дней и бюджета</a>
         </p>
-      </div>
-    </section>
-
-    <section class="section fold" id="food" data-fold="closed">
-      <button type="button" class="fold__btn" aria-expanded="false">
-        <span class="fold__text">
-          <span class="fold__title">Еда по дням</span>
-          <span class="fold__sub">Дефолты и запасные варианты — отдельно от маршрута.</span>
-        </span>
-        <span class="fold__chevron" aria-hidden="true">▾</span>
-      </button>
-      <div class="fold__panel" hidden>
-        <div id="foodBody"></div>
       </div>
     </section>
 
@@ -293,6 +279,10 @@
       <span class="country-dock__flag">🇯🇵</span>
       <span class="country-dock__label">Гид</span>
     </a>
+    <a class="country-dock__btn" href="food.html">
+      <span class="country-dock__flag">🍜</span>
+      <span class="country-dock__label">Еда</span>
+    </a>
     <a class="country-dock__btn" href="tracker.html">
       <span class="country-dock__flag">📊</span>
       <span class="country-dock__label">Трекер</span>
@@ -311,21 +301,20 @@
     <p class="gallery-view__cap" id="galleryCap"></p>
   </div>
 
-  <script src="js/data.js?v=43"></script>
-  <script src="js/food-data.js?v=43"></script>
-  <script src="js/usj-data.js?v=43"></script>
-  <script src="js/photos.js?v=43"></script>
-  <script src="js/app.js?v=43"></script>
+  <script src="js/data.js?v=44"></script>
+  <script src="js/usj-data.js?v=44"></script>
+  <script src="js/photos.js?v=44"></script>
+  <script src="js/app.js?v=44"></script>
   <script>
     (function () {
-      var VER = "43";
+      var VER = "44";
 
       async function clearOldCaches() {
         try {
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v43"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v44"
               ? caches.delete(k)
               : Promise.resolve();
           }));

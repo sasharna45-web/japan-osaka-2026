@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0d0d0f">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <title>Еда · Япония 2026</title>
+  <meta name="description" content="План еды по дням: Осака и Кансай, 9–25 сентября 2026.">
+
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Еда 2026">
+
+  <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
+  <link rel="stylesheet" href="css/styles.css?v=44">
+  <link rel="stylesheet" href="css/food.css?v=44">
+</head>
+<body class="ios-feel food-page">
+
+  <header class="hero hero--food" id="top">
+    <div class="hero__bg" aria-hidden="true">
+      <span class="hero__kanji">食</span>
+      <div class="hero__sun"></div>
+    </div>
+    <div class="hero__content">
+      <p class="hero__eyebrow">Alexander & Rita · еда · версия 28</p>
+      <h1 class="hero__title">Еда <span>2026</span></h1>
+      <p class="hero__subtitle">Один день — одна плитка · Кансай</p>
+      <div class="hero__meta">
+        <span>9–25 сентября</span>
+        <span>17 дней</span>
+      </div>
+      <button type="button" class="hero__refresh" id="forceRefresh">Обновить</button>
+    </div>
+  </header>
+
+  <nav class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__brand">日本</a>
+      <div class="nav__links">
+        <a href="#day">День</a>
+        <a href="#rules">Правила</a>
+        <a href="index.html">Гид</a>
+        <a href="tracker.html">Трекер</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="section section--tight" id="day">
+      <div class="food-switch" aria-label="Выбор дня">
+        <button type="button" class="food-switch__arrow" id="foodPrev" aria-label="Предыдущий день">‹</button>
+        <div class="food-switch__now" id="foodNow">
+          <div class="food-switch__date" id="foodNowDate">—</div>
+          <div class="food-switch__title" id="foodNowTitle">—</div>
+        </div>
+        <button type="button" class="food-switch__arrow" id="foodNext" aria-label="Следующий день">›</button>
+      </div>
+
+      <div class="food-chips" id="foodChips" role="tablist" aria-label="Дни поездки"></div>
+
+      <article class="food-tile" id="foodTile" aria-live="polite"></article>
+    </section>
+
+    <section class="section fold" id="rules" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Правила еды</span>
+          <span class="fold__sub">Коротко: якорь, кэш, темп маршрута.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <p class="food-plan__intro" id="foodIntro"></p>
+        <div class="food-plan__rules" id="foodRules"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p class="footer__jp">いただきます</p>
+    <p>Приятного аппетита, Александр и Рита</p>
+    <a href="#top" class="footer__up">↑ Наверх</a>
+  </footer>
+
+  <nav class="country-dock country-dock--jp" aria-label="Навигация">
+    <a class="country-dock__btn" href="index.html">
+      <span class="country-dock__flag">🇯🇵</span>
+      <span class="country-dock__label">Гид</span>
+    </a>
+    <a class="country-dock__btn is-active" href="food.html">
+      <span class="country-dock__flag">🍜</span>
+      <span class="country-dock__label">Еда</span>
+    </a>
+    <a class="country-dock__btn" href="tracker.html">
+      <span class="country-dock__flag">📊</span>
+      <span class="country-dock__label">Трекер</span>
+    </a>
+    <a class="country-dock__btn" href="china.html">
+      <span class="country-dock__flag">🇨🇳</span>
+      <span class="country-dock__label">Китай</span>
+    </a>
+  </nav>
+
+  <script src="js/food-data.js?v=44"></script>
+  <script src="js/food.js?v=44"></script>
+  <script>
+    (function () {
+      var VER = "44";
+
+      async function clearOldCaches() {
+        try {
+          if (!window.caches) return;
+          var keys = await caches.keys();
+          await Promise.all(keys.map(function (k) {
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v44"
+              ? caches.delete(k)
+              : Promise.resolve();
+          }));
+        } catch (e) {}
+      }
+
+      function registerSW() {
+        if ("serviceWorker" in navigator) {
+          navigator.serviceWorker.register("./sw.js?v=" + VER).catch(function () {});
+        }
+      }
+
+      var btn = document.getElementById("forceRefresh");
+      if (btn) {
+        btn.addEventListener("click", function () {
+          clearOldCaches().then(function () {
+            var url = new URL(location.href);
+            url.searchParams.set("v", VER);
+            url.searchParams.set("fresh", String(Date.now()));
+            location.replace(url.toString());
+          });
+        });
+      }
+
+      clearOldCaches().then(registerSW);
+    })();
+  </script>
+</body>
+</html>
