@@ -48,15 +48,15 @@ const TRACKER = {
       goal: "Тории, старый Киото, обмен у вокзала, Nintendo",
       soft: 20000,
       places: [
-        { id: "d4-inari", name: "Fushimi Inari", emoji: "⛩️", time: "рано", est: 0, estNote: "бесплатно" },
-        { id: "d4-kiyomizu", name: "Kiyomizu-dera", emoji: "🛕", time: "день", est: 1000, estNote: "500 ¥ × 2" },
-        { id: "d4-ninen", name: "Ninenzaka / Sannenzaka", emoji: "🏮" },
-        { id: "d4-nintendo", name: "Nintendo Kyoto", emoji: "🎮", time: "вечер" }
+        { id: "d2-inari", name: "Fushimi Inari", emoji: "⛩️", time: "рано", est: 0, estNote: "бесплатно" },
+        { id: "d2-kiyomizu", name: "Kiyomizu-dera", emoji: "🛕", time: "день", est: 1000, estNote: "500 ¥ × 2" },
+        { id: "d2-ninen", name: "Ninenzaka / Sannenzaka", emoji: "🏮" },
+        { id: "d2-nintendo", name: "Nintendo Kyoto", emoji: "🎮", time: "вечер" }
       ]
     },
     {
       n: 3, iso: "2026-09-11", date: "11 сентября", weekday: "Пт",
-      title: "Залив + Abeno Harukas",
+      title: "Осакский залив + Abeno Harukas",
       goal: "Океанариум и закат с высоты",
       soft: 22000,
       places: [
@@ -71,10 +71,10 @@ const TRACKER = {
       goal: "Замок утром, игровой район днём",
       soft: 18000,
       places: [
-        { id: "d2-castle", name: "Осакский замок", emoji: "🏯", time: "~09:00", est: 1200, estNote: "~600 ¥ × 2 · на месте" },
-        { id: "d2-denden", name: "Den Den Town", emoji: "🎮", time: "день" },
-        { id: "d2-potato", name: "Super Potato Osaka", emoji: "🕹️" },
-        { id: "d2-shin", name: "Shinsekai + Tsutenkaku", emoji: "🗼", time: "вечер" }
+        { id: "d4-castle", name: "Осакский замок", emoji: "🏯", time: "~09:00", est: 1200, estNote: "~600 ¥ × 2 · на месте" },
+        { id: "d4-denden", name: "Den Den Town", emoji: "🎮", time: "день" },
+        { id: "d4-potato", name: "Super Potato Osaka", emoji: "🕹️" },
+        { id: "d4-shin", name: "Shinsekai + Tsutenkaku", emoji: "🗼", time: "вечер" }
       ]
     },
     {
@@ -183,7 +183,7 @@ const TRACKER = {
     },
     {
       n: 15, iso: "2026-09-23", date: "23 сентября", weekday: "Ср",
-      title: "Sylvanian + море",
+      title: "Sylvanian Families + море",
       goal: "Harvest Hill ~10:00 · Nishikinohama если ясно",
       soft: 16000,
       places: [
@@ -203,7 +203,7 @@ const TRACKER = {
     },
     {
       n: 17, iso: "2026-09-25", date: "25 сентября", weekday: "Пт",
-      title: "Вылет / лёгкие траты",
+      title: "В Шанхай",
       goal: "Выезд в KIX · лёгкие траты до рейса",
       soft: 6000,
       places: [

@@ -13,8 +13,13 @@
   const variants = USJ_PLAN.variants;
 
   function loadKey() {
-    const q = new URLSearchParams(location.search).get("v");
-    if (q && variants.some((x) => x.key === q)) return q;
+    const params = new URLSearchParams(location.search);
+    // plan=max|chill — основной ключ. Старый ?v=max|chill тоже читаем,
+    // но числовой ?v=49 (cache-bust) игнорируем.
+    for (const name of ["plan", "v"]) {
+      const q = params.get(name);
+      if (q && variants.some((x) => x.key === q)) return q;
+    }
     try {
       const raw = localStorage.getItem(KEY);
       if (raw && variants.some((x) => x.key === raw)) return raw;
@@ -30,7 +35,11 @@
     activeKey = key;
     try { localStorage.setItem(KEY, key); } catch (e) {}
     const url = new URL(location.href);
-    url.searchParams.set("v", key);
+    url.searchParams.set("plan", key);
+    // Не трогаем ?v= (это cache-bust страницы / «Обновить гид»).
+    if (variants.some((x) => x.key === url.searchParams.get("v"))) {
+      url.searchParams.delete("v");
+    }
     history.replaceState(null, "", url.pathname + url.search + "#plan");
   }
 

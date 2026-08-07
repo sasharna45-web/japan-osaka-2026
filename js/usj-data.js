@@ -3,14 +3,15 @@
    - Spider-Man закрыт навсегда с 22.01.2024 — не планируем.
    - Terminator 2 / Backdraft закрыты; на месте Backdraft — Villain-Con Minion Blast.
    - 15 сен 2026 = вторник внутри Halloween Horror Nights (11 сен – 8 ноя 2026):
-     вечером зомби/ивент, парк обычно до ~21:00–22:00 (смотреть app в день визита).
+     вечером зомби/ивент; закрытие часто позже обычного (~21:00–22:00) — только по app в день.
+     Space Fantasy / JAWS / Backdrop могут быть с seasonal horror-оверлеями.
    - Express Pass 4 «Minions & Hollywood Dream»: Mine Cart + Forbidden Journey +
      Minion Mayhem + (Hollywood Dream ИЛИ JAWS) + timed entry SNW (и часто WWHP).
    - Mario Kart / Yoshi / Flying Dinosaur / Space Fantasy / Backdrop / Villain-Con —
      НЕ в этом Express (standby / Single Rider).
    Имена мест — ориентиры; очереди и закрытия сверять в app USJ в день. */
 const USJ_PLAN = {
-  date: "15 сентября 2026 · вт · до ~22:00",
+  date: "15 сентября 2026 · вт · закрытие по app (часто ~21:00–22:00 в HHN)",
   audited: "2026-08-07",
   pass: {
     name: "Universal Express Pass 4 · Minions and Hollywood Dream",
@@ -42,7 +43,7 @@ const USJ_PLAN = {
   rules: [
     { e: "🍄", t: "Жёсткий якорь SNW", d: "К 11:40 у входа. В 11:50 заходите и сразу Mine Cart (до 12:20). Фото и магазин — после вагонетки и Mario Kart." },
     { e: "📱", t: "App USJ = правда дня", d: "Очереди, Single Rider, закрытия, шоу и время закрытия парка — только из app. План ниже — каркас под ваш Express, не догма." },
-    { e: "🎃", t: "Halloween Horror Nights", d: "С 18:00 уличные зомби и horror-зоны. Лабиринты Resident Evil / Sadako — 15+ (жёсткий возрастной ценз). Не обязательно: можно только атмосферу + аттракционы." },
+    { e: "🎃", t: "Halloween Horror Nights", d: "Сезон 11 сен – 8 ноя 2026. С ~18:00 уличные зомби. Лабиринты вроде Resident Evil — часто жёсткий ценз 15+; Lights Out — R-18 по waiver. Sadako — horror-оверлей на аттракционе (не лабиринт). Можно только атмосферу + обычные райды." },
     { e: "🎟️", t: "Express не на Mario Kart", d: "В вашем Pass 4 нет Mario Kart и Flying Dinosaur. Их берём standby / Single Rider. Express жжём на пиковые: Mine Cart (слот), Forbidden Journey, Minion Mayhem, Hollywood Dream." },
     { e: "🚫", t: "Не ищите Spider-Man", d: "Аттракциона больше нет. Не тратьте время на старые карты/гайды, где он ещё есть." }
   ],
@@ -69,8 +70,8 @@ const USJ_PLAN = {
         { t: "~16:50", what: "Space Fantasy", detail: "Indoor-костер. Осенью 2026 часто horror-оверлей (Sadako и т.п.) — смотрите название в app. Если тошнит после HD — пауза 15 мин." },
         { t: "~17:40", what: "JAWS (standby)", detail: "Express уже ушёл на HD — JAWS обычной очередью / Single Rider. В сезон HHN может быть оверлей «Red Alert»." },
         { t: "~18:30", what: "Backdrop или шоу", detail: "Hollywood Dream – Backdrop (назад) — отдельная очередь, если силы есть. Иначе WaterWorld / расписание шоу в app. С 18:00 — зомби на улицах (атмосфера, не обязательный лабиринт)." },
-        { t: "~19:30–21:30", what: "Хвост до закрытия", detail: "По app: повтор с короткой очередью, парад/ночной слот, магазин. Лабиринты HHN (Resident Evil и др.) — только 15+ и только если хотите ужастики вместо ещё одного костера." },
-        { t: "~21:30–22:00", what: "Выход", detail: "Закрытие смотрите в app на день. Домой на JR Yumesaki → Osaka Station → метро. Завтра Kuromon — можно не геройствовать до последней минуты." }
+        { t: "~19:30–21:30", what: "Хвост до закрытия", detail: "По app: повтор с короткой очередью, шоу/магазин. Horror-лабиринты HHN — опция и часто 15+ (Lights Out — R-18); не обязательны для «закрыть парк»." },
+        { t: "~21:30–22:00", what: "Выход", detail: "Точное закрытие — только в app на 15 сен (в HHN часто позже обычного, но не обещаем 22:00). JR Yumesaki → Osaka → метро. Завтра Kuromon — можно не геройствовать до последней минуты." }
       ],
       skip: [
         "Spider-Man — его больше нет",

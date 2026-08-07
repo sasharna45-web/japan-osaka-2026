@@ -17,8 +17,8 @@
   <meta name="apple-mobile-web-app-title" content="USJ 2026">
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
-  <link rel="stylesheet" href="css/styles.css?v=48">
-  <link rel="stylesheet" href="css/usj.css?v=48">
+  <link rel="stylesheet" href="css/styles.css?v=49">
+  <link rel="stylesheet" href="css/usj.css?v=49">
 </head>
 <body class="ios-feel usj-page">
 
@@ -123,18 +123,18 @@
     </a>
   </nav>
 
-  <script src="js/usj-data.js?v=48"></script>
-  <script src="js/usj.js?v=48"></script>
+  <script src="js/usj-data.js?v=49"></script>
+  <script src="js/usj.js?v=49"></script>
   <script>
     (function () {
-      var VER = "48";
+      var VER = "49";
 
       async function clearOldCaches() {
         try {
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v48"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v49"
               ? caches.delete(k)
               : Promise.resolve();
           }));
