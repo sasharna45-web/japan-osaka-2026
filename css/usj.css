@@ -512,3 +512,95 @@
 .usj-events-panel .usj-zone__blurb {
   margin-bottom: 12px;
 }
+
+/* Нажимаемые плашки */
+.usj-tap-hint {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+button.usj-tap {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  appearance: none;
+}
+.usj-tap__bar {
+  display: grid;
+  grid-template-columns: 1fr 22px;
+  gap: 8px;
+  align-items: start;
+}
+.usj-step.usj-tap .usj-tap__bar {
+  grid-template-columns: 72px 1fr 22px;
+}
+.usj-tap__main { min-width: 0; }
+.usj-tap__chev {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--text-dim);
+  transition: transform .18s ease;
+  justify-self: end;
+  margin-top: 2px;
+}
+.usj-tap.is-open .usj-tap__chev { transform: rotate(180deg); color: var(--red); }
+.usj-tap__preview {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+.usj-tap.is-open .usj-tap__preview { display: none; }
+.usj-tap__panel {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.usj-tap__lead {
+  margin: 0 0 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text);
+}
+.usj-tap__more {
+  margin: 0;
+  padding-left: 18px;
+}
+.usj-tap__more li {
+  font-size: 13px;
+  line-height: 1.45;
+  margin-bottom: 6px;
+  color: var(--text-dim);
+}
+button.usj-attr,
+button.usj-guide-card,
+button.usj-step {
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.03);
+}
+button.usj-attr.is-open,
+button.usj-guide-card.is-open,
+button.usj-step.is-open {
+  border-color: rgba(230,57,70,.4);
+  background: rgba(230,57,70,.08);
+}
+.usj-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.usj-step__detail {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.45;
+}
