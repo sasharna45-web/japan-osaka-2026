@@ -250,6 +250,10 @@
       <div class="day__date">${day.date}${fixedBadge}</div>
       <div class="day__title">${day.title}</div>
       <div class="day__goal">${day.goal}</div>
+      <div class="day__quick">
+        <a class="day__quick-link" href="food.html?day=${day.n}#day" data-stop>🍜 Еда</a>
+        ${day.n === 7 ? `<a class="day__quick-link day__quick-link--usj" href="usj.html#plan" data-stop>🎢 USJ</a>` : ""}
+      </div>
     `);
 
     const load = el("div", "day__load");
@@ -259,6 +263,9 @@
     const chevron = el("div", "day__chevron", "▾");
 
     head.append(reorder, num, info, load, chevron);
+    head.querySelectorAll("[data-stop]").forEach((a) => {
+      a.addEventListener("click", (e) => e.stopPropagation());
+    });
 
     const body = el("div", "day__body");
     const bodyWrap = el("div", "day__body-wrap");
@@ -281,18 +288,6 @@
         </div>
       `));
     }
-
-    // Мосты на отдельные страницы — без засорения основы
-    const links = el("div", "day-links");
-    const foodA = el("a", "day-links__btn", "🍜 Еда этого дня");
-    foodA.href = `food.html?day=${day.n}#day`;
-    links.appendChild(foodA);
-    if (day.n === 7) {
-      const usjA = el("a", "day-links__btn day-links__btn--usj", "🎢 Сценарии USJ");
-      usjA.href = "usj.html#plan";
-      links.appendChild(usjA);
-    }
-    bodyWrap.appendChild(links);
 
     const details = el("div", "day-details");
     details.hidden = true;
