@@ -1,16 +1,17 @@
 /**
- * USJ: справочник зон / аттракционов / ивентов (без маршрутов).
- * Состояние фильтра зоны: japan2026.usjZone.v1
+ * USJ: маршрут (без Flying Dinosaur) + справочник зон / ивентов.
+ * Состояние: japan2026.usjZone.v2
  */
 (function () {
   "use strict";
 
-  const KEY = "japan2026.usjZone.v1";
+  const KEY = "japan2026.usjZone.v2";
   const $ = (sel, root = document) => root.querySelector(sel);
 
   if (typeof USJ_PLAN === "undefined" || !USJ_PLAN.zones) return;
 
   const zones = USJ_PLAN.zones;
+  const SPECIAL = ["route", "all", "events"];
   const KIND = {
     ride: "Райд",
     show: "Шоу / 4D",
@@ -20,17 +21,19 @@
     area: "Зона / прогулка"
   };
 
+  function isValid(key) {
+    return SPECIAL.includes(key) || zones.some((z) => z.key === key);
+  }
+
   function loadZone() {
     const params = new URLSearchParams(location.search);
     const q = params.get("zone") || params.get("z");
-    if (q === "all" || q === "events") return q;
-    if (q && zones.some((z) => z.key === q)) return q;
+    if (q && isValid(q)) return q;
     try {
       const raw = localStorage.getItem(KEY);
-      if (raw === "all" || raw === "events") return raw;
-      if (raw && zones.some((z) => z.key === raw)) return raw;
+      if (raw && isValid(raw)) return raw;
     } catch (e) {}
-    return "all";
+    return USJ_PLAN.route ? "route" : "all";
   }
 
   let active = loadZone();
@@ -40,15 +43,17 @@
     try { localStorage.setItem(KEY, key); } catch (e) {}
     const url = new URL(location.href);
     url.searchParams.set("zone", key);
-    if (zones.some((z) => z.key === url.searchParams.get("v")) || url.searchParams.get("plan")) {
-      url.searchParams.delete("plan");
-    }
-    history.replaceState(null, "", url.pathname + url.search + "#park");
+    url.searchParams.delete("plan");
+    history.replaceState(null, "", url.pathname + url.search + (key === "route" ? "#route" : "#park"));
   }
 
   function thrillDots(n) {
     const v = Math.max(0, Math.min(5, Number(n) || 0));
     return "●".repeat(v) + "○".repeat(5 - v);
+  }
+
+  function tabKeys() {
+    return ["route", "all", "events", ...zones.map((z) => z.key)].filter((k) => k !== "route" || USJ_PLAN.route);
   }
 
   function renderIdea() {
@@ -68,6 +73,7 @@
     const wrap = $("#usjChips");
     if (!wrap) return;
     const chips = [
+      ...(USJ_PLAN.route ? [{ key: "route", title: "📍 Маршрут" }] : []),
       { key: "all", title: "Все зоны" },
       { key: "events", title: "Ивенты" },
       ...zones.map((z) => ({ key: z.key, title: z.emoji + " " + z.name.replace(/^The |^SUPER /, "").slice(0, 22) }))
@@ -148,11 +154,48 @@
     `;
   }
 
+  function renderRoutePanel() {
+    const r = USJ_PLAN.route;
+    if (!r) return "";
+    return `
+      <header class="usj-tile__head">
+        <p class="usj-tile__score">${r.vibe}</p>
+        <h2 class="usj-tile__title">${r.title}</h2>
+        <p class="usj-tile__best">${r.bestFor}</p>
+        ${r.note ? `<p class="usj-tile__focus">${r.note}</p>` : ""}
+      </header>
+      <ol class="usj-timeline">
+        ${(r.timeline || []).map((step) => `
+          <li class="usj-step">
+            <div class="usj-step__t">${step.t}</div>
+            <div class="usj-step__body">
+              <div class="usj-step__what">${step.what}</div>
+              <div class="usj-step__detail">${step.detail}</div>
+            </div>
+          </li>
+        `).join("")}
+      </ol>
+      ${(r.skip || []).length ? `
+        <div class="usj-skip">
+          <div class="usj-skip__title">Не сегодня</div>
+          <ul>${r.skip.map((s) => `<li>${s}</li>`).join("")}</ul>
+        </div>
+      ` : ""}
+    `;
+  }
+
   function renderPark() {
     const tile = $("#usjTile");
     const label = $("#usjNowLabel");
     const title = $("#usjNowTitle");
     if (!tile) return;
+
+    if (active === "route") {
+      if (label) label.textContent = "Без Flying Dinosaur";
+      if (title) title.textContent = "Маршрут дня";
+      tile.innerHTML = renderRoutePanel();
+      return;
+    }
 
     if (active === "events") {
       if (label) label.textContent = "15 сен 2026";
@@ -243,16 +286,17 @@
   }
 
   function setupNav() {
-    const keys = ["all", "events", ...zones.map((z) => z.key)];
-    const idx = () => Math.max(0, keys.indexOf(active));
+    const idx = () => Math.max(0, tabKeys().indexOf(active));
 
     $("#usjPrev")?.addEventListener("click", () => {
+      const keys = tabKeys();
       const i = idx();
       if (i <= 0) return;
       saveZone(keys[i - 1]);
       paint();
     });
     $("#usjNext")?.addEventListener("click", () => {
+      const keys = tabKeys();
       const i = idx();
       if (i >= keys.length - 1) return;
       saveZone(keys[i + 1]);
@@ -268,6 +312,7 @@
         const dx = e.changedTouches[0].clientX - x0;
         x0 = null;
         if (Math.abs(dx) < 50) return;
+        const keys = tabKeys();
         const i = idx();
         if (dx < 0 && i < keys.length - 1) { saveZone(keys[i + 1]); paint(); }
         if (dx > 0 && i > 0) { saveZone(keys[i - 1]); paint(); }
@@ -276,7 +321,7 @@
   }
 
   function updateArrows() {
-    const keys = ["all", "events", ...zones.map((z) => z.key)];
+    const keys = tabKeys();
     const i = Math.max(0, keys.indexOf(active));
     const prev = $("#usjPrev");
     const next = $("#usjNext");

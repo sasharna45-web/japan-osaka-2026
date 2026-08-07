@@ -252,7 +252,7 @@
       <div class="day__goal">${day.goal}</div>
       <div class="day__quick">
         <a class="day__quick-link" href="food.html?day=${day.n}#day" data-stop>🍜 Еда</a>
-        ${day.n === 7 ? `<a class="day__quick-link day__quick-link--usj" href="usj.html#park" data-stop>🎢 USJ</a>` : ""}
+        ${day.n === 7 ? `<a class="day__quick-link day__quick-link--usj" href="usj.html#route" data-stop>🎢 USJ</a>` : ""}
       </div>
     `);
 
@@ -1127,7 +1127,7 @@
         <div class="next-day__actions">
           <button type="button" class="next-day__btn" data-open-day="${idx}">Открыть день</button>
           <a class="next-day__link" href="food.html?day=${day.n}#day">🍜 Еда</a>
-          ${day.n === 7 ? `<a class="next-day__link" href="usj.html#park">🎢 USJ</a>` : ""}
+          ${day.n === 7 ? `<a class="next-day__link" href="usj.html#route">🎢 USJ</a>` : ""}
         </div>
       </article>
     `;

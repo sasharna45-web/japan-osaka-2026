@@ -1,21 +1,54 @@
-/* USJ 15 сен 2026 — справочник парка (зоны + аттракционы + ивенты).
-   Без готовых маршрутов: выбираете сами по app и силам.
-   Актуальность: авг 2026. Очереди/закрытия/слоты шоу — только app USJ в день. */
+/* USJ 15 сен 2026 — справочник парка + один рекомендательный маршрут.
+   Маршрут без The Flying Dinosaur. Очереди/шоу — app USJ в день.
+   Актуальность: авг 2026. */
 const USJ_PLAN = {
   date: "Ваш визит: 15 сентября 2026 · вт",
   audited: "2026-08-07",
 
   idea: {
-    title: "Справочник парка · не маршрут",
-    lead: "Ниже — актуальные зоны, аттракционы и осенние ивенты. Готовых таймлайнов нет: порядок собираете сами под очереди в app. Ваш Express Pass 4 и слот SNW — в блоке «Билет» как напоминание, что уже куплено.",
+    title: "Справочник + один маршрут без Flying Dinosaur",
+    lead: "Чип «Маршрут» — рекомендация под ваш Express Pass 4 и слот SNW, без The Flying Dinosaur. Остальные чипы — зоны, аттракционы и ивенты, если захотите отойти от плана.",
     points: [
-      "15 сен = вторник внутри Halloween Horror Nights и Extreme Autumn.",
-      "Spider-Man / Terminator / Backdraft закрыты навсегда — в списке нет.",
-      "Сезонные оверлеи (Sadako, JAWS Red Alert, саундтреки HD) меняют вайб классических райдов — смотрите название в app."
+      "Flying Dinosaur сознательно не берём (жёстко / укачивание / не must под ваш билет).",
+      "Утро: Express Forbidden Journey → буфер к SNW 11:50.",
+      "15 сен внутри HHN: с ~18:00 зомби на улицах — атмосфера без лабиринтов ок."
     ]
   },
 
-  /** Напоминание о купленном билете — не маршрут. */
+  /** Рекомендательный день · без Flying Dinosaur. */
+  route: {
+    title: "Рекомендация · без Flying Dinosaur",
+    vibe: "Express + SNW + костеры полегче · до вечера",
+    bestFor: "Плотный день под ваш Pass 4, без самого жёсткого костера парка.",
+    note: "Каркас, не догма. Если очередь >60 мин на опции — скип и смотрите app. Jurassic лодочный — только если утро свободное и очередь короткая.",
+    skip: [
+      "The Flying Dinosaur — не планируем",
+      "Spider-Man — закрыт навсегда",
+      "Час в Kinopio's ради фото",
+      "Horror-лабиринты, если не хотите ужастики"
+    ],
+    timeline: [
+      { t: "07:30", what: "У ворот", detail: "Очередь до открытия. Studio Pass + Express на экране. Завтрак дома. Пончо / zip для телефона." },
+      { t: "~08:45–09:00", what: "Вход · к Хогвартсу", detail: "Открытие смотрите в app. Не к Flying Dinosaur — сразу в Wizarding World на Express." },
+      { t: "~09:05–09:50", what: "Express: Forbidden Journey", detail: "Закрываете Express №2 рано, пока очередь не выросла. Очередь-замок — часть атмосферы, но не стойте у каждого портрета по 10 мин." },
+      { t: "~10:00", what: "Hippogriff или Hogsmeade", detail: "Hippogriff — только если очередь <25 мин. Иначе фото + Butterbeer навынос / туалет / вода. Three Broomsticks на посадку — не сейчас." },
+      { t: "~10:30–11:20", what: "Опция: Jurassic лодочный", detail: "Jurassic Park – The Ride (не Flying Dinosaur), если путь удобный и очередь <40 мин. Иначе спокойный переход к SNW с запасом." },
+      { t: "11:40", what: "К воротам SNW", detail: "Буфер до слота. Туалет + вода. Не фото у трубы на 20 мин." },
+      { t: "11:50–12:20", what: "Mine Cart Madness", detail: "Вход в зону → сразу Donkey Kong по слоту. Якорь билета." },
+      { t: "~12:25–13:20", what: "Mario Kart → Yoshi", detail: "Mario Kart standby / Single Rider. Yoshi — если очередь <25–30 мин. Магазин SNW — быстрый взгляд, пакеты не на весь день." },
+      { t: "~13:30", what: "Быстрый обед", detail: "Фудкорт / зона Minions 25–35 мин. Kinopio's — только <20 мин." },
+      { t: "~14:15", what: "Express: Minion Mayhem", detail: "Express №3. Рядом — Villain-Con Minion Blast (standby)." },
+      { t: "~15:00", what: "Villain-Con Minion Blast", detail: "Шутер. Если очередь >60 мин — скип к Hollywood Dream." },
+      { t: "~15:45", what: "Express: Hollywood Dream", detail: "Берите HD вперёд (не JAWS) — лучший 4-й Express на этот день. Трек выберите быстро у панели." },
+      { t: "~16:40", what: "Space Fantasy", detail: "Indoor. Осенью часто Sadako-оверлей — смотрите app. Если тошнит после HD — пауза 15 мин." },
+      { t: "~17:30", what: "JAWS (standby)", detail: "Express уже на HD. JAWS обычной очередью / Single Rider. Сезон: Red Alert." },
+      { t: "~18:30", what: "Backdrop · шоу · зомби", detail: "По силам: Backdrop, WaterWorld/4D по app, или просто Street Zombies с ~18:00. Лабиринты — только если хотите." },
+      { t: "~19:30–21:30", what: "Хвост", detail: "Короткий повтор по app, магазин на выход, атмосфера HHN." },
+      { t: "~21:30–22:00", what: "Выход", detail: "Закрытие — только в app. JR Yumesaki → Osaka → метро. Завтра Kuromon." }
+    ]
+  },
+
+  /** Напоминание о купленном билете. */
   pass: {
     name: "Universal Express Pass 4 · Minions and Hollywood Dream",
     studio: "Studio Pass 1-day ×2 — куплены",

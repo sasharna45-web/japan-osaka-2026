@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#0d0d0f">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
-  <title>USJ · зоны и аттракционы · Япония 2026</title>
-  <meta name="description" content="Актуальный справочник Universal Studios Japan: зоны, аттракционы, ивенты осени 2026. Без готовых маршрутов.">
+  <title>USJ · маршрут и гид · Япония 2026</title>
+  <meta name="description" content="USJ 15 сен 2026: маршрут без Flying Dinosaur + справочник зон, аттракционов и ивентов.">
 
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
@@ -17,8 +17,8 @@
   <meta name="apple-mobile-web-app-title" content="USJ 2026">
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
-  <link rel="stylesheet" href="css/styles.css?v=51">
-  <link rel="stylesheet" href="css/usj.css?v=51">
+  <link rel="stylesheet" href="css/styles.css?v=52">
+  <link rel="stylesheet" href="css/usj.css?v=52">
 </head>
 <body class="ios-feel usj-page">
 
@@ -28,13 +28,13 @@
       <div class="hero__sun"></div>
     </div>
     <div class="hero__content">
-      <p class="hero__eyebrow">Alexander & Rita · USJ · версия 34</p>
+      <p class="hero__eyebrow">Alexander & Rita · USJ · версия 35</p>
       <h1 class="hero__title">USJ <span>гид</span></h1>
-      <p class="hero__subtitle">Зоны · все актуальные аттракционы · ивенты осени 2026</p>
+      <p class="hero__subtitle">Маршрут без Flying Dinosaur · зоны · ивенты</p>
       <div class="hero__meta">
         <span>15 сен · HHN</span>
-        <span>без маршрутов</span>
-        <span>Express в билете</span>
+        <span>SNW 11:50</span>
+        <span>Express 4</span>
       </div>
       <button type="button" class="hero__refresh" id="forceRefresh">Обновить</button>
     </div>
@@ -44,8 +44,9 @@
     <div class="nav__inner">
       <a href="index.html" class="nav__brand">日本</a>
       <div class="nav__links">
-        <a href="#park">Парк</a>
-        <a href="#food">Еда</a>
+        <a href="?zone=route#route">Маршрут</a>
+        <a href="?zone=all#route">Зоны</a>
+        <a href="?zone=events#route">Ивенты</a>
         <a href="#pass">Билет</a>
       </div>
     </div>
@@ -56,7 +57,7 @@
       <div class="usj-idea" id="usjIdea"></div>
     </section>
 
-    <section class="section section--tight" id="park">
+    <section class="section section--tight" id="route">
       <div class="usj-switch" aria-label="Раздел">
         <button type="button" class="usj-switch__arrow" id="usjPrev" aria-label="Назад">‹</button>
         <div class="usj-switch__now">
@@ -66,7 +67,7 @@
         <button type="button" class="usj-switch__arrow" id="usjNext" aria-label="Дальше">›</button>
       </div>
 
-      <div class="usj-chips" id="usjChips" role="tablist" aria-label="Зоны USJ"></div>
+      <div class="usj-chips" id="usjChips" role="tablist" aria-label="USJ"></div>
 
       <article class="usj-tile" id="usjTile" aria-live="polite"></article>
     </section>
@@ -127,18 +128,18 @@
     </a>
   </nav>
 
-  <script src="js/usj-data.js?v=51"></script>
-  <script src="js/usj.js?v=51"></script>
+  <script src="js/usj-data.js?v=52"></script>
+  <script src="js/usj.js?v=52"></script>
   <script>
     (function () {
-      var VER = "51";
+      var VER = "52";
 
       async function clearOldCaches() {
         try {
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v51"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v52"
               ? caches.delete(k)
               : Promise.resolve();
           }));
