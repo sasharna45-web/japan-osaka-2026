@@ -19,7 +19,9 @@
       const raw = localStorage.getItem(KEY);
       if (raw && variants.some((x) => x.key === raw)) return raw;
     } catch (e) {}
-    return variants[0].key;
+    // Старые ключи (default/nintendo) → новый макс-план
+    const max = variants.find((x) => x.key === "max");
+    return max ? max.key : variants[0].key;
   }
 
   let activeKey = loadKey();
