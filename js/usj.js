@@ -1,5 +1,5 @@
 /**
- * Страница USJ: один сценарий — одна плитка, переключение чипами.
+ * Страница USJ: сценарии + справочники еды/шоу/приоритетов.
  * Состояние: japan2026.usjVariant.v1
  */
 (function () {
@@ -14,8 +14,8 @@
 
   function loadKey() {
     const params = new URLSearchParams(location.search);
-    // plan=max|chill — основной ключ. Старый ?v=max|chill тоже читаем,
-    // но числовой ?v=49 (cache-bust) игнорируем.
+    // plan=max|shows|chill — основной ключ. Старый ?v=max|chill тоже читаем,
+    // но числовой ?v=50 (cache-bust) игнорируем.
     for (const name of ["plan", "v"]) {
       const q = params.get(name);
       if (q && variants.some((x) => x.key === q)) return q;
@@ -36,7 +36,6 @@
     try { localStorage.setItem(KEY, key); } catch (e) {}
     const url = new URL(location.href);
     url.searchParams.set("plan", key);
-    // Не трогаем ?v= (это cache-bust страницы / «Обновить гид»).
     if (variants.some((x) => x.key === url.searchParams.get("v"))) {
       url.searchParams.delete("v");
     }
@@ -51,12 +50,25 @@
     return Math.max(0, variants.findIndex((x) => x.key === activeKey));
   }
 
+  function renderIdea() {
+    const wrap = $("#usjIdea");
+    if (!wrap || !USJ_PLAN.idea) return;
+    const idea = USJ_PLAN.idea;
+    wrap.innerHTML = `
+      <h2 class="usj-idea__title">${idea.title}</h2>
+      <p class="usj-idea__lead">${idea.lead}</p>
+      <ul class="usj-idea__points">
+        ${(idea.points || []).map((p) => `<li>${p}</li>`).join("")}
+      </ul>
+    `;
+  }
+
   function renderChips() {
     const wrap = $("#usjChips");
     if (!wrap) return;
     wrap.innerHTML = variants.map((v) => `
       <button type="button" class="usj-chip${v.key === activeKey ? " is-active" : ""}" data-key="${v.key}" role="tab" aria-selected="${v.key === activeKey}">
-        <span class="usj-chip__t">${v.title.replace(" (дефолт)", "")}</span>
+        <span class="usj-chip__t">${v.title}</span>
       </button>
     `).join("");
 
@@ -76,6 +88,18 @@
     }
   }
 
+  function blockList(title, items, mapFn) {
+    if (!items || !items.length) return "";
+    return `
+      <div class="usj-block">
+        <div class="usj-block__title">${title}</div>
+        <ul class="usj-block__list">
+          ${items.map(mapFn).join("")}
+        </ul>
+      </div>
+    `;
+  }
+
   function renderTile() {
     const v = current();
     const label = $("#usjNowLabel");
@@ -89,6 +113,7 @@
         <p class="usj-tile__score">${v.score}</p>
         <h2 class="usj-tile__title">${v.title}</h2>
         <p class="usj-tile__best">${v.bestFor}</p>
+        ${v.focus ? `<p class="usj-tile__focus">${v.focus}</p>` : ""}
       </header>
       <ol class="usj-timeline">
         ${v.timeline.map((step) => `
@@ -101,6 +126,12 @@
           </li>
         `).join("")}
       </ol>
+      ${blockList("Еда в этом сценарии", v.food, (f) => `
+        <li><b>${f.when}</b> — ${f.what}${f.tip ? `<span class="usj-block__tip">${f.tip}</span>` : ""}</li>
+      `)}
+      ${blockList("Шоу / атмосфера", v.shows, (s) => `
+        <li><b>${s.when}</b> — ${s.what}${s.tip ? `<span class="usj-block__tip">${s.tip}</span>` : ""}</li>
+      `)}
       ${v.skip && v.skip.length ? `
         <div class="usj-skip">
           <div class="usj-skip__title">Не сегодня</div>
@@ -146,6 +177,74 @@
         <div class="usj-express__title">Закрыто навсегда — не ищите</div>
         <ul>${pass.gone.map((x) => `<li>${x}</li>`).join("")}</ul>
       </div>` : ""}
+    `;
+  }
+
+  function renderTiers() {
+    const wrap = $("#usjTiers");
+    if (!wrap || !USJ_PLAN.tiers) return;
+    const t = USJ_PLAN.tiers;
+    const section = (label, items, cls) => `
+      <div class="usj-tier ${cls || ""}">
+        <div class="usj-tier__label">${label}</div>
+        <ul>${(items || []).map((x) => `
+          <li><b>${x.name}</b><span>${x.why}</span></li>
+        `).join("")}</ul>
+      </div>
+    `;
+    wrap.innerHTML = `
+      <p class="usj-guide__lead">${t.title}: must закрываем почти всегда; optional — по силам и очередям.</p>
+      ${section("Must · билет и пик", t.must, "usj-tier--must")}
+      ${section("Сильные standby", t.strong)}
+      ${section("Опции", t.optional)}
+      <div class="usj-tier usj-tier--skip">
+        <div class="usj-tier__label">Спокойно пропускаем</div>
+        <ul>${(t.skipOk || []).map((x) => `<li>${x}</li>`).join("")}</ul>
+      </div>
+    `;
+  }
+
+  function renderFoodGuide() {
+    const wrap = $("#usjFoodGuide");
+    if (!wrap || !USJ_PLAN.foodGuide) return;
+    const g = USJ_PLAN.foodGuide;
+    wrap.innerHTML = `
+      <p class="usj-guide__lead">${g.lead}</p>
+      <div class="usj-guide-cards">
+        ${(g.spots || []).map((s) => `
+          <article class="usj-guide-card">
+            <div class="usj-guide-card__when">${s.when}</div>
+            <h3 class="usj-guide-card__name">${s.name}</h3>
+            <p class="usj-guide-card__what">${s.what}</p>
+            ${s.tip ? `<p class="usj-guide-card__tip">${s.tip}</p>` : ""}
+          </article>
+        `).join("")}
+      </div>
+    `;
+  }
+
+  function renderShowsGuide() {
+    const wrap = $("#usjShowsGuide");
+    if (!wrap || !USJ_PLAN.showsGuide) return;
+    const g = USJ_PLAN.showsGuide;
+    wrap.innerHTML = `
+      <p class="usj-guide__lead">${g.lead}</p>
+      <div class="usj-guide-cards">
+        ${(g.items || []).map((s) => `
+          <article class="usj-guide-card">
+            <div class="usj-guide-card__when">${s.kind}</div>
+            <h3 class="usj-guide-card__name">${s.name}</h3>
+            <p class="usj-guide-card__what">${s.tip}</p>
+          </article>
+        `).join("")}
+      </div>
+      ${USJ_PLAN.shopGuide ? `
+        <div class="usj-shop">
+          <div class="usj-express__title">${USJ_PLAN.shopGuide.title}</div>
+          <p class="usj-guide__lead">${USJ_PLAN.shopGuide.lead}</p>
+          <ul>${USJ_PLAN.shopGuide.tips.map((t) => `<li>${t}</li>`).join("")}</ul>
+        </div>
+      ` : ""}
     `;
   }
 
@@ -221,7 +320,11 @@
     saveKey(activeKey);
     setupFolds();
     setupNav();
+    renderIdea();
     renderPass();
+    renderTiers();
+    renderFoodGuide();
+    renderShowsGuide();
     renderRules();
     paint();
   }

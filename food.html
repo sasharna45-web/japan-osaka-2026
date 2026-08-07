@@ -17,8 +17,8 @@
   <meta name="apple-mobile-web-app-title" content="Еда 2026">
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
-  <link rel="stylesheet" href="css/styles.css?v=49">
-  <link rel="stylesheet" href="css/food.css?v=49">
+  <link rel="stylesheet" href="css/styles.css?v=50">
+  <link rel="stylesheet" href="css/food.css?v=50">
 </head>
 <body class="ios-feel food-page">
 
@@ -109,18 +109,18 @@
     </a>
   </nav>
 
-  <script src="js/food-data.js?v=49"></script>
-  <script src="js/food.js?v=49"></script>
+  <script src="js/food-data.js?v=50"></script>
+  <script src="js/food.js?v=50"></script>
   <script>
     (function () {
-      var VER = "49";
+      var VER = "50";
 
       async function clearOldCaches() {
         try {
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v49"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v50"
               ? caches.delete(k)
               : Promise.resolve();
           }));
