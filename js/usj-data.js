@@ -1,18 +1,17 @@
-/* USJ 15 сен 2026 — справочник парка + один рекомендательный маршрут.
-   Маршрут без The Flying Dinosaur. Очереди/шоу — app USJ в день.
-   Актуальность: авг 2026. Плашки нажимаются → подробности.
-   Источники ивентов: usj.co.jp (ONE PIECE, Extreme Autumn, HHN). */
+/* USJ 15 сен 2026 — справочник + маршрут без Flying Dinosaur.
+   Актуальность: полная сверка с usj.co.jp 2026-08-07.
+   Плашки нажимаются → подробности. Очереди/слоты — app USJ в день. */
 const USJ_PLAN = {
   date: "Ваш визит: 15 сентября 2026 · вт",
   audited: "2026-08-07",
-  truthNote: "Источники: usj.co.jp. ONE PIECE Premier Summer 30 июл–19 ноя 2026. Extreme Autumn 10 сен–8 ноя; HHN 11 сен–8 ноя. Spider-Man закрыт 22.01.2024. Villain-Con с 11.07.2025. Маршрут без Flying Dinosaur.",
+  truthNote: "Проверка 2026-08-07 по usj.co.jp: ONE PIECE 30.07–19.11.2026; Extreme Autumn 10.09–08.11; HHN 11.09–08.11; Hogwarts Castle Walk 01.09.2026–17.01.2027; Spider-Man закрыт 22.01.2024; Villain-Con с 11.07.2025. HHN All Night = 25.09 (не ваш день). App = очереди/слоты.",
   idea: {
     title: "Справочник + маршрут без Flying Dinosaur",
     lead: "Чип «Маршрут» — под Express Pass 4 и слот SNW. Чип «Ивенты» — что реально идёт 15 сен (в т.ч. ONE PIECE и HHN). Зоны — весь парк.",
     points: [
-      "15 сен = одновременно Extreme Autumn / HHN и ONE PIECE Premier Summer (до 19 ноя).",
-      "ONE PIECE Premier Show в WaterWorld — отдельный платный билет (~18:45); без него не планируем.",
-      "Flying Dinosaur сознательно не берём. Очереди и слоты шоу — только app USJ в день."
+      "15 сен = ONE PIECE Premier Summer + Extreme Autumn + HHN одновременно.",
+      "ONE PIECE Premier Show ~18:45 WaterWorld — отдельный билет; без него не идём.",
+      "Flying Dinosaur не берём. Очереди, Single Rider, какой оверлей на HD — только app USJ."
     ]
   },
   route: {
@@ -190,10 +189,10 @@ const USJ_PLAN = {
         kind: "Оверлей на Hollywood Dream · Track 2",
         tip: "Офиц.: Hollywood Dream – The Ride (TRACK 2). На Backdrop этот ONE PIECE Story Ride не идёт. У вас Express на HD — с большой вероятностью попадёте на Track 2 / Story Ride; смотрите панель и app.",
         more: [
-          "Офиц. название: ONE PIECE × Story Ride: The Giants' Island! Adventure on Elbaph.",
-          "Место: Hollywood Dream – The Ride, TRACK 2.",
-          "На Backdrop этот Story Ride официально не ставится.",
-          "Ваш Express на HD с высокой вероятностью даст Track 2 / Story Ride — уточняйте на панели и в app в день."
+          "Офиц.: ONE PIECE × Story Ride: The Giants' Island! Adventure on Elbaph.",
+          "Место: Hollywood Dream – The Ride, TRACK 2. На Backdrop не ставится.",
+          "Осенью на том же вперёд-костере также заявлен King Gnu «SO BAD» — режим дня только в app/на панели.",
+          "Ваш Express на HD с высокой вероятностью даст Track 2 — уточняйте в день."
         ]
       },
       {
@@ -325,6 +324,38 @@ const USJ_PLAN = {
           "Юбилейный декор / митапы / сезонная еда.",
           "Вход в зону часто по timed entry — у вас Express-слот 11:50–12:50."
         ]
+      },
+      {
+        name: "King Gnu «SO BAD» × Hollywood Dream",
+        when: "сезон Extreme Autumn",
+        kind: "Саундтрек · HD вперёд",
+        tip: "На Hollywood Dream (вперёд) осенью крутят King Gnu «SO BAD». В сезон ONE PIECE на TRACK 2 также Story Ride Elbaph — что именно в ваш слот, смотрите панель/app.",
+        more: [
+          "Офиц. карта осени: King Gnu «SO BAD» × Hollywood Dream – The Ride.",
+          "Параллельно до 19 ноя на TRACK 2 может идти ONE PIECE Story Ride.",
+          "Не Backdrop. Express на HD — берите то, что выдаст режим дня.",
+          "Backdrop отдельно: Chainsaw Man IRIS OUT / Ado / Soul Brothers."
+        ]
+      },
+      {
+        name: "Halloween Horror Nights: All Night",
+        when: "25 сен 2026 · 22:00→05:00",
+        kind: "Не ваш день",
+        tip: "Отдельная ночная акция 25 сентября. Вы в парке 15 сен — к вам не относится.",
+        more: [
+          "Офиц.: 25 сен 2026, 22:00 – 05:00 следующего дня.",
+          "Ваш визит 15 сен — обычный HHN-вечер со Street Zombies, не All Night."
+        ]
+      },
+      {
+        name: "Trick or Treat! с персоналом",
+        when: "сезон Extreme Autumn",
+        kind: "Мелочь в парке",
+        tip: "Скажите «Trick or Treat!» члену команды — могут дать конфету. Не аттракцион.",
+        more: [
+          "Работает в сезон осени по правилам парка.",
+          "Милая мелочь, не план дня."
+        ]
       }
     ]
   },
@@ -396,7 +427,9 @@ const USJ_PLAN = {
           kind: "food",
           thrill: 0,
           tip: "Тема Toad. Очередь часто длинная — не must.",
-          more: [ "Тема Toad. Очередь часто длинная — не must." ]
+          more: [
+            "Тема Toad. Очередь часто длинная — не must."
+          ]
         }
       ]
     },
@@ -423,28 +456,37 @@ const USJ_PLAN = {
           kind: "ride",
           thrill: 2,
           tip: "Короткий семейный костер. Хороший бонус, не must.",
-          more: [ "Короткий семейный костер.", "Опция при очереди <25 мин." ]
+          more: [
+            "Короткий семейный костер.",
+            "Опция при очереди <25 мин."
+          ]
         },
         {
           name: "Ollivanders",
           kind: "show",
           thrill: 0,
           tip: "Короткое шоу выбора палочки. Очередь отдельно.",
-          more: [ "Короткое шоу выбора палочки. Очередь отдельно." ]
+          more: [
+            "Короткое шоу выбора палочки. Очередь отдельно."
+          ]
         },
         {
           name: "Wand Magic",
           kind: "interactive",
           thrill: 0,
           tip: "Интерактивные точки по деревне с купленной палочкой.",
-          more: [ "Интерактивные точки по деревне с купленной палочкой." ]
+          more: [
+            "Интерактивные точки по деревне с купленной палочкой."
+          ]
         },
         {
           name: "Three Broomsticks · Butterbeer",
           kind: "food",
           thrill: 0,
           tip: "Атмосферная посадка / сливочное пиво. Дольше фудкорта.",
-          more: [ "Атмосферная посадка / сливочное пиво. Дольше фудкорта." ]
+          more: [
+            "Атмосферная посадка / сливочное пиво. Дольше фудкорта."
+          ]
         },
         {
           name: "Hogwarts Castle Walk (сезон)",
@@ -491,14 +533,18 @@ const USJ_PLAN = {
           kind: "ride",
           thrill: 1,
           tip: "Уличный спиннер (Minion Mayhem Ice). Укачивание возможно.",
-          more: [ "Уличный спиннер (Minion Mayhem Ice). Укачивание возможно." ]
+          more: [
+            "Уличный спиннер (Minion Mayhem Ice). Укачивание возможно."
+          ]
         },
         {
           name: "Кафе / мерч Minions",
           kind: "food",
           thrill: 0,
           tip: "Быстрый обед рядом с райдами.",
-          more: [ "Быстрый обед рядом с райдами." ]
+          more: [
+            "Быстрый обед рядом с райдами."
+          ]
         }
       ]
     },
@@ -569,7 +615,10 @@ const USJ_PLAN = {
           thrill: 3,
           seasonal: true,
           tip: "Indoor spinning coaster. Осенью часто Sadako's Curse.",
-          more: [ "Indoor spinning coaster.", "Осенью часто Sadako's Curse." ]
+          more: [
+            "Indoor spinning coaster.",
+            "Осенью часто Sadako's Curse."
+          ]
         }
       ]
     },
@@ -655,7 +704,9 @@ const USJ_PLAN = {
           thrill: 2,
           seasonal: true,
           tip: "Юбилейное horror-шоу улицы/сцены в сезон HHN.",
-          more: [ "Юбилейное horror-шоу улицы/сцены в сезон HHN." ]
+          more: [
+            "Юбилейное horror-шоу улицы/сцены в сезон HHN."
+          ]
         }
       ]
     },
@@ -670,21 +721,27 @@ const USJ_PLAN = {
           kind: "ride",
           thrill: 0,
           tip: "Спиннер Cupcake.",
-          more: [ "Спиннер Cupcake." ]
+          more: [
+            "Спиннер Cupcake."
+          ]
         },
         {
           name: "The Flying Snoopy",
           kind: "ride",
           thrill: 0,
           tip: "Мягкий «полёт», высота регулируется.",
-          more: [ "Мягкий «полёт», высота регулируется." ]
+          more: [
+            "Мягкий «полёт», высота регулируется."
+          ]
         },
         {
           name: "Snoopy's Flying Ace Adventure",
           kind: "ride",
           thrill: 1,
           tip: "Короткий детский костер.",
-          more: [ "Короткий детский костер." ]
+          more: [
+            "Короткий детский костер."
+          ]
         },
         {
           name: "Elmo / Curious George (зона)",
@@ -708,7 +765,9 @@ const USJ_PLAN = {
           kind: "area",
           thrill: 0,
           tip: "Не планируйте «главный райд» здесь — их почти не осталось.",
-          more: [ "Не планируйте «главный райд» здесь — их почти не осталось." ]
+          more: [
+            "Не планируйте «главный райд» здесь — их почти не осталось."
+          ]
         }
       ]
     }
