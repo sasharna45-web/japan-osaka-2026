@@ -4,15 +4,15 @@
 const USJ_PLAN = {
   date: "Ваш визит: 15 сентября 2026 · вт",
   audited: "2026-08-07",
-  truthNote: "HHN 11 сен–8 ноя 2026 (офиц. USJ). Spider-Man закрыт 22.01.2024. Villain-Con открыт 11.07.2025. Маршрут без Flying Dinosaur.",
+  truthNote: "Источники: usj.co.jp. ONE PIECE Premier Summer 30 июл–19 ноя 2026. Extreme Autumn 10 сен–8 ноя; HHN 11 сен–8 ноя. Spider-Man закрыт 22.01.2024. Villain-Con с 11.07.2025. Маршрут без Flying Dinosaur.",
 
   idea: {
-    title: "Справочник + один маршрут без Flying Dinosaur",
-    lead: "Чип «Маршрут» — рекомендация под ваш Express Pass 4 и слот SNW, без The Flying Dinosaur. Остальные чипы — зоны, аттракционы и ивенты, если захотите отойти от плана.",
+    title: "Справочник + маршрут без Flying Dinosaur",
+    lead: "Чип «Маршрут» — под Express Pass 4 и слот SNW. Чип «Ивенты» — что реально идёт 15 сен (в т.ч. ONE PIECE и HHN). Зоны — весь парк.",
     points: [
-      "Flying Dinosaur сознательно не берём (жёстко / укачивание / не must под ваш билет).",
-      "Утро: Express Forbidden Journey → буфер к SNW 11:50.",
-      "15 сен внутри HHN: с ~18:00 зомби на улицах — атмосфера без лабиринтов ок."
+      "15 сен = одновременно Extreme Autumn / HHN и ONE PIECE Premier Summer (до 19 ноя).",
+      "ONE PIECE Premier Show в WaterWorld — отдельный платный билет (~18:45); без него не планируем.",
+      "Flying Dinosaur сознательно не берём. Очереди и слоты шоу — только app USJ в день."
     ]
   },
 
@@ -25,6 +25,8 @@ const USJ_PLAN = {
     skip: [
       "The Flying Dinosaur — не планируем",
       "Spider-Man — закрыт навсегда",
+      "ONE PIECE Premier Show — нужен отдельный билет (~18:45 WaterWorld), у вас его нет в чеклисте",
+      "Sanji's Pirate Restaurant / Feast — лотерея/отдельный тикет",
       "Час в Kinopio's ради фото",
       "Horror-лабиринты, если не хотите ужастики"
     ],
@@ -37,14 +39,15 @@ const USJ_PLAN = {
       { t: "11:40", what: "К воротам SNW", detail: "Буфер до слота. Туалет + вода. Не фото у трубы на 20 мин." },
       { t: "11:50–12:20", what: "Mine Cart Madness", detail: "Вход в зону → сразу Donkey Kong по слоту. Якорь билета." },
       { t: "~12:25–13:20", what: "Mario Kart → Yoshi", detail: "Mario Kart standby / Single Rider. Yoshi — если очередь <25–30 мин. Магазин SNW — быстрый взгляд, пакеты не на весь день." },
-      { t: "~13:30", what: "Быстрый обед", detail: "Фудкорт / зона Minions 25–35 мин. Kinopio's — только <20 мин." },
+      { t: "~13:30", what: "Быстрый обед", detail: "Фудкорт / зона Minions 25–35 мин. Kinopio's — только <20 мин. ONE PIECE-меню в парке — по желанию, не якорь." },
       { t: "~14:15", what: "Express: Minion Mayhem", detail: "Express №3. Рядом — Villain-Con Minion Blast (standby)." },
       { t: "~15:00", what: "Villain-Con Minion Blast", detail: "Шутер. Если очередь >60 мин — скип к Hollywood Dream." },
-      { t: "~15:45", what: "Express: Hollywood Dream", detail: "Берите HD вперёд (не JAWS) — лучший 4-й Express на этот день. Трек выберите быстро у панели." },
+      { t: "~15:45", what: "Express: Hollywood Dream (Track 2)", detail: "Вперёд / Track 2: в сезон ONE PIECE часто Story Ride «Elbaph» (офиц. не на Backdrop). Трек/режим смотрите на панели и в app." },
       { t: "~16:40", what: "Space Fantasy", detail: "Indoor. Осенью часто Sadako-оверлей — смотрите app. Если тошнит после HD — пауза 15 мин." },
-      { t: "~17:30", what: "JAWS (standby)", detail: "Express уже на HD. JAWS обычной очередью / Single Rider. Сезон: Red Alert." },
-      { t: "~18:30", what: "Backdrop · шоу · зомби", detail: "По силам: Backdrop, WaterWorld/4D по app, или просто Street Zombies с ~18:00. Лабиринты — только если хотите." },
-      { t: "~19:30–21:30", what: "Хвост", detail: "Короткий повтор по app, магазин на выход, атмосфера HHN." },
+      { t: "~17:30", what: "JAWS (standby)", detail: "Express уже на HD. JAWS обычной очередью / Single Rider. Сезон HHN: Red Alert." },
+      { t: "~18:00+", what: "Зомби HHN · не One Piece Show", detail: "Street Zombies с ~18:00 — бесплатно со Studio Pass. Premier Show ONE PIECE в WaterWorld ~18:45 — только с отдельным билетом (у вас нет → не идём, не стоим у входа)." },
+      { t: "~18:30–20:00", what: "Backdrop / 4D / атмосфера", detail: "Backdrop (отдельная очередь; сезонные треки Chainsaw Man/Ado и др.), Chainsaw Man 4-D по app, или просто улица. Классический WaterWorld вечером занят ONE PIECE Show." },
+      { t: "~20:00–21:30", what: "Хвост", detail: "Короткий повтор по app, мерч ONE PIECE/Universal на выход, атмосфера HHN." },
       { t: "~21:30–22:00", what: "Выход", detail: "Закрытие — только в app. JR Yumesaki → Osaka → метро. Завтра Kuromon." }
     ]
   },
@@ -68,79 +71,97 @@ const USJ_PLAN = {
 
   events: {
     title: "Ивенты на 15 сен 2026",
-    lead: "Осень 2026 = 25-летие парка (Discover U!!!) + 15-летие Halloween Horror Nights. Днём — сезонная атмосфера Extreme Autumn; с вечера — зомби и horror-зоны.",
+    lead: "В ваш день одновременно крутятся несколько сезонов. Главное, что раньше пропускали: ONE PIECE Premier Summer ещё идёт до 19 ноя. Плюс Extreme Autumn / HHN.",
     items: [
+      {
+        name: "ONE PIECE Premier Summer 2026",
+        when: "30 июл – 19 ноя 2026",
+        kind: "Крупный ивент · 15 сен внутри",
+        tip: "Офиц. usj.co.jp/events/onepiece/summer-2026. Шоу + рестораны + Story Ride + еда/мерч. Не часть HHN — отдельный сезон, который пересекается с осенью."
+      },
+      {
+        name: "ONE PIECE Premier Show 2026",
+        when: "30 июл – 19 ноя · не каждый день",
+        kind: "Платное шоу · WaterWorld",
+        tip: "Двери ~18:15, старт ~18:45, ~80 мин. Нужен отдельный билет (студия Pass не включает). Без билета вечером WaterWorld под шоу не «свободный классический WaterWorld»."
+      },
+      {
+        name: "ONE PIECE × Story Ride (Elbaph)",
+        when: "сезон ONE PIECE",
+        kind: "Оверлей на Hollywood Dream · Track 2",
+        tip: "Офиц.: Hollywood Dream – The Ride (TRACK 2). На Backdrop этот ONE PIECE Story Ride не идёт. У вас Express на HD — с большой вероятностью попадёте на Track 2 / Story Ride; смотрите панель и app."
+      },
+      {
+        name: "Sanji's Pirate Restaurant · Straw Hat Feast",
+        when: "сезон ONE PIECE",
+        kind: "Еда · отдельно",
+        tip: "Платно / часто лотерея. В ваш план еды не заложено — только если купите отдельно. Уличная ONE PIECE-еда в парке — по желанию."
+      },
       {
         name: "Universal Extreme Autumn · Discover U!!!",
         when: "10 сен – 8 ноя 2026",
         kind: "Сезон парка",
-        tip: "Зонтик над всей осенью: коллабы, сезонные шоу/саундтреки, декор. HHN — часть этого сезона."
+        tip: "Зонтик осени: HHN, сезонные оверлеи, декор. 25-летие Discover U!!!."
       },
       {
         name: "Halloween Horror Nights (15-летие)",
         when: "11 сен – 8 ноя 2026",
         kind: "Horror-сезон",
-        tip: "Ваш день 15 сен внутри. С ~18:00 Street Zombies. Лабиринты и R-18 — отдельно, не обязательны."
+        tip: "Ваш день внутри. С ~18:00 Street Zombies. Лабиринты и R-18 — отдельно."
       },
       {
         name: "Street Zombies · Zombie de Dance",
         when: "~18:00 → закрытие",
         kind: "Улица",
-        tip: "Входит в Studio Pass. Атмосфера и фото без лабиринта. Zombie de Dance — уличный танцевальный слот (часто под King Gnu «SO BAD»)."
+        tip: "Входит в Studio Pass. Главная бесплатная вечерняя атмосфера, если нет билета на ONE PIECE Show."
       },
       {
         name: "Resident Evil Requiem: The Dive",
         when: "11 сен – 27 дек 2026",
         kind: "Horror · часто 15+",
-        tip: "Новый лабиринт/аттракцион HHN. Нужен Timed Entry в app. Гости 14 и младше — нельзя. Не must для райд-дня."
+        tip: "Timed Entry в app. 14 и младше — нельзя."
       },
       {
         name: "Lights Out: Nightmare Isolation",
         when: "сезон HHN",
         kind: "Horror · R-18",
-        tip: "Первый R-18 опыт USJ, waiver. Только если оба хотите жёсткий ужастик."
+        tip: "Waiver. Только если оба хотите жёсткий ужастик."
       },
       {
         name: "Factory of Fear · Witches of House 18 · HHN Academy",
         when: "сезон HHN",
         kind: "Horror / stage",
-        tip: "Лабиринты и юбилейное шоу «15 Years of Screams». Слоты и возрасты — в app."
+        tip: "Лабиринты и юбилейное шоу. Слоты и возрасты — в app."
       },
       {
-        name: "SADAKO'S CURSE: Dark Horror Ride",
-        when: "11 сен 2026 – ~4 янв 2027",
-        kind: "Оверлей на Space Fantasy",
-        tip: "Тот же Space Fantasy, horror-режим. В app может отображаться как Sadako, не как обычный Space Fantasy."
+        name: "SADAKO'S CURSE · JAWS Red Alert · Jurassic in the Dark",
+        when: "сезон HHN / осень",
+        kind: "Оверлеи на райдах",
+        tip: "Space Fantasy / JAWS / вечерний Jurassic лодочный — смотрите названия в app."
       },
       {
-        name: "JAWS: Red Alert",
-        when: "11 сен 2026 – ~31 янв 2027",
-        kind: "Оверлей на JAWS",
-        tip: "Сезонный horror-вайб на классическом JAWS. Очередь и эффекты — по app."
+        name: "Chainsaw Man 4-D · сезонные треки HD Backdrop",
+        when: "Extreme Autumn",
+        kind: "4D / саундтрек",
+        tip: "4-D в Cinema. Backdrop: IRIS OUT / Ado / Soul Brothers и др. — у панели. Не путать с ONE PIECE Story Ride (тот на Track 2)."
       },
       {
-        name: "Chainsaw Man: The Chaos 4-D",
+        name: "Hogwarts Castle Walk",
+        when: "1 сен 2026 – 17 янв 2027",
+        kind: "Прогулка · Хогвартс",
+        tip: "Особый маршрут по замку (сезон). Смотрите app / указатели в зоне."
+      },
+      {
+        name: "Minions Belloween Greeting",
         when: "сезон Extreme Autumn",
-        kind: "4D · «кино»",
-        tip: "Cinema 4-D. Слоты по расписанию. Хорошая пауза для ног."
-      },
-      {
-        name: "Hollywood Dream · сезонные треки",
-        when: "осень 2026",
-        kind: "Саундтрек на костере",
-        tip: "Вперёд: часто King Gnu «SO BAD» и др. Backdrop: Chainsaw Man × «IRIS OUT», Ado «Show», Sandaime J Soul Brothers и т.п. — список в app у панели."
-      },
-      {
-        name: "Jurassic Park – The Ride in the Dark",
-        when: "сезон HHN (вечером)",
-        kind: "Ночной режим лодочного",
-        tip: "Тот же Jurassic Park – The Ride, темнее и страшнее. Если идёт — смотрите в app."
+        kind: "Улица / митап",
+        tip: "Миньоны в хэллоуинских костюмах — коротко и бесплатно."
       },
       {
         name: "SUPER NINTENDO WORLD · 5th anniversary",
         when: "2026",
         kind: "Зона",
-        tip: "Юбилейный декор/митап/еда. Вход в зону часто по timed entry (у вас — Express-слот 11:50–12:50)."
+        tip: "Юбилейный декор. Вход часто timed entry — у вас Express-слот 11:50–12:50."
       }
     ]
   },
@@ -213,11 +234,11 @@ const USJ_PLAN = {
       key: "hollywood",
       name: "Hollywood",
       emoji: "🎬",
-      blurb: "У входа: главные костеры «с музыкой» и indoor Space Fantasy.",
+      blurb: "У входа: Hollywood Dream (Track 2 / Backdrop) и Space Fantasy. 15 сен Track 2 часто под ONE PIECE Story Ride.",
       attractions: [
-        { name: "Hollywood Dream – The Ride", kind: "ride", thrill: 4, yourExpress: true, tip: "Костер вперёд + свой трек. В Express как один из вариантов 4-го слота (или JAWS)." },
-        { name: "Hollywood Dream – Backdrop", kind: "ride", thrill: 5, tip: "Тот же трек назад, отдельная очередь. Не в Express Pass 4. Осенью — сезонные треки (IRIS OUT и др.)." },
-        { name: "Space Fantasy – The Ride", kind: "ride", thrill: 3, tip: "Indoor spinning coaster. Осенью часто Sadako's Curse." }
+        { name: "Hollywood Dream – The Ride (Track 2)", kind: "ride", thrill: 4, yourExpress: true, seasonal: true, tip: "В Express. В сезон ONE PIECE — Story Ride «Elbaph» на TRACK 2 (офиц.). Панель + app в день." },
+        { name: "Hollywood Dream – Backdrop", kind: "ride", thrill: 5, seasonal: true, tip: "Назад, отдельная очередь. ONE PIECE Story Ride сюда не ставят. Осенью — другие сезонные треки (Chainsaw Man / Ado и др.)." },
+        { name: "Space Fantasy – The Ride", kind: "ride", thrill: 3, seasonal: true, tip: "Indoor spinning coaster. Осенью часто Sadako's Curse." }
       ]
     },
     {
@@ -226,16 +247,17 @@ const USJ_PLAN = {
       emoji: "🦈",
       blurb: "Зона JAWS. Классика с открытия парка.",
       attractions: [
-        { name: "JAWS", kind: "ride", thrill: 2, yourExpress: true, tip: "Лодочный тур + акула. Может обрызгать. В вашем Pass 4 — альтернатива HD. Осенью: Red Alert." }
+        { name: "JAWS", kind: "ride", thrill: 2, yourExpress: true, seasonal: true, tip: "Лодочный тур + акула. Может обрызгать. В Pass 4 — альтернатива HD. Осенью: Red Alert." }
       ]
     },
     {
       key: "waterworld",
       name: "WaterWorld",
       emoji: "💦",
-      blurb: "Сценическое шоу, не райд. Первые ряды мокрые.",
+      blurb: "Площадка шоу. 15 сен вечером — ONE PIECE Premier Show (платно). Классический WaterWorld днём — смотрите app.",
       attractions: [
-        { name: "WaterWorld", kind: "show", thrill: 1, tip: "Пиротехника, трюки, вода ~20–25 мин. Слоты в app; приходите заранее." }
+        { name: "ONE PIECE Premier Show 2026", kind: "show", thrill: 1, seasonal: true, tip: "~18:45, ~80 мин, отдельный билет. Без билета не входите в поток зрителей." },
+        { name: "WaterWorld (классика)", kind: "show", thrill: 1, tip: "Дневные слоты пиротехники/воды — если идут в день; вечером площадка обычно под ONE PIECE. App = правда." }
       ]
     },
     {

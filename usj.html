@@ -17,8 +17,8 @@
   <meta name="apple-mobile-web-app-title" content="USJ 2026">
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
-  <link rel="stylesheet" href="css/styles.css?v=53">
-  <link rel="stylesheet" href="css/usj.css?v=53">
+  <link rel="stylesheet" href="css/styles.css?v=54">
+  <link rel="stylesheet" href="css/usj.css?v=54">
 </head>
 <body class="ios-feel usj-page">
 
@@ -28,9 +28,9 @@
       <div class="hero__sun"></div>
     </div>
     <div class="hero__content">
-      <p class="hero__eyebrow">Alexander & Rita · USJ · версия 36</p>
+      <p class="hero__eyebrow">Alexander & Rita · USJ · версия 37</p>
       <h1 class="hero__title">USJ <span>гид</span></h1>
-      <p class="hero__subtitle">Маршрут без Flying Dinosaur · зоны · ивенты</p>
+      <p class="hero__subtitle">ONE PIECE + HHN · маршрут · зоны</p>
       <div class="hero__meta">
         <span>15 сен · HHN</span>
         <span>SNW 11:50</span>
@@ -128,18 +128,18 @@
     </a>
   </nav>
 
-  <script src="js/usj-data.js?v=53"></script>
-  <script src="js/usj.js?v=53"></script>
+  <script src="js/usj-data.js?v=54"></script>
+  <script src="js/usj.js?v=54"></script>
   <script>
     (function () {
-      var VER = "53";
+      var VER = "54";
 
       async function clearOldCaches() {
         try {
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v53"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v54"
               ? caches.delete(k)
               : Promise.resolve();
           }));
