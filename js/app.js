@@ -603,6 +603,53 @@
     `;
   }
 
+  // ======================= ЕДА (отдельная вкладка) =======================
+  function renderFoodPlan() {
+    const wrap = $("#foodBody");
+    if (!wrap || typeof FOOD_PLAN === "undefined") return;
+    wrap.innerHTML = "";
+
+    const intro = el("p", "food-plan__intro", FOOD_PLAN.intro);
+    wrap.appendChild(intro);
+
+    if (FOOD_PLAN.rules && FOOD_PLAN.rules.length) {
+      const rules = el("div", "food-plan__rules");
+      FOOD_PLAN.rules.forEach(r => {
+        rules.appendChild(el("div", "food-rule", `
+          <span class="food-rule__e">${r.e}</span>
+          <div>
+            <div class="food-rule__t">${r.t}</div>
+            <div class="food-rule__d">${r.d}</div>
+          </div>
+        `));
+      });
+      wrap.appendChild(rules);
+    }
+
+    const list = el("div", "food-plan__days");
+    FOOD_PLAN.days.forEach(d => {
+      const card = el("article", "food-day reveal");
+      const mealsHtml = (d.meals || []).map(m => `
+        <div class="food-day__meal">
+          <div class="food-day__slot">${m.slot}${m.when ? ` · <span>${m.when}</span>` : ""}</div>
+          <div class="food-day__what">${m.what}</div>
+        </div>
+      `).join("");
+      card.innerHTML = `
+        <header class="food-day__head">
+          <span class="food-day__n">День ${d.n}</span>
+          <span class="food-day__meta">${d.date} · ${d.weekday}</span>
+          <h3 class="food-day__title">${d.title}</h3>
+        </header>
+        <div class="food-day__meals">${mealsHtml}</div>
+        ${d.alt ? `<p class="food-day__alt"><span>Запасной</span>${d.alt}</p>` : ""}
+        ${d.skip ? `<p class="food-day__skip"><span>Не сегодня</span>${d.skip}</p>` : ""}
+      `;
+      list.appendChild(card);
+    });
+    wrap.appendChild(list);
+  }
+
   // ======================= СОВЕТЫ =======================
   const TIPS = [
     { e: "💳", t: "Mobile PASMO", d: "На обоих iPhone: пополнить ~15 000 ¥ — метро, JR, автобусы и конбини." },
@@ -1307,6 +1354,7 @@
     renderNextDay();
     renderTransitOut();
     renderBudget();
+    renderFoodPlan();
     renderNearby();
     renderWeather();
     renderFilters();

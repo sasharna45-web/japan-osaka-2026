@@ -1050,6 +1050,103 @@ a { color: inherit; text-decoration: none; }
 }
 .cl-sub .cl-text { font-size: 13px; }
 
+/* ============================ FOOD PLAN ============================ */
+.food-plan__intro {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.55;
+  margin: 0 0 16px;
+}
+.food-plan__rules {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+.food-rule {
+  display: flex;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+.food-rule__e { font-size: 22px; flex-shrink: 0; line-height: 1.2; }
+.food-rule__t { font-weight: 700; font-size: 14px; margin-bottom: 2px; }
+.food-rule__d { font-size: 13px; color: var(--text-dim); line-height: 1.45; }
+.food-plan__days {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.food-day {
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 16px 16px 14px;
+}
+.food-day__head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.food-day__n {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-right: 8px;
+}
+.food-day__meta {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.food-day__title {
+  margin: 6px 0 0;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.food-day__meals {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.food-day__slot {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 2px;
+}
+.food-day__slot span {
+  font-weight: 500;
+  color: var(--text-dim);
+}
+.food-day__what {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+}
+.food-day__alt,
+.food-day__skip {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text-dim);
+}
+.food-day__alt span,
+.food-day__skip span {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  margin-right: 8px;
+  color: var(--text);
+}
+.food-day__skip span { color: var(--red); }
+
 /* ============================ TIPS ============================ */
 .tips-grid {
   display: grid;
