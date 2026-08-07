@@ -1,53 +1,54 @@
 /**
- * Страница USJ: сценарии + справочники еды/шоу/приоритетов.
- * Состояние: japan2026.usjVariant.v1
+ * USJ: справочник зон / аттракционов / ивентов (без маршрутов).
+ * Состояние фильтра зоны: japan2026.usjZone.v1
  */
 (function () {
   "use strict";
 
-  const KEY = "japan2026.usjVariant.v1";
+  const KEY = "japan2026.usjZone.v1";
   const $ = (sel, root = document) => root.querySelector(sel);
 
-  if (typeof USJ_PLAN === "undefined" || !USJ_PLAN.variants || !USJ_PLAN.variants.length) return;
+  if (typeof USJ_PLAN === "undefined" || !USJ_PLAN.zones) return;
 
-  const variants = USJ_PLAN.variants;
+  const zones = USJ_PLAN.zones;
+  const KIND = {
+    ride: "Райд",
+    show: "Шоу / 4D",
+    interactive: "Интерактив",
+    food: "Еда",
+    shop: "Магазин",
+    area: "Зона / прогулка"
+  };
 
-  function loadKey() {
+  function loadZone() {
     const params = new URLSearchParams(location.search);
-    // plan=max|shows|chill — основной ключ. Старый ?v=max|chill тоже читаем,
-    // но числовой ?v=50 (cache-bust) игнорируем.
-    for (const name of ["plan", "v"]) {
-      const q = params.get(name);
-      if (q && variants.some((x) => x.key === q)) return q;
-    }
+    const q = params.get("zone") || params.get("z");
+    if (q === "all" || q === "events") return q;
+    if (q && zones.some((z) => z.key === q)) return q;
     try {
       const raw = localStorage.getItem(KEY);
-      if (raw && variants.some((x) => x.key === raw)) return raw;
+      if (raw === "all" || raw === "events") return raw;
+      if (raw && zones.some((z) => z.key === raw)) return raw;
     } catch (e) {}
-    // Старые ключи (default/nintendo) → новый макс-план
-    const max = variants.find((x) => x.key === "max");
-    return max ? max.key : variants[0].key;
+    return "all";
   }
 
-  let activeKey = loadKey();
+  let active = loadZone();
 
-  function saveKey(key) {
-    activeKey = key;
+  function saveZone(key) {
+    active = key;
     try { localStorage.setItem(KEY, key); } catch (e) {}
     const url = new URL(location.href);
-    url.searchParams.set("plan", key);
-    if (variants.some((x) => x.key === url.searchParams.get("v"))) {
-      url.searchParams.delete("v");
+    url.searchParams.set("zone", key);
+    if (zones.some((z) => z.key === url.searchParams.get("v")) || url.searchParams.get("plan")) {
+      url.searchParams.delete("plan");
     }
-    history.replaceState(null, "", url.pathname + url.search + "#plan");
+    history.replaceState(null, "", url.pathname + url.search + "#park");
   }
 
-  function current() {
-    return variants.find((x) => x.key === activeKey) || variants[0];
-  }
-
-  function idx() {
-    return Math.max(0, variants.findIndex((x) => x.key === activeKey));
+  function thrillDots(n) {
+    const v = Math.max(0, Math.min(5, Number(n) || 0));
+    return "●".repeat(v) + "○".repeat(5 - v);
   }
 
   function renderIdea() {
@@ -66,97 +67,123 @@
   function renderChips() {
     const wrap = $("#usjChips");
     if (!wrap) return;
-    wrap.innerHTML = variants.map((v) => `
-      <button type="button" class="usj-chip${v.key === activeKey ? " is-active" : ""}" data-key="${v.key}" role="tab" aria-selected="${v.key === activeKey}">
-        <span class="usj-chip__t">${v.title}</span>
+    const chips = [
+      { key: "all", title: "Все зоны" },
+      { key: "events", title: "Ивенты" },
+      ...zones.map((z) => ({ key: z.key, title: z.emoji + " " + z.name.replace(/^The |^SUPER /, "").slice(0, 22) }))
+    ];
+    wrap.innerHTML = chips.map((c) => `
+      <button type="button" class="usj-chip${c.key === active ? " is-active" : ""}" data-key="${c.key}" role="tab" aria-selected="${c.key === active}">
+        <span class="usj-chip__t">${c.title}</span>
       </button>
     `).join("");
 
     wrap.querySelectorAll(".usj-chip").forEach((btn) => {
       btn.addEventListener("click", () => {
-        saveKey(btn.dataset.key);
+        saveZone(btn.dataset.key);
         paint();
         btn.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
       });
     });
 
-    const active = wrap.querySelector(".usj-chip.is-active");
-    if (active) {
+    const on = wrap.querySelector(".usj-chip.is-active");
+    if (on) {
       requestAnimationFrame(() => {
-        active.scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
+        on.scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
       });
     }
   }
 
-  function blockList(title, items, mapFn) {
-    if (!items || !items.length) return "";
+  function attrCard(a) {
+    const badges = [];
+    if (a.yourExpress) badges.push('<span class="usj-badge usj-badge--express">ваш Express</span>');
+    if (a.seasonal) badges.push('<span class="usj-badge usj-badge--season">сезон</span>');
     return `
-      <div class="usj-block">
-        <div class="usj-block__title">${title}</div>
-        <ul class="usj-block__list">
-          ${items.map(mapFn).join("")}
-        </ul>
-      </div>
+      <article class="usj-attr">
+        <div class="usj-attr__top">
+          <span class="usj-attr__kind">${KIND[a.kind] || a.kind}</span>
+          ${a.kind === "ride" || a.thrill ? `<span class="usj-attr__thrill" title="Жёсткость">${thrillDots(a.thrill)}</span>` : ""}
+        </div>
+        <h3 class="usj-attr__name">${a.name}</h3>
+        <div class="usj-attr__badges">${badges.join("")}</div>
+        <p class="usj-attr__tip">${a.tip || ""}</p>
+      </article>
     `;
   }
 
-  function renderTile() {
-    const v = current();
+  function zoneBlock(z) {
+    return `
+      <section class="usj-zone" id="zone-${z.key}">
+        <header class="usj-zone__head">
+          <div class="usj-zone__emoji">${z.emoji}</div>
+          <div>
+            <h2 class="usj-zone__name">${z.name}</h2>
+            <p class="usj-zone__blurb">${z.blurb}</p>
+          </div>
+        </header>
+        <div class="usj-attrs">
+          ${(z.attractions || []).map(attrCard).join("")}
+        </div>
+      </section>
+    `;
+  }
+
+  function renderEventsPanel() {
+    const ev = USJ_PLAN.events;
+    if (!ev) return "";
+    return `
+      <section class="usj-events-panel">
+        <h2 class="usj-zone__name">${ev.title}</h2>
+        <p class="usj-zone__blurb">${ev.lead}</p>
+        <div class="usj-guide-cards">
+          ${(ev.items || []).map((e) => `
+            <article class="usj-guide-card">
+              <div class="usj-guide-card__when">${e.when} · ${e.kind}</div>
+              <h3 class="usj-guide-card__name">${e.name}</h3>
+              <p class="usj-guide-card__what">${e.tip}</p>
+            </article>
+          `).join("")}
+        </div>
+      </section>
+    `;
+  }
+
+  function renderPark() {
+    const tile = $("#usjTile");
     const label = $("#usjNowLabel");
     const title = $("#usjNowTitle");
-    if (label) label.textContent = v.vibe;
-    if (title) title.textContent = v.title;
+    if (!tile) return;
 
-    const tile = $("#usjTile");
-    tile.innerHTML = `
-      <header class="usj-tile__head">
-        <p class="usj-tile__score">${v.score}</p>
-        <h2 class="usj-tile__title">${v.title}</h2>
-        <p class="usj-tile__best">${v.bestFor}</p>
-        ${v.focus ? `<p class="usj-tile__focus">${v.focus}</p>` : ""}
-      </header>
-      <ol class="usj-timeline">
-        ${v.timeline.map((step) => `
-          <li class="usj-step">
-            <div class="usj-step__t">${step.t}</div>
-            <div class="usj-step__body">
-              <div class="usj-step__what">${step.what}</div>
-              <div class="usj-step__detail">${step.detail}</div>
-            </div>
-          </li>
-        `).join("")}
-      </ol>
-      ${blockList("Еда в этом сценарии", v.food, (f) => `
-        <li><b>${f.when}</b> — ${f.what}${f.tip ? `<span class="usj-block__tip">${f.tip}</span>` : ""}</li>
-      `)}
-      ${blockList("Шоу / атмосфера", v.shows, (s) => `
-        <li><b>${s.when}</b> — ${s.what}${s.tip ? `<span class="usj-block__tip">${s.tip}</span>` : ""}</li>
-      `)}
-      ${v.skip && v.skip.length ? `
-        <div class="usj-skip">
-          <div class="usj-skip__title">Не сегодня</div>
-          <ul>${v.skip.map((s) => `<li>${s}</li>`).join("")}</ul>
-        </div>
-      ` : ""}
-    `;
+    if (active === "events") {
+      if (label) label.textContent = "15 сен 2026";
+      if (title) title.textContent = "Ивенты и сезон";
+      tile.innerHTML = renderEventsPanel();
+      return;
+    }
 
-    const i = idx();
-    const prev = $("#usjPrev");
-    const next = $("#usjNext");
-    if (prev) prev.disabled = i <= 0;
-    if (next) next.disabled = i >= variants.length - 1;
+    if (active === "all") {
+      if (label) label.textContent = zones.length + " зон";
+      if (title) title.textContent = "Весь парк";
+      tile.innerHTML = zones.map(zoneBlock).join("");
+      return;
+    }
+
+    const z = zones.find((x) => x.key === active) || zones[0];
+    if (label) label.textContent = z.emoji + " зона";
+    if (title) title.textContent = z.name;
+    tile.innerHTML = zoneBlock(z);
   }
 
   function renderPass() {
     const wrap = $("#usjPass");
-    if (!wrap) return;
+    if (!wrap || !USJ_PLAN.pass) return;
     const pass = USJ_PLAN.pass;
     wrap.innerHTML = `
       <p class="usj-head__pass">${pass.name}</p>
       <p class="usj-head__studio">${pass.studio}</p>
       <p class="usj-head__date">${USJ_PLAN.date}</p>
       <div class="usj-slots">
-        ${pass.slots.map((s) => `
+        ${(pass.slots || []).map((s) => `
           <div class="usj-slot">
             <div class="usj-slot__time">${s.time}</div>
             <div class="usj-slot__label">${s.label}</div>
@@ -165,42 +192,16 @@
         `).join("")}
       </div>
       <div class="usj-express">
-        <div class="usj-express__title">В Express Pass 4</div>
-        <ul>${pass.express.map((x) => `<li><b>${x.name}</b> — ${x.tip}</li>`).join("")}</ul>
+        <div class="usj-express__title">В вашем Express Pass 4</div>
+        <ul>${(pass.express || []).map((x) => `<li><b>${x.name}</b> — ${x.tip}</li>`).join("")}</ul>
       </div>
-      <div class="usj-not">
-        <div class="usj-express__title">Не в этом Express</div>
-        <ul>${pass.notIncluded.map((x) => `<li>${x}</li>`).join("")}</ul>
-      </div>
-      ${pass.gone && pass.gone.length ? `
-      <div class="usj-not usj-not--gone">
-        <div class="usj-express__title">Закрыто навсегда — не ищите</div>
-        <ul>${pass.gone.map((x) => `<li>${x}</li>`).join("")}</ul>
-      </div>` : ""}
-    `;
-  }
-
-  function renderTiers() {
-    const wrap = $("#usjTiers");
-    if (!wrap || !USJ_PLAN.tiers) return;
-    const t = USJ_PLAN.tiers;
-    const section = (label, items, cls) => `
-      <div class="usj-tier ${cls || ""}">
-        <div class="usj-tier__label">${label}</div>
-        <ul>${(items || []).map((x) => `
-          <li><b>${x.name}</b><span>${x.why}</span></li>
-        `).join("")}</ul>
-      </div>
-    `;
-    wrap.innerHTML = `
-      <p class="usj-guide__lead">${t.title}: must закрываем почти всегда; optional — по силам и очередям.</p>
-      ${section("Must · билет и пик", t.must, "usj-tier--must")}
-      ${section("Сильные standby", t.strong)}
-      ${section("Опции", t.optional)}
-      <div class="usj-tier usj-tier--skip">
-        <div class="usj-tier__label">Спокойно пропускаем</div>
-        <ul>${(t.skipOk || []).map((x) => `<li>${x}</li>`).join("")}</ul>
-      </div>
+      ${pass.note ? `<p class="usj-guide__lead">${pass.note}</p>` : ""}
+      ${(USJ_PLAN.gone || []).length ? `
+        <div class="usj-not usj-not--gone">
+          <div class="usj-express__title">Закрыто навсегда — не ищите</div>
+          <ul>${USJ_PLAN.gone.map((g) => `<li><b>${g.name}</b> — ${g.note}</li>`).join("")}</ul>
+        </div>
+      ` : ""}
     `;
   }
 
@@ -215,51 +216,11 @@
           <article class="usj-guide-card">
             <div class="usj-guide-card__when">${s.when}</div>
             <h3 class="usj-guide-card__name">${s.name}</h3>
-            <p class="usj-guide-card__what">${s.what}</p>
-            ${s.tip ? `<p class="usj-guide-card__tip">${s.tip}</p>` : ""}
+            <p class="usj-guide-card__what">${s.what}${s.tip ? " · " + s.tip : ""}</p>
           </article>
         `).join("")}
       </div>
     `;
-  }
-
-  function renderShowsGuide() {
-    const wrap = $("#usjShowsGuide");
-    if (!wrap || !USJ_PLAN.showsGuide) return;
-    const g = USJ_PLAN.showsGuide;
-    wrap.innerHTML = `
-      <p class="usj-guide__lead">${g.lead}</p>
-      <div class="usj-guide-cards">
-        ${(g.items || []).map((s) => `
-          <article class="usj-guide-card">
-            <div class="usj-guide-card__when">${s.kind}</div>
-            <h3 class="usj-guide-card__name">${s.name}</h3>
-            <p class="usj-guide-card__what">${s.tip}</p>
-          </article>
-        `).join("")}
-      </div>
-      ${USJ_PLAN.shopGuide ? `
-        <div class="usj-shop">
-          <div class="usj-express__title">${USJ_PLAN.shopGuide.title}</div>
-          <p class="usj-guide__lead">${USJ_PLAN.shopGuide.lead}</p>
-          <ul>${USJ_PLAN.shopGuide.tips.map((t) => `<li>${t}</li>`).join("")}</ul>
-        </div>
-      ` : ""}
-    `;
-  }
-
-  function renderRules() {
-    const wrap = $("#usjRules");
-    if (!wrap || !USJ_PLAN.rules) return;
-    wrap.innerHTML = USJ_PLAN.rules.map((r) => `
-      <div class="food-rule">
-        <span class="food-rule__e">${r.e}</span>
-        <div>
-          <div class="food-rule__t">${r.t}</div>
-          <div class="food-rule__d">${r.d}</div>
-        </div>
-      </div>
-    `).join("");
   }
 
   function setupFolds() {
@@ -282,16 +243,19 @@
   }
 
   function setupNav() {
+    const keys = ["all", "events", ...zones.map((z) => z.key)];
+    const idx = () => Math.max(0, keys.indexOf(active));
+
     $("#usjPrev")?.addEventListener("click", () => {
       const i = idx();
       if (i <= 0) return;
-      saveKey(variants[i - 1].key);
+      saveZone(keys[i - 1]);
       paint();
     });
     $("#usjNext")?.addEventListener("click", () => {
       const i = idx();
-      if (i >= variants.length - 1) return;
-      saveKey(variants[i + 1].key);
+      if (i >= keys.length - 1) return;
+      saveZone(keys[i + 1]);
       paint();
     });
 
@@ -305,27 +269,34 @@
         x0 = null;
         if (Math.abs(dx) < 50) return;
         const i = idx();
-        if (dx < 0 && i < variants.length - 1) { saveKey(variants[i + 1].key); paint(); }
-        if (dx > 0 && i > 0) { saveKey(variants[i - 1].key); paint(); }
+        if (dx < 0 && i < keys.length - 1) { saveZone(keys[i + 1]); paint(); }
+        if (dx > 0 && i > 0) { saveZone(keys[i - 1]); paint(); }
       }, { passive: true });
     }
   }
 
+  function updateArrows() {
+    const keys = ["all", "events", ...zones.map((z) => z.key)];
+    const i = Math.max(0, keys.indexOf(active));
+    const prev = $("#usjPrev");
+    const next = $("#usjNext");
+    if (prev) prev.disabled = i <= 0;
+    if (next) next.disabled = i >= keys.length - 1;
+  }
+
   function paint() {
     renderChips();
-    renderTile();
+    renderPark();
+    updateArrows();
   }
 
   function init() {
-    saveKey(activeKey);
+    saveZone(active);
     setupFolds();
     setupNav();
     renderIdea();
     renderPass();
-    renderTiers();
     renderFoodGuide();
-    renderShowsGuide();
-    renderRules();
     paint();
   }
 

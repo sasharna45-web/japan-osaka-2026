@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#0d0d0f">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
-  <title>USJ · Япония 2026</title>
-  <meta name="description" content="USJ 15 сентября 2026: максимум райдов, шоу+еда или дождь — под Express Pass 4.">
+  <title>USJ · зоны и аттракционы · Япония 2026</title>
+  <meta name="description" content="Актуальный справочник Universal Studios Japan: зоны, аттракционы, ивенты осени 2026. Без готовых маршрутов.">
 
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
@@ -17,8 +17,8 @@
   <meta name="apple-mobile-web-app-title" content="USJ 2026">
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
-  <link rel="stylesheet" href="css/styles.css?v=50">
-  <link rel="stylesheet" href="css/usj.css?v=50">
+  <link rel="stylesheet" href="css/styles.css?v=51">
+  <link rel="stylesheet" href="css/usj.css?v=51">
 </head>
 <body class="ios-feel usj-page">
 
@@ -28,13 +28,13 @@
       <div class="hero__sun"></div>
     </div>
     <div class="hero__content">
-      <p class="hero__eyebrow">Alexander & Rita · USJ · версия 33</p>
-      <h1 class="hero__title">USJ <span>15 сен</span></h1>
-      <p class="hero__subtitle">Не всё подряд · лучшее под Express · еда и шоу по сценарию</p>
+      <p class="hero__eyebrow">Alexander & Rita · USJ · версия 34</p>
+      <h1 class="hero__title">USJ <span>гид</span></h1>
+      <p class="hero__subtitle">Зоны · все актуальные аттракционы · ивенты осени 2026</p>
       <div class="hero__meta">
-        <span>SNW 11:50–12:50</span>
-        <span>Mine Cart 11:50–12:20</span>
-        <span>HHN вечером</span>
+        <span>15 сен · HHN</span>
+        <span>без маршрутов</span>
+        <span>Express в билете</span>
       </div>
       <button type="button" class="hero__refresh" id="forceRefresh">Обновить</button>
     </div>
@@ -44,10 +44,8 @@
     <div class="nav__inner">
       <a href="index.html" class="nav__brand">日本</a>
       <div class="nav__links">
-        <a href="#plan">План</a>
+        <a href="#park">Парк</a>
         <a href="#food">Еда</a>
-        <a href="#shows">Шоу</a>
-        <a href="#tiers">Что брать</a>
         <a href="#pass">Билет</a>
       </div>
     </div>
@@ -58,57 +56,31 @@
       <div class="usj-idea" id="usjIdea"></div>
     </section>
 
-    <section class="section section--tight" id="plan">
-      <div class="usj-switch" aria-label="Сценарий">
-        <button type="button" class="usj-switch__arrow" id="usjPrev" aria-label="Предыдущий сценарий">‹</button>
+    <section class="section section--tight" id="park">
+      <div class="usj-switch" aria-label="Раздел">
+        <button type="button" class="usj-switch__arrow" id="usjPrev" aria-label="Назад">‹</button>
         <div class="usj-switch__now">
-          <div class="usj-switch__date" id="usjNowLabel">Сценарий</div>
+          <div class="usj-switch__date" id="usjNowLabel">Парк</div>
           <div class="usj-switch__title" id="usjNowTitle">—</div>
         </div>
-        <button type="button" class="usj-switch__arrow" id="usjNext" aria-label="Следующий сценарий">›</button>
+        <button type="button" class="usj-switch__arrow" id="usjNext" aria-label="Дальше">›</button>
       </div>
 
-      <div class="usj-chips" id="usjChips" role="tablist" aria-label="Сценарии USJ"></div>
+      <div class="usj-chips" id="usjChips" role="tablist" aria-label="Зоны USJ"></div>
 
       <article class="usj-tile" id="usjTile" aria-live="polite"></article>
     </section>
 
-    <section class="section fold" id="food" data-fold="open">
-      <button type="button" class="fold__btn" aria-expanded="true">
-        <span class="fold__text">
-          <span class="fold__title">Поесть в парке</span>
-          <span class="fold__sub">Завтрак дома, фудкорт, Kinopio's, Хогвартс, ужин после.</span>
-        </span>
-        <span class="fold__chevron" aria-hidden="true">▾</span>
-      </button>
-      <div class="fold__panel">
-        <div id="usjFoodGuide"></div>
-      </div>
-    </section>
-
-    <section class="section fold" id="shows" data-fold="open">
-      <button type="button" class="fold__btn" aria-expanded="true">
-        <span class="fold__text">
-          <span class="fold__title">Шоу, «кино», HHN</span>
-          <span class="fold__sub">WaterWorld, 4D, зомби, лабиринты, магазины.</span>
-        </span>
-        <span class="fold__chevron" aria-hidden="true">▾</span>
-      </button>
-      <div class="fold__panel">
-        <div id="usjShowsGuide"></div>
-      </div>
-    </section>
-
-    <section class="section fold" id="tiers" data-fold="closed">
+    <section class="section fold" id="food" data-fold="closed">
       <button type="button" class="fold__btn" aria-expanded="false">
         <span class="fold__text">
-          <span class="fold__title">Что брать / что можно скипнуть</span>
-          <span class="fold__sub">Must, сильные standby, опции.</span>
+          <span class="fold__title">Еда в парке</span>
+          <span class="fold__sub">Кратко · полный план во вкладке Еда.</span>
         </span>
         <span class="fold__chevron" aria-hidden="true">▾</span>
       </button>
       <div class="fold__panel" hidden>
-        <div id="usjTiers"></div>
+        <div id="usjFoodGuide"></div>
       </div>
     </section>
 
@@ -116,7 +88,7 @@
       <button type="button" class="fold__btn" aria-expanded="false">
         <span class="fold__text">
           <span class="fold__title">Ваш билет</span>
-          <span class="fold__sub">Слоты и что входит в Express Pass 4.</span>
+          <span class="fold__sub">Express Pass 4 и слоты · что закрыто навсегда.</span>
         </span>
         <span class="fold__chevron" aria-hidden="true">▾</span>
       </button>
@@ -124,24 +96,11 @@
         <div id="usjPass"></div>
       </div>
     </section>
-
-    <section class="section fold" id="rules" data-fold="closed">
-      <button type="button" class="fold__btn" aria-expanded="false">
-        <span class="fold__text">
-          <span class="fold__title">Правила дня</span>
-          <span class="fold__sub">Якорь SNW, app, HHN, Spider-Man.</span>
-        </span>
-        <span class="fold__chevron" aria-hidden="true">▾</span>
-      </button>
-      <div class="fold__panel" hidden>
-        <div id="usjRules"></div>
-      </div>
-    </section>
   </main>
 
   <footer class="footer">
     <p class="footer__jp">楽しんで</p>
-    <p>Кайфового дня в парке</p>
+    <p>Очереди и шоу — только в app USJ</p>
     <a href="#top" class="footer__up">↑ Наверх</a>
   </footer>
 
@@ -168,18 +127,18 @@
     </a>
   </nav>
 
-  <script src="js/usj-data.js?v=50"></script>
-  <script src="js/usj.js?v=50"></script>
+  <script src="js/usj-data.js?v=51"></script>
+  <script src="js/usj.js?v=51"></script>
   <script>
     (function () {
-      var VER = "50";
+      var VER = "51";
 
       async function clearOldCaches() {
         try {
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v50"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v51"
               ? caches.delete(k)
               : Promise.resolve();
           }));

@@ -1,4 +1,4 @@
-/* Страница USJ — сценарии как плитки */
+/* Страница USJ — справочник зон, аттракционов, ивентов */
 
 .hero--usj .hero__kanji { opacity: .07; }
 
@@ -405,3 +405,110 @@
 }
 
 
+
+/* Справочник зон / аттракционов */
+.usj-zone {
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.usj-zone:last-child {
+  border-bottom: 0;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.usj-zone__head {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+  align-items: start;
+}
+.usj-zone__emoji {
+  font-size: 28px;
+  line-height: 1.1;
+}
+.usj-zone__name {
+  margin: 0 0 4px;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+.usj-zone__blurb {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.45;
+}
+.usj-attrs {
+  display: grid;
+  gap: 8px;
+}
+.usj-attr {
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.03);
+}
+.usj-attr__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.usj-attr__kind {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.usj-attr__thrill {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--red);
+  opacity: .85;
+}
+.usj-attr__name {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+.usj-attr__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.usj-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--text-dim);
+}
+.usj-badge--express {
+  border-color: rgba(230,57,70,.45);
+  color: #fff;
+  background: rgba(230,57,70,.35);
+}
+.usj-badge--season {
+  border-color: rgba(212,175,55,.45);
+  color: var(--gold);
+  background: rgba(212,175,55,.1);
+}
+.usj-attr__tip {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.45;
+}
+.usj-events-panel .usj-zone__name {
+  margin-bottom: 8px;
+}
+.usj-events-panel .usj-zone__blurb {
+  margin-bottom: 12px;
+}

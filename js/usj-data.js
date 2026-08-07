@@ -1,316 +1,251 @@
-/* USJ 15 сен 2026 — отдельная страница usj.html.
-   Актуальность (аудит авг 2026):
-   - Spider-Man закрыт навсегда с 22.01.2024 — не планируем.
-   - Terminator 2 / Backdraft закрыты; на месте Backdraft — Villain-Con Minion Blast.
-   - 15 сен 2026 = вторник внутри Halloween Horror Nights (11 сен – 8 ноя 2026):
-     вечером зомби/ивент; закрытие часто позже обычного (~21:00–22:00) — только по app в день.
-     Space Fantasy / JAWS / Backdrop могут быть с seasonal horror-оверлеями.
-   - Express Pass 4 «Minions & Hollywood Dream»: Mine Cart + Forbidden Journey +
-     Minion Mayhem + (Hollywood Dream ИЛИ JAWS) + timed entry SNW (и часто WWHP).
-   - Mario Kart / Yoshi / Flying Dinosaur / Space Fantasy / Backdrop / Villain-Con —
-     НЕ в этом Express (standby / Single Rider).
-   Имена мест — ориентиры; очереди и закрытия сверять в app USJ в день. */
+/* USJ 15 сен 2026 — справочник парка (зоны + аттракционы + ивенты).
+   Без готовых маршрутов: выбираете сами по app и силам.
+   Актуальность: авг 2026. Очереди/закрытия/слоты шоу — только app USJ в день. */
 const USJ_PLAN = {
-  date: "15 сентября 2026 · вт · закрытие по app (часто ~21:00–22:00 в HHN)",
+  date: "Ваш визит: 15 сентября 2026 · вт",
   audited: "2026-08-07",
 
-  /** Что вообще означает этот день в гиде. */
   idea: {
-    title: "Не «все аттракционы» — лучший день под ваш билет",
-    lead: "В парке десятки райдов, шоу, кафе и магазинов. За один день физически не закрыть всё. Здесь — плотный каркас под Express Pass 4 + SNW-слот: сначала то, что дорого по очереди и входит в билет, потом сильные standby, еда и шоу — по выбранному сценарию.",
+    title: "Справочник парка · не маршрут",
+    lead: "Ниже — актуальные зоны, аттракционы и осенние ивенты. Готовых таймлайнов нет: порядок собираете сами под очереди в app. Ваш Express Pass 4 и слот SNW — в блоке «Билет» как напоминание, что уже куплено.",
     points: [
-      "Максимум = больше костеров и Express, еда быстрая, шоу — если влезает вечером.",
-      "Шоу + еда = меньше гонки, полноценный обед, WaterWorld / 4D / атмосфера HHN.",
-      "Дождь / усталость = только Express + крыша, без чувства вины за ранний выход."
+      "15 сен = вторник внутри Halloween Horror Nights и Extreme Autumn.",
+      "Spider-Man / Terminator / Backdraft закрыты навсегда — в списке нет.",
+      "Сезонные оверлеи (Sadako, JAWS Red Alert, саундтреки HD) меняют вайб классических райдов — смотрите название в app."
     ]
   },
 
+  /** Напоминание о купленном билете — не маршрут. */
   pass: {
     name: "Universal Express Pass 4 · Minions and Hollywood Dream",
     studio: "Studio Pass 1-day ×2 — куплены",
     slots: [
-      { label: "SUPER NINTENDO WORLD", time: "11:50–12:50", note: "вход в зону по Express — не опаздывать" },
-      { label: "Mine Cart Madness", time: "11:50–12:20", note: "сразу после входа в SNW · слот жёсткий" }
+      { label: "SUPER NINTENDO WORLD", time: "11:50–12:50", note: "вход в зону по Express" },
+      { label: "Mine Cart Madness", time: "11:50–12:20", note: "слот внутри SNW · жёсткий" }
     ],
     express: [
       { name: "Mine Cart Madness", tip: "слот 11:50–12:20" },
       { name: "Harry Potter and the Forbidden Journey", tip: "Express · 1 раз" },
       { name: "Despicable Me Minion Mayhem", tip: "Express · 1 раз" },
-      { name: "Hollywood Dream – The Ride или JAWS", tip: "на выбор один; для макс-дня берите Hollywood Dream" }
+      { name: "Hollywood Dream – The Ride или JAWS", tip: "на выбор один" }
     ],
-    notIncluded: [
-      "Mario Kart: Koopa's Challenge — standby / Single Rider внутри SNW",
-      "Yoshi's Adventure — standby",
-      "The Flying Dinosaur — standby / Single Rider",
-      "Hollywood Dream – Backdrop (назад) — отдельная очередь",
-      "Space Fantasy – The Ride (осенью часто horror-оверлей) — standby",
-      "Villain-Con Minion Blast — standby",
-      "Flight of the Hippogriff, Jurassic Park – The Ride, JAWS (если Express ушёл на HD)"
-    ],
-    gone: [
-      "The Amazing Adventures of Spider-Man — закрыт навсегда с 22.01.2024",
-      "Terminator 2: 3-D / Backdraft — закрыты (на месте Backdraft теперь Villain-Con)"
-    ]
+    note: "Mario Kart, Yoshi, Flying Dinosaur, Backdrop, Space Fantasy, Villain-Con — не в этом Express (standby / Single Rider)."
   },
 
-  /** Карта приоритетов — чтобы было ясно, что «лучшее», а что опция. */
-  tiers: {
-    title: "Приоритеты дня",
-    must: [
-      { name: "Mine Cart Madness", why: "Жёсткий слот Express — если пропустите окно, день ломается." },
-      { name: "Forbidden Journey", why: "Пик Хогвартса; Express сжигает очередь, которая иначе съест час." },
-      { name: "Minion Mayhem", why: "Третий Express; удобно стыкуется с обедом/Villain-Con." },
-      { name: "Hollywood Dream (вперёд)", why: "Лучший выбор 4-го Express на макс-дне; JAWS оставляем standby." }
-    ],
-    strong: [
-      { name: "The Flying Dinosaur", why: "Главный «дорогой» standby утра — Express на него нет." },
-      { name: "Mario Kart", why: "Икона SNW; Single Rider ускоряет, если не против разделиться на заезд." },
-      { name: "Villain-Con Minion Blast", why: "Новый интерактивный райд на месте Backdraft; берите, если очередь не зверская." },
-      { name: "Space Fantasy / JAWS", why: "Сильные вечерние standby; осенью часто horror-оверлеи." }
-    ],
-    optional: [
-      { name: "Jurassic Park – The Ride", why: "Рядом с Flying Dinosaur; только если очередь <40 мин." },
-      { name: "Yoshi's Adventure", why: "Мило, но не must; только короткая очередь после Mario Kart." },
-      { name: "Flight of the Hippogriff", why: "Короткий костер у Хогвартса — бонус, не цель." },
-      { name: "Hollywood Dream – Backdrop", why: "Отдельная очередь «назад»; для фанатов костеров вечером." },
-      { name: "WaterWorld / сценические шоу / 4D", why: "Кино-шоу парка — в варианте «Шоу + еда» это якорь, в «Максимуме» — если влезает." },
-      { name: "Уличные зомби HHN", why: "Атмосфера с ~18:00 бесплатно со Studio Pass; лабиринты — отдельное решение." }
-    ],
-    skipOk: [
-      "Час в Kinopio's ради фото еды",
-      "Повторные круги «просто постоять» в одной зоне",
-      "Horror-лабиринты (Resident Evil и др.), если не хотите ужастики",
-      "Второй заход в SNW без слота «на удачу»",
-      "Детские / очень спокойные райды, если цель — плотный день"
-    ]
-  },
-
-  /** Еда в парке — общий справочник (детали ещё в вариантах). */
-  foodGuide: {
-    title: "Поесть в USJ",
-    lead: "Еда — не отдельный квест. На макс-дне обед 25–35 мин. Если хотите сесть нормально — берите сценарий «Шоу + еда». Завтрак дома обязателен: утренние очереди за едой убивают Flying Dinosaur.",
-    spots: [
-      {
-        name: "Завтрак дома",
-        when: "до выхода",
-        what: "Плотно: рис/онигири, белок, вода. В парк — только перекус в сумке (батончик), если пустят.",
-        tip: "Кассы у входа утром — ловушка времени."
-      },
-      {
-        name: "Фудкорты / центральная улица",
-        when: "обед ~13:00–14:30",
-        what: "Быстро и сытно: бургеры, карри, лапша, kids-меню. Садитесь, ешьте, вставайте.",
-        tip: "Лучший дефолт для «Максимума»."
-      },
-      {
-        name: "Зона Minions",
-        when: "после Minion Mayhem",
-        what: "Кафе/киоски рядом с Express №3 — удобно стыковать обед и Villain-Con.",
-        tip: "Не уходите далеко от зоны, если ещё не закрыли Express."
-      },
-      {
-        name: "Kinopio's Café (SNW)",
-        when: "только очередь <20 мин",
-        what: "Тема Mario, фотогенично. На макс-дне — почти всегда скип.",
-        tip: "В варианте «Шоу + еда» можно зайти после Mine Cart/Mario Kart, если очередь человеческая."
-      },
-      {
-        name: "Hogsmeade / Three Broomsticks",
-        when: "после Forbidden Journey или вечером",
-        what: "Атмосферный обед/ужин в Хогвартсе. Дольше обычного фудкорта.",
-        tip: "Имеет смысл в «Шоу + еда», не в гонке за костерами."
-      },
-      {
-        name: "Перекус стоя / попкорн / напиток",
-        when: "между райдами",
-        what: "Хватает 5–10 мин. Не превращайте в «второй обед».",
-        tip: "Вода из фонтанчиков/магазина дешевле, чем очередь за десертом."
-      },
-      {
-        name: "Ужин после парка",
-        when: "выход ~21:00–22:00",
-        what: "Дома, конбини у станции или простой рамен. Ноги важнее гастро-якоря.",
-        tip: "Завтра Kuromon — там будет тяжёлый обед. Сегодня можно недоесть вечером."
-      }
-    ]
-  },
-
-  /** Шоу / «кино» / сезон — не аттракционы-очереди. */
-  showsGuide: {
-    title: "Шоу, «кино» и атмосфера",
-    lead: "В USJ «кинотеатры» — это в основном 4D/stage/water-шоу и сезонные оверлеи на райдах. Расписание только в app на день. Ниже — что обычно стоит знать на 15 сен 2026.",
+  events: {
+    title: "Ивенты на 15 сен 2026",
+    lead: "Осень 2026 = 25-летие парка (Discover U!!!) + 15-летие Halloween Horror Nights. Днём — сезонная атмосфера Extreme Autumn; с вечера — зомби и horror-зоны.",
     items: [
       {
-        name: "WaterWorld",
-        kind: "Сценическое шоу · вода/пиротехника",
-        tip: "Классика парка, ~20–25 мин. В «Максимуме» — если попали в окно без дыры в плане. В «Шоу + еда» — сознательный якорь второй половины дня. Приходите за 15–20 мин; первые ряды мокрые."
+        name: "Universal Extreme Autumn · Discover U!!!",
+        when: "10 сен – 8 ноя 2026",
+        kind: "Сезон парка",
+        tip: "Зонтик над всей осенью: коллабы, сезонные шоу/саундтреки, декор. HHN — часть этого сезона."
       },
       {
-        name: "4D / stage (сезон 2026)",
-        kind: "Крытое «кино»-шоу",
-        tip: "Осенью 2026 в Extreme Autumn бывают сезонные 4D (в т.ч. коллабы вроде Chainsaw Man). Точное имя и слоты — в app. Хорошая пауза для ног и жары/дождя."
+        name: "Halloween Horror Nights (15-летие)",
+        when: "11 сен – 8 ноя 2026",
+        kind: "Horror-сезон",
+        tip: "Ваш день 15 сен внутри. С ~18:00 Street Zombies. Лабиринты и R-18 — отдельно, не обязательны."
       },
       {
-        name: "Hollywood Dream — сезонные саундтреки",
-        kind: "Костер + «кино» в наушниках",
-        tip: "Вперёд и Backdrop могут крутить сезонные треки (J-pop / аниме-коллабы). Выбирайте трек быстро у панели — не стойте 10 минут в меню."
+        name: "Street Zombies · Zombie de Dance",
+        when: "~18:00 → закрытие",
+        kind: "Улица",
+        tip: "Входит в Studio Pass. Атмосфера и фото без лабиринта. Zombie de Dance — уличный танцевальный слот (часто под King Gnu «SO BAD»)."
       },
       {
-        name: "Space Fantasy / JAWS horror-оверлеи",
-        kind: "Тот же райд, другой вайб",
-        tip: "Осенью часто Sadako-оверлей на Space Fantasy и horror-режим на JAWS. Это не отдельный билет — смотрите название в app. Если страшно/тошнит — обычная версия или скип."
+        name: "Resident Evil Requiem: The Dive",
+        when: "11 сен – 27 дек 2026",
+        kind: "Horror · часто 15+",
+        tip: "Новый лабиринт/аттракцион HHN. Нужен Timed Entry в app. Гости 14 и младше — нельзя. Не must для райд-дня."
       },
       {
-        name: "Уличные зомби HHN",
-        kind: "Улица · с ~18:00",
-        tip: "Входит в Studio Pass. Атмосфера, фото, крики — без лабиринта. Можно пройтись 20–40 мин вечером вместо ещё одного костера."
+        name: "Lights Out: Nightmare Isolation",
+        when: "сезон HHN",
+        kind: "Horror · R-18",
+        tip: "Первый R-18 опыт USJ, waiver. Только если оба хотите жёсткий ужастик."
       },
       {
-        name: "Horror-лабиринты (Resident Evil и др.)",
-        kind: "Отдельное решение · часто 15+",
-        tip: "Не часть «собрать райды». Lights Out — R-18 + waiver. Если оба не фанаты ужастиков — спокойно пропускайте: день и так полный."
+        name: "Factory of Fear · Witches of House 18 · HHN Academy",
+        when: "сезон HHN",
+        kind: "Horror / stage",
+        tip: "Лабиринты и юбилейное шоу «15 Years of Screams». Слоты и возрасты — в app."
       },
       {
-        name: "Парад / ночной слот (если есть в app)",
-        kind: "Шоу улицы",
-        tip: "Не каждый день. Если в app на 15 сен есть вечерний слот — встаньте сбоку на 15 мин, не в первый ряд на час."
+        name: "SADAKO'S CURSE: Dark Horror Ride",
+        when: "11 сен 2026 – ~4 янв 2027",
+        kind: "Оверлей на Space Fantasy",
+        tip: "Тот же Space Fantasy, horror-режим. В app может отображаться как Sadako, не как обычный Space Fantasy."
+      },
+      {
+        name: "JAWS: Red Alert",
+        when: "11 сен 2026 – ~31 янв 2027",
+        kind: "Оверлей на JAWS",
+        tip: "Сезонный horror-вайб на классическом JAWS. Очередь и эффекты — по app."
+      },
+      {
+        name: "Chainsaw Man: The Chaos 4-D",
+        when: "сезон Extreme Autumn",
+        kind: "4D · «кино»",
+        tip: "Cinema 4-D. Слоты по расписанию. Хорошая пауза для ног."
+      },
+      {
+        name: "Hollywood Dream · сезонные треки",
+        when: "осень 2026",
+        kind: "Саундтрек на костере",
+        tip: "Вперёд: часто King Gnu «SO BAD» и др. Backdrop: Chainsaw Man × «IRIS OUT», Ado «Show», Sandaime J Soul Brothers и т.п. — список в app у панели."
+      },
+      {
+        name: "Jurassic Park – The Ride in the Dark",
+        when: "сезон HHN (вечером)",
+        kind: "Ночной режим лодочного",
+        tip: "Тот же Jurassic Park – The Ride, темнее и страшнее. Если идёт — смотрите в app."
+      },
+      {
+        name: "SUPER NINTENDO WORLD · 5th anniversary",
+        when: "2026",
+        kind: "Зона",
+        tip: "Юбилейный декор/митап/еда. Вход в зону часто по timed entry (у вас — Express-слот 11:50–12:50)."
       }
     ]
   },
 
-  shopGuide: {
-    title: "Магазины",
-    lead: "Покупки — в конце или в мёртвые окна. Тяжёлые пакеты портят Flying Dinosaur и вечер.",
-    tips: [
-      "SNW / Mario — после Mine Cart и Mario Kart, не до слота.",
-      "Harry Potter (палочки, сладости) — короткий заход после Forbidden Journey или вечером.",
-      "Minion / общий Universal — на выходе, когда руки свободны.",
-      "Power-Up Band — только если уже решили купить заранее; иначе съест 20–40 мин на настройку."
-    ]
-  },
-
-  rules: [
-    { e: "🎯", t: "Это лучшие под билет, не чек-лист парка", d: "Цель — закрыть Express + сильные standby + нормально поесть/посмотреть шоу по сценарию. Не бегите «собрать все иконки на карте»." },
-    { e: "🍄", t: "Жёсткий якорь SNW", d: "К 11:40 у входа. В 11:50 заходите и сразу Mine Cart (до 12:20). Фото и магазин — после вагонетки и Mario Kart." },
-    { e: "📱", t: "App USJ = правда дня", d: "Очереди, Single Rider, закрытия, шоу и время закрытия парка — только из app. План ниже — каркас, не догма." },
-    { e: "🎃", t: "Halloween Horror Nights", d: "Сезон 11 сен – 8 ноя 2026. С ~18:00 уличные зомби. Лабиринты вроде Resident Evil — часто жёсткий ценз 15+; Lights Out — R-18 по waiver. Sadako — horror-оверлей на аттракционе (не лабиринт)." },
-    { e: "🎟️", t: "Express не на Mario Kart", d: "В Pass 4 нет Mario Kart и Flying Dinosaur. Их берём standby / Single Rider. Express жжём на пиковые: Mine Cart, Forbidden Journey, Minion Mayhem, Hollywood Dream." },
-    { e: "🚫", t: "Не ищите Spider-Man", d: "Аттракциона больше нет с 22.01.2024. Не тратьте время на старые карты/гайды." }
+  gone: [
+    { name: "The Amazing Adventures of Spider-Man", note: "Закрыт навсегда с 22.01.2024" },
+    { name: "Terminator 2: 3-D", note: "Закрыт" },
+    { name: "Backdraft", note: "Закрыт · на месте — Villain-Con Minion Blast" }
   ],
 
-  variants: [
+  /**
+   * zones[].attractions[]:
+   * kind: ride | show | interactive | food | shop | area
+   * thrill: 0..5
+   * express: true если бывает в Express (не значит «в вашем Pass»)
+   * yourExpress: true если в вашем Pass 4 / слоте
+   * seasonal: краткая пометка осеннего оверлея
+   */
+  zones: [
     {
-      key: "max",
-      title: "Максимум до закрытия",
-      vibe: "Плотнее некуда · райды прежде всего",
-      bestFor: "Ноги ок, хотите выжать Express и костеры до вечера. Дефолт на 15 сен.",
-      score: "Главный сценарий · ~12–14 активностей · еда быстрая · шоу по остатку",
-      focus: "Не все аттракционы парка — максимум сильных под ваш Pass за один день.",
-      food: [
-        { when: "утро", what: "Плотный завтрак дома", tip: "В парке до SNW еду не ищем." },
-        { when: "~13:30", what: "Фудкорт / Minion zone 25–35 мин", tip: "Kinopio's — только очередь <20 мин." },
-        { when: "между райдами", what: "Вода + один перекус стоя", tip: "Не второй обед." },
-        { when: "после выхода", what: "Лёгкий ужин дома / у станции", tip: "Завтра Kuromon." }
-      ],
-      shows: [
-        { when: "~18:30+", what: "Backdrop или WaterWorld / слот из app", tip: "Если силы есть; иначе улица зомби 20 мин." },
-        { when: "вечер", what: "Уличные зомби HHN", tip: "Атмосфера без лабиринта." }
-      ],
-      timeline: [
-        { t: "07:30", what: "У ворот", detail: "Очередь до открытия. Studio Pass + Express на экране. Завтрак дома. Пончо/zip для телефона." },
-        { t: "~08:45–09:00", what: "Вход · сразу к Jurassic", detail: "Открытие смотрите в app (часто раньше «официальных» 9:00). Бегом не к SNW (слот только в 11:50), а к The Flying Dinosaur." },
-        { t: "~09:05", what: "The Flying Dinosaur", detail: "Standby или Single Rider (можно разделиться на один заезд). Главный «дорогой» standby утра — Express на него нет." },
-        { t: "~09:50", what: "Jurassic Park – The Ride", detail: "Лодочный рядом, если очередь <40 мин. Иначе скип без жалости — нужен запас на SNW." },
-        { t: "~10:30", what: "Express: Forbidden Journey", detail: "В Хогвартс. Express сейчас: к полудню очередь вырастет. Быстрый круг Hogsmeade / фото. Hippogriff — только короткая очередь. Кафе Three Broomsticks сегодня не садимся." },
-        { t: "11:40", what: "К воротам SNW", detail: "Буфер. Туалет + вода. Не фотографироваться у трубы 20 минут." },
-        { t: "11:50–12:20", what: "Mine Cart Madness", detail: "Вход в зону → сразу Donkey Kong Mine Cart по слоту. Это якорь билета." },
-        { t: "~12:25–13:20", what: "Mario Kart → Yoshi", detail: "Mario Kart standby / Single Rider. Yoshi — если очередь <25–30 мин. Магазин SNW — только быстрый взгляд, пакеты не таскаем весь день." },
-        { t: "~13:30", what: "Быстрый обед", detail: "Фудкорт / Minion area. Kinopio's — только <20 мин. Цель: сесть и встать за 25–35 мин. Это не гастро-день." },
-        { t: "~14:15", what: "Express: Minion Mayhem", detail: "Закрываете Express №3. Сразу рядом — Villain-Con Minion Blast (standby; это не Express)." },
-        { t: "~15:15", what: "Villain-Con Minion Blast", detail: "Интерактивный шутер в Minion Park (на месте старого Backdraft). Если очередь >60 мин — скип и идите к Hollywood Dream." },
-        { t: "~16:00", what: "Express: Hollywood Dream", detail: "Берите HD (вперёд), не JAWS — для макс-дня это правильный Express-слот. Саундтрек выберите быстро у панели." },
-        { t: "~16:50", what: "Space Fantasy", detail: "Indoor-костер. Осенью 2026 часто horror-оверлей (Sadako и т.п.) — смотрите название в app. Если тошнит после HD — пауза 15 мин / напиток стоя." },
-        { t: "~17:40", what: "JAWS (standby)", detail: "Express уже ушёл на HD — JAWS обычной очередью / Single Rider. В сезон HHN может быть оверлей «Red Alert»." },
-        { t: "~18:30", what: "Backdrop · шоу · зомби", detail: "Варианты по силам: (1) Hollywood Dream – Backdrop, (2) WaterWorld / 4D по app, (3) просто улица с зомби HHN 20–40 мин. Лабиринты — только если сами хотите." },
-        { t: "~19:30–21:30", what: "Хвост до закрытия", detail: "По app: повтор с короткой очередью, магазин на выход, ещё раз атмосферу. Horror-лабиринты — опция и часто 15+ (Lights Out — R-18)." },
-        { t: "~21:30–22:00", what: "Выход", detail: "Точное закрытие — только в app. JR Yumesaki → Osaka → метро. Сувениры — сейчас, не утром. Завтра Kuromon." }
-      ],
-      skip: [
-        "Spider-Man — его больше нет",
-        "Час в Kinopio's / Three Broomsticks",
-        "Два раза ходить в SNW без слота",
-        "Полный horror-маршрут HHN вместо райдов",
-        "«Собрать все аттракционы с карты» — физически нереально"
+      key: "snw",
+      name: "SUPER NINTENDO WORLD",
+      emoji: "🍄",
+      blurb: "Mario Land + Donkey Kong Country. Часто timed entry. У вас вход 11:50–12:50 + Mine Cart 11:50–12:20.",
+      attractions: [
+        { name: "Mine Cart Madness", kind: "ride", thrill: 3, yourExpress: true, tip: "Вагонетка Donkey Kong. Слот Express жёсткий. Может закрываться при дожде/ветре." },
+        { name: "Mario Kart: Koopa's Challenge", kind: "ride", thrill: 1, tip: "AR-гонка в замке Боузера. Standby / Single Rider. Первый круг — понять правила, второй — веселее." },
+        { name: "Yoshi's Adventure", kind: "ride", thrill: 0, tip: "Спокойный трек, охота за яйцами. Для взрослых — опция, если очередь короткая." },
+        { name: "Power-Up Band · Key Challenges", kind: "interactive", thrill: 0, tip: "Платный браслет: мини-игры по зоне. Без браслета зона всё равно ок — фото и райды." },
+        { name: "Kinopio's Café · киоски", kind: "food", thrill: 0, tip: "Тема Toad. Очередь часто длинная — не must." }
       ]
     },
     {
-      key: "shows",
-      title: "Шоу + еда",
-      vibe: "Меньше гонки · больше впечатлений и обеда",
-      bestFor: "Хотите WaterWorld / 4D, сесть нормально, вечером зомби — без ощущения марафона.",
-      score: "Express закрываете · 1–2 шоу · нормальный обед · вечер спокойнее",
-      focus: "Тот же билет и SNW-якорь, но дневной темп ниже: еда и «кино»-шоу — часть плана, не остаток.",
-      food: [
-        { when: "утро", what: "Завтрак дома", tip: "Как в максимуме — без очередей у входа." },
-        { when: "~13:00–14:00", what: "Нормальный обед: Three Broomsticks или Minion / фудкорт с посадкой", tip: "Заложите 45–60 мин. Это сознательно." },
-        { when: "после шоу", what: "Десерт / напиток стоя", tip: "Попкорн, мороженое — без второй посадки." },
-        { when: "после парка", what: "Лёгкий ужин", tip: "Можно чуть сытнее, чем в максимуме — день мягче." }
-      ],
-      shows: [
-        { when: "~15:30–17:00", what: "WaterWorld или сезонный 4D", tip: "Слоты в app; прийти за 15–20 мин. Первый ряд WaterWorld = мокро." },
-        { when: "~18:00+", what: "Уличные зомби HHN", tip: "Главная вечерняя «атмосфера» без лабиринта." },
-        { when: "по желанию", what: "Короткий stage / парад из app", tip: "Не больше 20 мин сбоку, не час в первом ряду." }
-      ],
-      timeline: [
-        { t: "07:30–08:30", what: "У ворот", detail: "Можно не первым номером, но до открытия комфортнее. Завтрак дома." },
-        { t: "утро", what: "Express: Forbidden Journey", detail: "Сразу под крышу Хогвартса. Flying Dinosaur — только если очередь коротко утром; иначе сознательный скип ради темпа." },
-        { t: "до 11:40", what: "Фото Hogsmeade / лёгкий райд", detail: "Hippogriff или просто атмосфера. Не зарывайтесь в магазин на 40 мин." },
-        { t: "11:40–12:20", what: "SNW якорь", detail: "Mine Cart обязателен. Mario Kart — если очередь ок. Yoshi — опция. Kinopio's — только если реально коротко." },
-        { t: "~13:00–14:00", what: "Обед с посадкой", detail: "Three Broomsticks (атмосфера) или зона Minions / центральный фудкорт. 45–60 мин — норма. Телефоны на зарядке, ноги вверх." },
-        { t: "~14:15–15:00", what: "Express: Minion Mayhem", detail: "Закрываете Express №3. Villain-Con — если очередь <45 мин, иначе к шоу." },
-        { t: "~15:30–17:00", what: "Шоу / «кино»", detail: "WaterWorld или сезонный 4D по app. Это якорь варианта — не «если останется время». Сидите, смотрите, отдыхаете." },
-        { t: "~17:00–18:00", what: "Express: Hollywood Dream или JAWS", detail: "Если ещё не жгли 4-й Express — сейчас. В этом сценарии JAWS тоже ок (короче путь к вечерней зоне). HD — если хочется костер." },
-        { t: "~18:00–19:30", what: "Зомби + лёгкий хвост", detail: "Улица HHN, фото, один короткий standby по app. Лабиринты — только если оба хотите ужастики." },
-        { t: "~19:30–21:00", what: "Магазин + выход по силам", detail: "Не обязаны до закрытия. Сувениры сейчас. Домой раньше максимума — тоже победа." }
-      ],
-      skip: [
-        "Гнать Flying Dinosaur любой ценой",
-        "Обед «на ходу за 15 мин» — сегодня можно сесть",
-        "Spider-Man (его нет)",
-        "Все horror-лабиринты подряд",
-        "Чувство, что «недобрали аттракционов» — у вас другой критерий дня"
+      key: "potter",
+      name: "The Wizarding World of Harry Potter",
+      emoji: "🧙",
+      blurb: "Hogsmeade + Хогвартс. Очередь Forbidden Journey — часть атмосферы (кабинет Дамблдора, портреты).",
+      attractions: [
+        { name: "Harry Potter and the Forbidden Journey", kind: "ride", thrill: 3, yourExpress: true, tip: "Полёт по замку. Сильная укачиваемость у многих — не сразу после еды." },
+        { name: "Flight of the Hippogriff", kind: "ride", thrill: 2, tip: "Короткий семейный костер. Хороший бонус, не must." },
+        { name: "Ollivanders", kind: "show", thrill: 0, tip: "Короткое шоу выбора палочки. Очередь отдельно." },
+        { name: "Wand Magic", kind: "interactive", thrill: 0, tip: "Интерактивные точки по деревне с купленной палочкой." },
+        { name: "Three Broomsticks · Butterbeer", kind: "food", thrill: 0, tip: "Атмосферная посадка / сливочное пиво. Дольше фудкорта." },
+        { name: "Hogwarts Castle Walk (сезон)", kind: "area", thrill: 0, seasonal: true, tip: "Иногда открывают особый маршрут по замку — смотрите app осенью." }
       ]
     },
     {
-      key: "chill",
-      title: "Дождь / усталость",
-      vibe: "Только якоря Express + крыша",
-      bestFor: "Ливень, нет сил, или «уже тяжело к обеду».",
-      score: "Сохранить день · закрыть билет · не геройствовать",
-      focus: "Минимум ходьбы под открытым небом. Еда тёплая под крышей. Шоу 4D — идеальная пауза.",
-      food: [
-        { when: "утро", what: "Завтрак дома + пончо", tip: "Сухие носки в сумке — не шутка." },
-        { when: "~13:00", what: "Тёплый обед под крышей", tip: "Фудкорт / кафе; сушиться, зарядка, горячий напиток." },
-        { when: "выход", what: "Что угодно у станции", tip: "Главное — сухо и домой." }
-      ],
-      shows: [
-        { when: "день", what: "Любой крытый 4D / stage из app", tip: "Лучшая замена мокрым очередям." },
-        { when: "вечер", what: "Зомби только если дождь слабый", tip: "Иначе домой без FOMO." }
-      ],
-      timeline: [
-        { t: "07:30–08:30", what: "У ворот по самочувствию", detail: "Лучше до открытия. Пончо у входа. Не стойло в луже час «ради принципа»." },
-        { t: "утро", what: "Express: Forbidden Journey", detail: "Под крышей. Jurassic / Flying Dinosaur в ливень — пропуск." },
-        { t: "11:40", what: "SNW якорь", detail: "Mine Cart обязателен. Mario Kart — только если очередь человеческая и дождь терпимый." },
-        { t: "~13:00", what: "Тёплый обед", detail: "Крытое кафе/фудкорт. Сушиться, зарядка, горячее. 40–50 мин ок." },
-        { t: "день", what: "Express: Minion + HD/JAWS", detail: "Только Express. Standby >40 мин — скип. Между ними — 4D/шоу из app под крышей." },
-        { t: "когда угодно", what: "Домой", detail: "Кайфовый день ≠ до 22:00. Завтра рынок. Мокрые носки — сигнал к выходу." }
-      ],
-      skip: [
-        "Flying Dinosaur в ливень",
-        "Чувство вины за ранний выход",
-        "Horror-лабиринты «за компанию»",
-        "Очереди под открытым небом «ещё один»"
+      key: "minion",
+      name: "Minion Park",
+      emoji: "🟡",
+      blurb: "Жёлтая зона Illumination. Рядом удобно стыковать Express Minion Mayhem и шутер.",
+      attractions: [
+        { name: "Despicable Me Minion Mayhem", kind: "ride", thrill: 2, yourExpress: true, tip: "Симулятор 3D. В вашем Express Pass 4." },
+        { name: "Villain-Con Minion Blast", kind: "ride", thrill: 1, tip: "Интерактивный шутер (на месте Backdraft). В гидах 2025–26 также как Minion Mayhem Mission. Standby." },
+        { name: "Freeze Ray Sliders", kind: "ride", thrill: 1, tip: "Уличный спиннер (Minion Mayhem Ice). Укачивание возможно." },
+        { name: "Кафе / мерч Minions", kind: "food", thrill: 0, tip: "Быстрый обед рядом с райдами." }
+      ]
+    },
+    {
+      key: "jurassic",
+      name: "Jurassic Park",
+      emoji: "🦕",
+      blurb: "Два разных вайба: жёсткий flying coaster и мокрый лодочный.",
+      attractions: [
+        { name: "The Flying Dinosaur", kind: "ride", thrill: 5, tip: "Самый жёсткий костер парка (лицом вниз). Нет в вашем Express. Single Rider часто спасает." },
+        { name: "Jurassic Park – The Ride", kind: "ride", thrill: 3, tip: "Лодочный со сбросом. Промокнете. Осенью вечером может быть In the Dark." }
+      ]
+    },
+    {
+      key: "hollywood",
+      name: "Hollywood",
+      emoji: "🎬",
+      blurb: "У входа: главные костеры «с музыкой» и indoor Space Fantasy.",
+      attractions: [
+        { name: "Hollywood Dream – The Ride", kind: "ride", thrill: 4, yourExpress: true, tip: "Костер вперёд + свой трек. В Express как один из вариантов 4-го слота (или JAWS)." },
+        { name: "Hollywood Dream – Backdrop", kind: "ride", thrill: 5, tip: "Тот же трек назад, отдельная очередь. Не в Express Pass 4. Осенью — сезонные треки (IRIS OUT и др.)." },
+        { name: "Space Fantasy – The Ride", kind: "ride", thrill: 3, tip: "Indoor spinning coaster. Осенью часто Sadako's Curse." }
+      ]
+    },
+    {
+      key: "amity",
+      name: "Amity Village",
+      emoji: "🦈",
+      blurb: "Зона JAWS. Классика с открытия парка.",
+      attractions: [
+        { name: "JAWS", kind: "ride", thrill: 2, yourExpress: true, tip: "Лодочный тур + акула. Может обрызгать. В вашем Pass 4 — альтернатива HD. Осенью: Red Alert." }
+      ]
+    },
+    {
+      key: "waterworld",
+      name: "WaterWorld",
+      emoji: "💦",
+      blurb: "Сценическое шоу, не райд. Первые ряды мокрые.",
+      attractions: [
+        { name: "WaterWorld", kind: "show", thrill: 1, tip: "Пиротехника, трюки, вода ~20–25 мин. Слоты в app; приходите заранее." }
+      ]
+    },
+    {
+      key: "newyork",
+      name: "New York · Stage / 4D",
+      emoji: "🏙️",
+      blurb: "Театры и сезонные horror/4D. Постоянных «больших» райдов после закрытия Spider-Man почти нет.",
+      attractions: [
+        { name: "Cinema 4-D (сезонные шоу)", kind: "show", thrill: 1, seasonal: true, tip: "Осенью 2026: Chainsaw Man The Chaos 4-D и др. Расписание в app." },
+        { name: "Stage 18 / 22 · HHN atractions", kind: "show", thrill: 4, seasonal: true, tip: "Resident Evil, Lights Out, Factory of Fear, Witches… — сезонные, часто Timed Entry и возрастной ценз." },
+        { name: "Gramercy Park · HHN Academy", kind: "show", thrill: 2, seasonal: true, tip: "Юбилейное horror-шоу улицы/сцены в сезон HHN." }
+      ]
+    },
+    {
+      key: "wonderland",
+      name: "Universal Wonderland",
+      emoji: "🎈",
+      blurb: "Детская зона: Hello Kitty, Snoopy, Elmo / Curious George. Взрослым без детей — низкий приоритет.",
+      attractions: [
+        { name: "Hello Kitty's Cupcake Dream", kind: "ride", thrill: 0, tip: "Спиннер Cupcake." },
+        { name: "The Flying Snoopy", kind: "ride", thrill: 0, tip: "Мягкий «полёт», высота регулируется." },
+        { name: "Snoopy's Flying Ace Adventure", kind: "ride", thrill: 1, tip: "Короткий детский костер." },
+        { name: "Elmo / Curious George (зона)", kind: "area", thrill: 0, tip: "Несколько мягких райдов и фотозоны — смотрите app, если идёте с детьми." }
+      ]
+    },
+    {
+      key: "sanfran",
+      name: "San Francisco · прочее",
+      emoji: "🌉",
+      blurb: "После закрытий крупных шоу зона тише. Магазины, перекусы, проход к другим районам.",
+      attractions: [
+        { name: "Прогулка / фото / фуд", kind: "area", thrill: 0, tip: "Не планируйте «главный райд» здесь — их почти не осталось." }
       ]
     }
-  ]
+  ],
+
+  foodGuide: {
+    title: "Еда (кратко)",
+    lead: "Полный план еды поездки — во вкладке «Еда». В парке: завтрак дома, днём фудкорт/Minions или Three Broomsticks, Kinopio's только при короткой очереди, ужин после выхода (завтра Kuromon).",
+    spots: [
+      { name: "Завтрак дома", when: "до парка", what: "Плотно. Утренние кассы у входа съедают время.", tip: "" },
+      { name: "Фудкорты / Minion", when: "обед", what: "Быстро и сытно.", tip: "Дефолт, если гоняете райды." },
+      { name: "Three Broomsticks", when: "обед/вечер", what: "Посадка в Хогвартсе.", tip: "Дольше по времени." },
+      { name: "Kinopio's Café", when: "SNW", what: "Тема Mario.", tip: "Только очередь <20 мин." }
+    ]
+  }
 };
