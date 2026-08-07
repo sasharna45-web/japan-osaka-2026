@@ -1,9 +1,10 @@
 /* Offline-first PWA for japan-osaka-2026 */
-const CACHE = "japan2026-offline-v44";
+const CACHE = "japan2026-offline-v45";
 const PRECACHE = [
   './index.html',
   './tracker.html',
   './food.html',
+  './usj.html',
   './china.html',
   './icon.svg',
   './manifest.webmanifest',
@@ -12,6 +13,7 @@ const PRECACHE = [
   './css/styles.css',
   './css/tracker.css',
   './css/food.css',
+  './css/usj.css',
   './js/app.js',
   './js/china-data.js',
   './js/china.js',
@@ -19,6 +21,7 @@ const PRECACHE = [
   './js/food-data.js',
   './js/food.js',
   './js/usj-data.js',
+  './js/usj.js',
   './js/photos.js',
   './js/tracker-data.js',
   './js/tracker.js',

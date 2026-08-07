@@ -18,7 +18,7 @@
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
 
-  <link rel="stylesheet" href="css/styles.css?v=44">
+  <link rel="stylesheet" href="css/styles.css?v=45">
 </head>
 <body class="ios-feel">
 
@@ -30,7 +30,7 @@
       <div class="hero__sun"></div>
     </div>
     <div class="hero__content">
-      <p class="hero__eyebrow">Alexander & Rita · версия 28</p>
+      <p class="hero__eyebrow">Alexander & Rita · версия 29</p>
       <h1 class="hero__title">Япония <span>2026</span></h1>
       <p class="hero__subtitle">Осака · Кансай · 9–25 сентября</p>
       <div class="hero__meta">
@@ -51,7 +51,6 @@
         <a href="#transit">Пекин</a>
         <a href="#packing">Чек-лист</a>
         <a href="#budget">Деньги</a>
-        <a href="#usj">USJ</a>
         <a href="tracker.html">Трекер</a>
         <a href="#route">Маршрут</a>
         <a href="#home">Дом</a>
@@ -117,19 +116,6 @@
         <p class="budget-tracker-link">
           <a class="link-btn" href="tracker.html">📊 Открыть трекер дней и бюджета</a>
         </p>
-      </div>
-    </section>
-
-    <section class="section fold" id="usj" data-fold="closed">
-      <button type="button" class="fold__btn" aria-expanded="false">
-        <span class="fold__text">
-          <span class="fold__title">USJ · маршруты</span>
-          <span class="fold__sub">15 сен · Express Pass 4 · несколько сценариев.</span>
-        </span>
-        <span class="fold__chevron" aria-hidden="true">▾</span>
-      </button>
-      <div class="fold__panel" hidden>
-        <div id="usjBody"></div>
       </div>
     </section>
 
@@ -274,7 +260,7 @@
     </div>
   </div>
 
-  <nav class="country-dock country-dock--jp" aria-label="Страна">
+  <nav class="country-dock country-dock--jp country-dock--5" aria-label="Страна">
     <a class="country-dock__btn is-active" href="index.html">
       <span class="country-dock__flag">🇯🇵</span>
       <span class="country-dock__label">Гид</span>
@@ -282,6 +268,10 @@
     <a class="country-dock__btn" href="food.html">
       <span class="country-dock__flag">🍜</span>
       <span class="country-dock__label">Еда</span>
+    </a>
+    <a class="country-dock__btn" href="usj.html">
+      <span class="country-dock__flag">🎢</span>
+      <span class="country-dock__label">USJ</span>
     </a>
     <a class="country-dock__btn" href="tracker.html">
       <span class="country-dock__flag">📊</span>
@@ -301,20 +291,19 @@
     <p class="gallery-view__cap" id="galleryCap"></p>
   </div>
 
-  <script src="js/data.js?v=44"></script>
-  <script src="js/usj-data.js?v=44"></script>
-  <script src="js/photos.js?v=44"></script>
-  <script src="js/app.js?v=44"></script>
+  <script src="js/data.js?v=45"></script>
+  <script src="js/photos.js?v=45"></script>
+  <script src="js/app.js?v=45"></script>
   <script>
     (function () {
-      var VER = "44";
+      var VER = "45";
 
       async function clearOldCaches() {
         try {
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v44"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v45"
               ? caches.delete(k)
               : Promise.resolve();
           }));
