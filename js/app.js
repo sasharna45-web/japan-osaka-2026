@@ -282,6 +282,18 @@
       `));
     }
 
+    // Мосты на отдельные страницы — без засорения основы
+    const links = el("div", "day-links");
+    const foodA = el("a", "day-links__btn", "🍜 Еда этого дня");
+    foodA.href = `food.html?day=${day.n}#day`;
+    links.appendChild(foodA);
+    if (day.n === 7) {
+      const usjA = el("a", "day-links__btn day-links__btn--usj", "🎢 Сценарии USJ");
+      usjA.href = "usj.html#plan";
+      links.appendChild(usjA);
+    }
+    bodyWrap.appendChild(links);
+
     const details = el("div", "day-details");
     details.hidden = true;
 
@@ -1117,7 +1129,11 @@
         <div class="next-day__date">${day.date} · ${day.weekday}</div>
         <div class="next-day__title">${day.title}</div>
         ${briefHtml}
-        <button type="button" class="next-day__btn" data-open-day="${idx}">Открыть день</button>
+        <div class="next-day__actions">
+          <button type="button" class="next-day__btn" data-open-day="${idx}">Открыть день</button>
+          <a class="next-day__link" href="food.html?day=${day.n}#day">🍜 Еда</a>
+          ${day.n === 7 ? `<a class="next-day__link" href="usj.html#plan">🎢 USJ</a>` : ""}
+        </div>
       </article>
     `;
   }
