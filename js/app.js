@@ -938,6 +938,7 @@
         setSectionOpen(sec, next);
         foldState[id] = next;
         saveFolds();
+        if (next && typeof observeReveals === "function") observeReveals();
       });
     });
 
