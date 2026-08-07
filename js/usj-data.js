@@ -4,6 +4,7 @@
 const USJ_PLAN = {
   date: "Ваш визит: 15 сентября 2026 · вт",
   audited: "2026-08-07",
+  truthNote: "HHN 11 сен–8 ноя 2026 (офиц. USJ). Spider-Man закрыт 22.01.2024. Villain-Con открыт 11.07.2025. Маршрут без Flying Dinosaur.",
 
   idea: {
     title: "Справочник + один маршрут без Flying Dinosaur",
@@ -193,7 +194,7 @@ const USJ_PLAN = {
       blurb: "Жёлтая зона Illumination. Рядом удобно стыковать Express Minion Mayhem и шутер.",
       attractions: [
         { name: "Despicable Me Minion Mayhem", kind: "ride", thrill: 2, yourExpress: true, tip: "Симулятор 3D. В вашем Express Pass 4." },
-        { name: "Villain-Con Minion Blast", kind: "ride", thrill: 1, tip: "Интерактивный шутер (на месте Backdraft). В гидах 2025–26 также как Minion Mayhem Mission. Standby." },
+        { name: "Villain-Con Minion Blast", kind: "ride", thrill: 1, tip: "Офиц. Illumination's Villain-Con Minion Blast (яп. «хачамеча миссия»). Шутер на движущейся дорожке, открыт 2025 на месте Backdraft. Standby." },
         { name: "Freeze Ray Sliders", kind: "ride", thrill: 1, tip: "Уличный спиннер (Minion Mayhem Ice). Укачивание возможно." },
         { name: "Кафе / мерч Minions", kind: "food", thrill: 0, tip: "Быстрый обед рядом с райдами." }
       ]
@@ -244,7 +245,7 @@ const USJ_PLAN = {
       blurb: "Театры и сезонные horror/4D. Постоянных «больших» райдов после закрытия Spider-Man почти нет.",
       attractions: [
         { name: "Cinema 4-D (сезонные шоу)", kind: "show", thrill: 1, seasonal: true, tip: "Осенью 2026: Chainsaw Man The Chaos 4-D и др. Расписание в app." },
-        { name: "Stage 18 / 22 · HHN atractions", kind: "show", thrill: 4, seasonal: true, tip: "Resident Evil, Lights Out, Factory of Fear, Witches… — сезонные, часто Timed Entry и возрастной ценз." },
+        { name: "Stage 18 / 22 · HHN attractions", kind: "show", thrill: 4, seasonal: true, tip: "Resident Evil, Lights Out, Factory of Fear, Witches… — сезонные, часто Timed Entry и возрастной ценз." },
         { name: "Gramercy Park · HHN Academy", kind: "show", thrill: 2, seasonal: true, tip: "Юбилейное horror-шоу улицы/сцены в сезон HHN." }
       ]
     },

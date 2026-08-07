@@ -27,6 +27,10 @@
 
   function loadZone() {
     const params = new URLSearchParams(location.search);
+    const hash = (location.hash || "").replace(/^#/, "");
+    // Старые закладки #park → все зоны
+    if (hash === "park" && !params.get("zone") && !params.get("z")) return "all";
+    if (hash === "events" && !params.get("zone") && !params.get("z")) return "events";
     const q = params.get("zone") || params.get("z");
     if (q && isValid(q)) return q;
     try {
@@ -44,7 +48,8 @@
     const url = new URL(location.href);
     url.searchParams.set("zone", key);
     url.searchParams.delete("plan");
-    history.replaceState(null, "", url.pathname + url.search + (key === "route" ? "#route" : "#park"));
+    const hash = key === "events" ? "events" : key === "all" ? "zones" : key === "route" ? "route" : "route";
+    history.replaceState(null, "", url.pathname + url.search + "#" + hash);
   }
 
   function thrillDots(n) {
