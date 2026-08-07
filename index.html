@@ -18,7 +18,7 @@
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
 
-  <link rel="stylesheet" href="css/styles.css?v=42">
+  <link rel="stylesheet" href="css/styles.css?v=43">
 </head>
 <body class="ios-feel">
 
@@ -30,7 +30,7 @@
       <div class="hero__sun"></div>
     </div>
     <div class="hero__content">
-      <p class="hero__eyebrow">Alexander & Rita · версия 26</p>
+      <p class="hero__eyebrow">Alexander & Rita · версия 27</p>
       <h1 class="hero__title">Япония <span>2026</span></h1>
       <p class="hero__subtitle">Осака · Кансай · 9–25 сентября</p>
       <div class="hero__meta">
@@ -52,6 +52,7 @@
         <a href="#packing">Чек-лист</a>
         <a href="#budget">Деньги</a>
         <a href="#food">Еда</a>
+        <a href="#usj">USJ</a>
         <a href="tracker.html">Трекер</a>
         <a href="#route">Маршрут</a>
         <a href="#home">Дом</a>
@@ -130,6 +131,19 @@
       </button>
       <div class="fold__panel" hidden>
         <div id="foodBody"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="usj" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">USJ · маршруты</span>
+          <span class="fold__sub">15 сен · Express Pass 4 · несколько сценариев.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div id="usjBody"></div>
       </div>
     </section>
 
@@ -297,20 +311,21 @@
     <p class="gallery-view__cap" id="galleryCap"></p>
   </div>
 
-  <script src="js/data.js?v=42"></script>
-  <script src="js/food-data.js?v=42"></script>
-  <script src="js/photos.js?v=42"></script>
-  <script src="js/app.js?v=42"></script>
+  <script src="js/data.js?v=43"></script>
+  <script src="js/food-data.js?v=43"></script>
+  <script src="js/usj-data.js?v=43"></script>
+  <script src="js/photos.js?v=43"></script>
+  <script src="js/app.js?v=43"></script>
   <script>
     (function () {
-      var VER = "42";
+      var VER = "43";
 
       async function clearOldCaches() {
         try {
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v42"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v43"
               ? caches.delete(k)
               : Promise.resolve();
           }));

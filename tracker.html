@@ -17,8 +17,8 @@
   <meta name="apple-mobile-web-app-title" content="Трекер 2026">
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
-  <link rel="stylesheet" href="css/styles.css?v=42">
-  <link rel="stylesheet" href="css/tracker.css?v=42">
+  <link rel="stylesheet" href="css/styles.css?v=43">
+  <link rel="stylesheet" href="css/tracker.css?v=43">
 </head>
 <body class="ios-feel tracker-page">
 
@@ -28,7 +28,7 @@
       <div class="hero__sun"></div>
     </div>
     <div class="hero__content">
-      <p class="hero__eyebrow">Alexander & Rita · трекер · версия 26</p>
+      <p class="hero__eyebrow">Alexander & Rita · трекер · версия 27</p>
       <h1 class="hero__title">Трекер <span>2026</span></h1>
       <p class="hero__subtitle">Дни · бюджет после обмена в KIX · Кансай</p>
       <div class="hero__meta">
@@ -205,11 +205,11 @@
     </a>
   </nav>
 
-  <script src="js/tracker-data.js?v=42"></script>
-  <script src="js/tracker.js?v=42"></script>
+  <script src="js/tracker-data.js?v=43"></script>
+  <script src="js/tracker.js?v=43"></script>
   <script>
     (function () {
-      var VER = "42";
+      var VER = "43";
 
       function initFolds() {
         document.querySelectorAll(".fold").forEach(function (fold) {
@@ -230,7 +230,7 @@
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v42"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v43"
               ? caches.delete(k)
               : Promise.resolve();
           }));
