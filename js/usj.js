@@ -132,6 +132,11 @@
         <div class="usj-express__title">Не в этом Express</div>
         <ul>${pass.notIncluded.map((x) => `<li>${x}</li>`).join("")}</ul>
       </div>
+      ${pass.gone && pass.gone.length ? `
+      <div class="usj-not usj-not--gone">
+        <div class="usj-express__title">Закрыто навсегда — не ищите</div>
+        <ul>${pass.gone.map((x) => `<li>${x}</li>`).join("")}</ul>
+      </div>` : ""}
     `;
   }
 
