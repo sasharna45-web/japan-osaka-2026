@@ -105,20 +105,42 @@
     }
   }
 
+  function previewText(text, max = 90) {
+    const t = String(text || "").trim();
+    if (t.length <= max) return t;
+    return t.slice(0, max - 1).trim() + "…";
+  }
+
+  function moreList(more, tip) {
+    const items = (more && more.length) ? more : (tip ? [tip] : []);
+    if (!items.length) return "";
+    return `<ul class="usj-tap__more">${items.map((x) => `<li>${x}</li>`).join("")}</ul>`;
+  }
+
   function attrCard(a) {
     const badges = [];
     if (a.yourExpress) badges.push('<span class="usj-badge usj-badge--express">ваш Express</span>');
     if (a.seasonal) badges.push('<span class="usj-badge usj-badge--season">сезон</span>');
+    const preview = previewText(a.tip || (a.more && a.more[0]) || "");
     return `
-      <article class="usj-attr">
-        <div class="usj-attr__top">
-          <span class="usj-attr__kind">${KIND[a.kind] || a.kind}</span>
-          ${a.kind === "ride" || a.thrill ? `<span class="usj-attr__thrill" title="Жёсткость">${thrillDots(a.thrill)}</span>` : ""}
+      <button type="button" class="usj-tap usj-attr" aria-expanded="false">
+        <div class="usj-tap__bar">
+          <div class="usj-tap__main">
+            <div class="usj-attr__top">
+              <span class="usj-attr__kind">${KIND[a.kind] || a.kind}</span>
+              ${a.kind === "ride" || a.thrill != null ? `<span class="usj-attr__thrill" title="Жёсткость">${thrillDots(a.thrill)}</span>` : ""}
+            </div>
+            <h3 class="usj-attr__name">${a.name}</h3>
+            <div class="usj-attr__badges">${badges.join("")}</div>
+            <p class="usj-tap__preview">${preview}</p>
+          </div>
+          <span class="usj-tap__chev" aria-hidden="true">▾</span>
         </div>
-        <h3 class="usj-attr__name">${a.name}</h3>
-        <div class="usj-attr__badges">${badges.join("")}</div>
-        <p class="usj-attr__tip">${a.tip || ""}</p>
-      </article>
+        <div class="usj-tap__panel" hidden>
+          ${a.tip && a.more ? `<p class="usj-tap__lead">${a.tip}</p>` : ""}
+          ${moreList(a.more, a.tip)}
+        </div>
+      </button>
     `;
   }
 
@@ -146,13 +168,23 @@
       <section class="usj-events-panel">
         <h2 class="usj-zone__name">${ev.title}</h2>
         <p class="usj-zone__blurb">${ev.lead}</p>
+        <p class="usj-tap-hint">Нажмите плашку — откроется подробное описание.</p>
         <div class="usj-guide-cards">
           ${(ev.items || []).map((e) => `
-            <article class="usj-guide-card">
-              <div class="usj-guide-card__when">${e.when} · ${e.kind}</div>
-              <h3 class="usj-guide-card__name">${e.name}</h3>
-              <p class="usj-guide-card__what">${e.tip}</p>
-            </article>
+            <button type="button" class="usj-tap usj-guide-card" aria-expanded="false">
+              <div class="usj-tap__bar">
+                <div class="usj-tap__main">
+                  <div class="usj-guide-card__when">${e.when} · ${e.kind}</div>
+                  <h3 class="usj-guide-card__name">${e.name}</h3>
+                  <p class="usj-tap__preview">${previewText(e.tip)}</p>
+                </div>
+                <span class="usj-tap__chev" aria-hidden="true">▾</span>
+              </div>
+              <div class="usj-tap__panel" hidden>
+                ${e.tip ? `<p class="usj-tap__lead">${e.tip}</p>` : ""}
+                ${moreList(e.more, e.tip)}
+              </div>
+            </button>
           `).join("")}
         </div>
       </section>
@@ -168,15 +200,24 @@
         <h2 class="usj-tile__title">${r.title}</h2>
         <p class="usj-tile__best">${r.bestFor}</p>
         ${r.note ? `<p class="usj-tile__focus">${r.note}</p>` : ""}
+        <p class="usj-tap-hint">Нажмите шаг — откроются детали.</p>
       </header>
       <ol class="usj-timeline">
         ${(r.timeline || []).map((step) => `
-          <li class="usj-step">
-            <div class="usj-step__t">${step.t}</div>
-            <div class="usj-step__body">
-              <div class="usj-step__what">${step.what}</div>
-              <div class="usj-step__detail">${step.detail}</div>
-            </div>
+          <li>
+            <button type="button" class="usj-tap usj-step" aria-expanded="false">
+              <div class="usj-tap__bar">
+                <div class="usj-step__t">${step.t}</div>
+                <div class="usj-tap__main">
+                  <div class="usj-step__what">${step.what}</div>
+                  <p class="usj-tap__preview">${previewText(step.detail, 70)}</p>
+                </div>
+                <span class="usj-tap__chev" aria-hidden="true">▾</span>
+              </div>
+              <div class="usj-tap__panel" hidden>
+                <p class="usj-step__detail">${step.detail}</p>
+              </div>
+            </button>
           </li>
         `).join("")}
       </ol>
@@ -259,16 +300,43 @@
     const g = USJ_PLAN.foodGuide;
     wrap.innerHTML = `
       <p class="usj-guide__lead">${g.lead}</p>
+      <p class="usj-tap-hint">Нажмите плашку — подробности.</p>
       <div class="usj-guide-cards">
         ${(g.spots || []).map((s) => `
-          <article class="usj-guide-card">
-            <div class="usj-guide-card__when">${s.when}</div>
-            <h3 class="usj-guide-card__name">${s.name}</h3>
-            <p class="usj-guide-card__what">${s.what}${s.tip ? " · " + s.tip : ""}</p>
-          </article>
+          <button type="button" class="usj-tap usj-guide-card" aria-expanded="false">
+            <div class="usj-tap__bar">
+              <div class="usj-tap__main">
+                <div class="usj-guide-card__when">${s.when}</div>
+                <h3 class="usj-guide-card__name">${s.name}</h3>
+                <p class="usj-tap__preview">${previewText(s.what)}</p>
+              </div>
+              <span class="usj-tap__chev" aria-hidden="true">▾</span>
+            </div>
+            <div class="usj-tap__panel" hidden>
+              <p class="usj-tap__lead">${s.what}</p>
+              ${s.tip ? `<ul class="usj-tap__more"><li>${s.tip}</li></ul>` : ""}
+            </div>
+          </button>
         `).join("")}
       </div>
     `;
+    bindTapCards(wrap);
+  }
+
+  function bindTapCards(root) {
+    const scope = root || document;
+    scope.querySelectorAll(".usj-tap").forEach((btn) => {
+      if (btn.dataset.tapReady) return;
+      btn.dataset.tapReady = "1";
+      btn.addEventListener("click", () => {
+        const open = btn.getAttribute("aria-expanded") === "true";
+        const next = !open;
+        btn.setAttribute("aria-expanded", next ? "true" : "false");
+        btn.classList.toggle("is-open", next);
+        const panel = btn.querySelector(".usj-tap__panel");
+        if (panel) panel.hidden = !next;
+      });
+    });
   }
 
   function setupFolds() {
@@ -338,6 +406,7 @@
     renderChips();
     renderPark();
     updateArrows();
+    bindTapCards($("#usjTile"));
   }
 
   function init() {
