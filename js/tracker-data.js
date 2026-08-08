@@ -109,12 +109,13 @@ const TRACKER = {
     },
     {
       n: 8, iso: "2026-09-16", date: "16 сентября", weekday: "Ср",
-      title: "Восстановление + Kuromon + Capcom",
-      goal: "Kuromon ~12:30 · Capcom ~17:00",
-      soft: 16000,
+      title: "Восстановление · Kuromon + Solaniwa",
+      goal: "Kuromon ~12:30 · Solaniwa private · Capcom по силам",
+      soft: 22000,
       places: [
         { id: "d8-kuromon", name: "Kuromon Ichiba", emoji: "🐟", time: "~12:30" },
-        { id: "d8-capcom", name: "Capcom Store Umeda", emoji: "🎮", time: "~17:00" }
+        { id: "d8-solaniwa", name: "Solaniwa · private bath", emoji: "♨️", time: "~15:00", est: 16000, estNote: "private ~8 800 + вход ×2 + налог · будни без онлайн-предоплаты" },
+        { id: "d8-capcom", name: "Capcom Store Umeda (опц.)", emoji: "🎮", time: "~18:00+" }
       ]
     },
     {

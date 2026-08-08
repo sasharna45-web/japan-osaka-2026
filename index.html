@@ -30,7 +30,7 @@
       <div class="hero__sun"></div>
     </div>
     <div class="hero__content">
-      <p class="hero__eyebrow">Alexander & Rita · версия 32</p>
+      <p class="hero__eyebrow">Alexander & Rita · версия 33</p>
       <h1 class="hero__title">Япония <span>2026</span></h1>
       <p class="hero__subtitle">Осака · Кансай · 9–25 сентября</p>
       <div class="hero__meta">
@@ -303,7 +303,7 @@
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v57"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v58"
               ? caches.delete(k)
               : Promise.resolve();
           }));
