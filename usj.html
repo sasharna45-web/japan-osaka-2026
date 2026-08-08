@@ -139,7 +139,7 @@
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v57"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v58"
               ? caches.delete(k)
               : Promise.resolve();
           }));
