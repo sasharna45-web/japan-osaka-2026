@@ -3,7 +3,7 @@
  * Деньги: всего $3225. В трекере считаем РАБОЧИЕ ЙЕНЫ после обмена
  * ($2825 → ≈441–452k ¥ при ~156–160). Резерв $400 долларами — отдельно.
  * Уже оплачено отдельно: жильё, самолёты, USJ, Umeda Sky, Harukas.
- * Осакский замок — на месте (~600 ¥ × 2).
+ * Осакский замок — башня 1 200 ¥ × 2 (WEB/QR).
  */
 
 const TRACKER = {
@@ -45,7 +45,7 @@ const TRACKER = {
     {
       n: 2, iso: "2026-09-10", date: "10 сентября", weekday: "Чт",
       title: "Киото №1 — классика",
-      goal: "Тории, старый Киото, обмен у вокзала, Nintendo",
+      goal: "Тории, старый Киото, Nintendo (обмен гибко)",
       soft: 20000,
       places: [
         { id: "d2-inari", name: "Fushimi Inari", emoji: "⛩️", time: "рано", est: 0, estNote: "бесплатно" },
@@ -71,7 +71,7 @@ const TRACKER = {
       goal: "Замок утром, игровой район днём",
       soft: 18000,
       places: [
-        { id: "d4-castle", name: "Осакский замок", emoji: "🏯", time: "~09:00", est: 1200, estNote: "~600 ¥ × 2 · на месте" },
+        { id: "d4-castle", name: "Осакский замок", emoji: "🏯", time: "~09:00", est: 2400, estNote: "1 200 ¥ × 2 · WEB/QR" },
         { id: "d4-denden", name: "Den Den Town", emoji: "🎮", time: "день" },
         { id: "d4-potato", name: "Super Potato Osaka", emoji: "🕹️" },
         { id: "d4-shin", name: "Shinsekai + Tsutenkaku", emoji: "🗼", time: "вечер" }
@@ -131,18 +131,17 @@ const TRACKER = {
     },
     {
       n: 10, iso: "2026-09-18", date: "18 сентября", weekday: "Пт",
-      title: "Кобе",
-      goal: "Обед Steakland + порт",
-      soft: 28000,
+      title: "Химэдзи",
+      goal: "Замок и сад · до Silver Week",
+      soft: 22000,
       places: [
-        { id: "d10-beef", name: "Steakland Kobe (обед)", emoji: "🥩", time: "~12:30", est: 16000, estNote: "обеденный сет ориентир ≈ 6–10 тыс ¥/чел · без обязательной брони" },
-        { id: "d10-harbor", name: "Harborland + Kobe Tower", emoji: "⚓", time: "~14:30" }
+        { id: "d10-castle", name: "Замок Химэдзи + сад Koko-en", emoji: "🦢", time: "~10:00", est: 5200, estNote: "комбо 2 600 ¥ × 2 (с 2026-03-01) · Shirasagi QR" }
       ]
     },
     {
       n: 11, iso: "2026-09-19", date: "19 сентября", weekday: "Сб",
       title: "Hard Off Yao + Умеда",
-      goal: "Шопинг и каваий",
+      goal: "Шопинг и каваий · старт Silver Week",
       soft: 25000,
       places: [
         { id: "d11-hardoff", name: "Hard Off Yao", emoji: "💿", time: "~10:30" },
@@ -154,11 +153,12 @@ const TRACKER = {
     },
     {
       n: 12, iso: "2026-09-20", date: "20 сентября", weekday: "Вс",
-      title: "Химэдзи",
-      goal: "Замок и сад",
-      soft: 22000,
+      title: "Кобе",
+      goal: "Обед Steakland + порт",
+      soft: 28000,
       places: [
-        { id: "d12-castle", name: "Замок Химэдзи + сад Koko-en", emoji: "🦢", time: "~10:00", est: 5200, estNote: "комбо 2 600 ¥ × 2 (с 2026-03-01)" }
+        { id: "d12-beef", name: "Steakland Kobe (обед)", emoji: "🥩", time: "~12:30", est: 16000, estNote: "обеденный сет ориентир ≈ 6–10 тыс ¥/чел · без обязательной брони" },
+        { id: "d12-harbor", name: "Harborland + Kobe Tower", emoji: "⚓", time: "~14:30" }
       ]
     },
     {
@@ -223,13 +223,13 @@ const TRACKER = {
         title: "Авадзи · бесплатный шаттл (западное побережье)",
         facts: [
           "Бесплатный shuttle между Awaji IC / Iwaya Port / Nijigen no Mori / Hello Kitty Smile и др. остановками западного побережья.",
-          "21 сент 2026 — понедельник → смотреть расписание Weekdays (не weekend/holiday).",
+          "21 сент 2026 — Respect for the Aged Day (праздник) + Silver Week → смотреть holiday / weekend PDF, не обычный weekday.",
           "Последнее опубликованное weekday-расписание (поправка 2026.4.1): рейсы примерно с ~09:20 до ≈20:00; интервал днём около 20–30 мин; между Nijigen и Hello Kitty Smile — короткий перегон (несколько минут).",
-          "Отдельного PDF именно на 21.09.2026 нет — ближе к дате сверьте weekday timetable на сайте. Если попадёт японский праздник — тогда holiday PDF."
+          "Ближе к дате сверьте holiday timetable на сайте Awaji West Coast."
         ],
         source: "Awaji Island West Coast — Access Free Shuttle Bus",
         url: "https://en.awajishima-resort.com/access_freebus/",
-        asOf: "расписание от 2026-04-01 (weekday PDF); 21.09.2026 = пн"
+        asOf: "расписание от 2026-04-01; 21.09.2026 = праздник Silver Week"
       },
       {
         id: "awaji-bus",
@@ -260,7 +260,8 @@ const TRACKER = {
         id: "tickets",
         title: "Входы · цены и часы",
         facts: [
-          "Химэдзи + Koko-en комбо: 2 600 ¥ взрослый (с 1 марта 2026); дети до 18 бесплатно. Часы обычно 9:00–17:00 (замок last entry −1 ч).",
+          "Химэдзи + Koko-en комбо: 2 600 ¥ взрослый (с 1 марта 2026); дети до 18 бесплатно. Часы обычно 9:00–17:00 (замок last entry −1 ч). Цифровой билет: himejicastle-ticket.jp (Shirasagi, слоты 30 мин).",
+          "Осакский замок (башня): взрослый 1 200 ¥ (с 1 апр. 2025); 9:00–18:00, вход до 17:30. WEB/QR рекомендован в уикенд.",
           "Kaiyukan: динамическая цена взр. 2 700–3 500 ¥; обычно 10:00–20:00, last entry 19:00. На 11.09 смотрите календарь на kaiyukan.com.",
           "Tempozan Ferris Wheel: ≈ 1 000 ¥/чел (офиц. сайт), часто 10:00–22:00 (продажи до −15 мин).",
           "Fushimi Inari: бесплатно, территория открыта круглосуточно.",
@@ -280,12 +281,13 @@ const TRACKER = {
         id: "events",
         title: "Фестивали / тайфуны / толпы",
         facts: [
-          "Kishiwada Danjiri Matsuri: 18–20 сентября 2026 (пробный 18-го, основные 19–20). Очень людно в Кишиваде (юг Осаки) — на ваш маршрут Hard Off Yao / Умеда влияет слабо, но поезда Nankai/южные линии могут быть плотнее.",
+          "Silver Week 2026: 19–23 сентября (сб–ср) — Respect for the Aged Day 21-го, Citizens' Holiday 22-го, Autumnal Equinox 23-го. Толпы на дальних выездах и в ТЦ. Химэдзи специально на пт 18-го (до каникул); Кобе на вс 20-го.",
+          "Kishiwada Danjiri Matsuri: 18–20 сентября 2026 (пробный 18-го, основные 19–20). Очень людно в Кишиваде (юг Осаки) — на Hard Off Yao / Умеда влияет слабо, но поезда Nankai/южные линии могут быть плотнее.",
           "Сентябрь — пик сезона тайфунов в Японии. Кансай умеренный риск: возможны дожди, задержки JR/автобусов/паромов на 1–2 дня. Держите зонты и запасной «крытый» день.",
-          "Крупных паломничеств, закрывающих ваши объекты на 9–25 сент, не видно. Перед Авадзи/Химэдзи сверьте JMA + сайты объектов."
+          "Перед Авадзи/Химэдзи сверьте JMA + сайты объектов."
         ],
-        source: "Fest in Japan / Timeout Osaka / JMA typhoon season notes",
-        url: "https://festinjapan.jp/festivals/kishiwada-danjiri",
+        source: "Nippon.com holidays / Fest in Japan / JMA",
+        url: "https://www.nippon.com/en/japan-data/h02302/",
         asOf: "2026-08"
       },
       {
@@ -295,7 +297,7 @@ const TRACKER = {
           "Рамен на человека: обычно 900–1 500 ¥ (простая миска); с топпингами до ≈ 1 800 ¥.",
           "Кайтен-суши (обед/ужин): типично 1 500–3 000 ¥/чел; плотный заход 3 000–4 000 ¥.",
           "Тэппаньяки с кобе-говядиной среднего уровня: ужин ≈ 8 000–15 000 ¥/чел → на двоих ≈ 16 000–30 000 ¥ (без алкоголя). Курсы «премиум» легко уходят за 20 000+/чел.",
-          "Kobe beef (обед Steakland ~12:30) — одна «дорогая» статья: soft дня 28k уже с запасом; если выйдете выше — из долларового резерва."
+          "Kobe beef (обед Steakland ~12:30, день 20 сен) — одна «дорогая» статья: soft дня 28k уже с запасом; если выйдете выше — из долларового резерва."
         ],
         source: "Tabelog bands / типичные цены Кансая 2025–2026",
         url: "https://tabelog.com/",
