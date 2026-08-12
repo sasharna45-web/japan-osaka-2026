@@ -16,12 +16,44 @@
 }
 ```
 
-## Security Rules
+## Security Rules (обязательно Publish)
 
-В [Firebase Console](https://console.firebase.google.com/) → Realtime Database → Rules  
-вставьте содержимое файла `database.rules.json` из корня репо и Publish.
+Сейчас без Publish база может быть в test-mode (открыта целиком). Агент GitHub **не может** записать rules без вашего логина в Firebase.
 
-Не оставляйте test-mode `.read/.write: true` на весь корень базы.
+### Вариант A — Console (30 сек)
+
+1. Откройте [Realtime Database → Rules](https://console.firebase.google.com/project/japan-travel-2026-53a24/database/japan-travel-2026-53a24-default-rtdb/rules)
+2. Замените всё на:
+
+```json
+{
+  "rules": {
+    "trips": {
+      "japan-osaka-2026": {
+        ".read": true,
+        ".write": true
+      },
+      "$other": {
+        ".read": false,
+        ".write": false
+      }
+    }
+  }
+}
+```
+
+3. **Publish**
+
+Проверка: запись в `trips/other-trip` должна дать Permission denied; в `trips/japan-osaka-2026` — ок.
+
+### Вариант B — CLI
+
+```bash
+firebase login
+firebase deploy --only database
+```
+
+(`firebase.json` + `.firebaserc` уже в репо.)
 
 ## Offline
 
