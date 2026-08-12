@@ -632,16 +632,58 @@
     });
   }
 
-  // ======================= ЧЕКЛИСТ ПОДГОТОВКИ =======================
-  const CL_KEY = "japan2026.checklist.v2";
-  const CL_SHOW_ALL_KEY = "japan2026.checklistShowAll.v1";
-  const PACK_SHOW_ALL_KEY = "japan2026.packingShowAll.v1";
-  const CL_DONE_DEFAULT = { abeno: true, cash: true, "esim-jp": true, "esim-cn": true }; // уже закрыто по факту
+  // ======================= СБОРЫ (единый PREP) =======================
+  const PREP_KEY = "japan2026.prep.v1";
+  const OLD_CL_KEY = "japan2026.checklist.v2";
+  const OLD_PACK_KEY = "japan2026.packing.ru-depart.v2";
+  const PREP_SHOW_ALL_KEY = "japan2026.prepShowAll.v1";
+  // Старый checklistShowAll / packingShowAll подхватим при миграции фильтра
+  const OLD_CL_SHOW_ALL = "japan2026.checklistShowAll.v1";
+  const OLD_PACK_SHOW_ALL = "japan2026.packingShowAll.v1";
+
+  /** Старые id чеклиста подготовки → канонические id в PREP */
+  const PREP_ID_ALIASES = {
+    abeno: "pk-tix-harukas",
+    "usj-tix": "pk-tix-usj",
+    "umeda-sky-tix": "pk-tix-umeda",
+    "flights-booked": "pk-tix-flights",
+    "esim-jp": "pk-esim-jp",
+    "esim-cn": "pk-esim-cn",
+    cash: "pk-cash-usd",
+    "alipay-install": "pk-alipay",
+    "wechat-pay": "pk-wechat",
+    "yunpay-card": "pk-yunpay",
+    "china-entry-qr": "pk-china-qr",
+    "alipay-topup": "pk-cny-topup",
+    insurance: "pk-insurance",
+    vjw: "pk-vjw",
+    "doc-flights": "pk-print-flights",
+    "doc-hotels": "pk-beijing-hotel", // также см. ниже pk-shanghai-hotel
+    "doc-airbnb": "pk-airbnb",
+    "doc-ins": "pk-insurance",
+    "doc-view": "pk-print-view",
+    "doc-usj": "pk-print-usj"
+  };
+
+  /** Дефолты «уже закрыто» из старого чеклиста — в канонических id */
+  const PREP_DONE_DEFAULT = {
+    "pk-tix-harukas": true,
+    "pk-cash-usd": true,
+    "pk-esim-jp": true,
+    "pk-esim-cn": true,
+    "pk-tix-usj": true,
+    "pk-tix-umeda": true,
+    "pk-tix-flights": true,
+    "pk-alipay": true,
+    "pk-wechat": true,
+    "pk-yunpay": true,
+    "pk-china-qr": true
+  };
 
   function loadShowAll(key) {
     try {
       const v = localStorage.getItem(key);
-      if (v === null) return false; // по умолчанию — только невыполненные
+      if (v === null) return false;
       return v === "1";
     } catch (e) {
       return false;
@@ -652,7 +694,6 @@
     try { localStorage.setItem(key, showAll ? "1" : "0"); } catch (e) {}
   }
 
-  /** Скрыть выполненные пункты/пустые группы (данные и галочки не трогаем). */
   function applyDoneVisibility(root, showAll) {
     if (!root) return;
     root.classList.toggle("cl-hide-done", !showAll);
@@ -675,7 +716,6 @@
 
   function syncShowAllBtn(btn, hint, showAll) {
     if (btn) {
-      // «Вкл» = режим фильтра (только оставшееся)
       btn.classList.toggle("is-on", !showAll);
       btn.setAttribute("aria-pressed", showAll ? "false" : "true");
       btn.textContent = showAll ? "Только оставшееся" : "Показать все";
@@ -698,65 +738,124 @@
     }
   }
 
-  function loadChecklistState() {
+  function readJsonKey(key) {
     try {
-      const raw = localStorage.getItem(CL_KEY);
-      if (raw) return JSON.parse(raw) || {};
-    } catch (e) {}
-    return { ...CL_DONE_DEFAULT };
-  }
-
-  function saveChecklistState() {
-    const ok = storageAvailable();
-    if (!ok) {
-      flashClSave("⚠️ Не сохраняется (режим инкогнито?)");
-      return false;
-    }
-    try {
-      localStorage.setItem(CL_KEY, JSON.stringify(clState));
-      flashClSave("✓ Сохранено на этом устройстве");
-      return true;
+      const raw = localStorage.getItem(key);
+      if (!raw) return null;
+      const v = JSON.parse(raw);
+      return v && typeof v === "object" ? v : null;
     } catch (e) {
-      flashClSave("⚠️ Ошибка сохранения");
+      return null;
+    }
+  }
+
+  function markTruthy(target, source) {
+    if (!source) return;
+    Object.keys(source).forEach((k) => {
+      if (source[k]) target[k] = true;
+    });
+  }
+
+  /** OR-слияние старых галочек → japan2026.prep.v1 (один раз). */
+  function migratePrepState() {
+    const existing = readJsonKey(PREP_KEY);
+    if (existing) return existing;
+
+    const state = {};
+    const oldPack = readJsonKey(OLD_PACK_KEY) || {};
+    const oldCl = readJsonKey(OLD_CL_KEY);
+
+    markTruthy(state, oldPack);
+
+    if (oldCl) {
+      Object.keys(oldCl).forEach((k) => {
+        if (!oldCl[k]) return;
+        state[k] = true;
+        const canon = PREP_ID_ALIASES[k];
+        if (canon) state[canon] = true;
+        if (k === "doc-hotels") {
+          state["pk-beijing-hotel"] = true;
+          state["pk-shanghai-hotel"] = true;
+        }
+      });
+    } else {
+      // Как старый loadChecklistState без ключа: дефолты «уже закрыто»
+      Object.assign(state, PREP_DONE_DEFAULT);
+    }
+
+    try { localStorage.setItem(PREP_KEY, JSON.stringify(state)); } catch (e) {}
+    return state;
+  }
+
+  function migratePrepShowAll() {
+    try {
+      if (localStorage.getItem(PREP_SHOW_ALL_KEY) !== null) {
+        return localStorage.getItem(PREP_SHOW_ALL_KEY) === "1";
+      }
+      const a = localStorage.getItem(OLD_PACK_SHOW_ALL);
+      const b = localStorage.getItem(OLD_CL_SHOW_ALL);
+      // если хоть один был «показать все» — сохраняем это
+      const showAll = a === "1" || b === "1";
+      localStorage.setItem(PREP_SHOW_ALL_KEY, showAll ? "1" : "0");
+      return showAll;
+    } catch (e) {
       return false;
     }
   }
 
-  let clSaveTimer = null;
-  function flashClSave(msg) {
-    const label = $("#clProgressLabel");
+  let prepState = migratePrepState();
+  let prepShowAll = migratePrepShowAll();
+
+  let prepSaveTimer = null;
+  function flashPrepSave(msg) {
+    const label = $("#packProgressLabel");
     if (!label) return;
     const base = label.dataset.base || label.textContent;
     label.dataset.base = base;
     label.textContent = msg;
-    clearTimeout(clSaveTimer);
-    clSaveTimer = setTimeout(() => {
+    clearTimeout(prepSaveTimer);
+    prepSaveTimer = setTimeout(() => {
       label.textContent = label.dataset.base || base;
     }, 1600);
   }
 
-  let clState = loadChecklistState();
-  let clShowAll = loadShowAll(CL_SHOW_ALL_KEY);
-  let packShowAll = loadShowAll(PACK_SHOW_ALL_KEY);
+  function savePrepState() {
+    if (!storageAvailable()) {
+      flashPrepSave("⚠️ Не сохраняется (режим инкогнито?)");
+      return false;
+    }
+    try {
+      localStorage.setItem(PREP_KEY, JSON.stringify(prepState));
+      flashPrepSave("✓ Сохранено на этом устройстве");
+      return true;
+    } catch (e) {
+      flashPrepSave("⚠️ Ошибка сохранения");
+      return false;
+    }
+  }
 
-  function collectClIds() {
+  function prepList() {
+    return typeof PREP !== "undefined" && Array.isArray(PREP) ? PREP : (typeof PACKING !== "undefined" ? PACKING : []);
+  }
+
+  function prepIds() {
     const ids = [];
-    CHECKLIST.forEach(g => g.items.forEach(it => {
-      if (it.sub && it.sub.length) it.sub.forEach(s => ids.push(s.id));
+    prepList().forEach((g) => g.items.forEach((it) => {
+      if (it.sub && it.sub.length) it.sub.forEach((s) => ids.push(s.id));
       else if (it.id) ids.push(it.id);
     }));
     return ids;
   }
 
-  function updateClProgress() {
-    const ids = collectClIds();
-    const done = ids.filter(id => clState[id]).length;
+  function updatePrepProgress() {
+    const ids = prepIds();
+    const done = ids.filter((id) => prepState[id]).length;
     const left = ids.length - done;
-    const pct = ids.length ? Math.round(done / ids.length * 100) : 0;
-    const bar = $("#clBarFill");
-    const label = $("#clProgressLabel");
-    const text = clShowAll
-      ? `${done} из ${ids.length} выполнено · ${pct}%`
+    const pct = ids.length ? Math.round((done / ids.length) * 100) : 0;
+    const bar = $("#packBarFill");
+    const label = $("#packProgressLabel");
+    const text = prepShowAll
+      ? `${done} из ${ids.length} · ${pct}%`
       : `Осталось ${left} · выполнено ${done} из ${ids.length}`;
     if (bar) bar.style.width = pct + "%";
     if (label) {
@@ -765,145 +864,38 @@
     }
   }
 
-  function makeCheckItem(id, text) {
+  function makePrepItem(id, text) {
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.className = "cl-item" + (clState[id] ? " done" : "");
-    btn.setAttribute("aria-pressed", clState[id] ? "true" : "false");
-    const box = el("span", "cl-box", clState[id] ? "✓" : "");
+    btn.className = "cl-item" + (prepState[id] ? " done" : "");
+    btn.setAttribute("aria-pressed", prepState[id] ? "true" : "false");
+    const box = el("span", "cl-box", prepState[id] ? "✓" : "");
     const txt = el("span", "cl-text", text);
-    btn.append(box, txt);
-
-    const toggle = () => {
-      const next = !clState[id];
-      clState[id] = next;
-      btn.classList.toggle("done", next);
-      btn.setAttribute("aria-pressed", next ? "true" : "false");
-      box.textContent = next ? "✓" : "";
-      updateClProgress();
-      saveChecklistState();
-      applyDoneVisibility($("#checklist-body"), clShowAll);
-    };
-
-    btn.addEventListener("click", toggle);
-    return btn;
-  }
-
-  function renderChecklist() {
-    const wrap = $("#checklist-body");
-    if (!wrap || typeof CHECKLIST === "undefined") return;
-    wrap.innerHTML = "";
-    CHECKLIST.forEach((g, gi) => {
-      const group = el("div", "cl-group fold-group");
-      const head = document.createElement("button");
-      head.type = "button";
-      head.className = `cl-step cl-step--${g.tone} fold-group__btn`;
-      head.innerHTML = `<span class="cl-step__tag">${g.step}</span><span class="fold-group__label">${g.title}</span><span class="fold-group__chevron">▾</span>`;
-      const list = el("div", "cl-list fold-group__panel");
-      list.hidden = true;
-      g.items.forEach(it => {
-        if (it.sub && it.sub.length) {
-          list.appendChild(el("div", "cl-subhead", it.text));
-          const subwrap = el("div", "cl-sub");
-          it.sub.forEach(s => subwrap.appendChild(makeCheckItem(s.id, s.text)));
-          list.appendChild(subwrap);
-        } else if (it.id) {
-          list.appendChild(makeCheckItem(it.id, it.text));
-        }
-      });
-      bindGroupFold(group, head, list, `cl-${gi}`, gi === 0);
-      group.append(head, list);
-      wrap.appendChild(group);
-    });
-    updateClProgress();
-    applyDoneVisibility(wrap, clShowAll);
-    syncShowAllBtn($("#clShowAllBtn"), $("#clShowAllHint"), clShowAll);
-    if (!storageAvailable()) {
-      flashClSave("⚠️ Галочки не сохранятся — откройте не в инкогнито");
-    }
-  }
-
-  function setupChecklistShowAll() {
-    const btn = $("#clShowAllBtn");
-    if (!btn || btn.dataset.ready) return;
-    btn.dataset.ready = "1";
-    syncShowAllBtn(btn, $("#clShowAllHint"), clShowAll);
-    btn.addEventListener("click", () => {
-      clShowAll = !clShowAll;
-      saveShowAll(CL_SHOW_ALL_KEY, clShowAll);
-      syncShowAllBtn(btn, $("#clShowAllHint"), clShowAll);
-      applyDoneVisibility($("#checklist-body"), clShowAll);
-      updateClProgress();
-    });
-  }
-
-  // ======================= ЧЕК-ЛИСТ ПЕРЕД ПОЕЗДКОЙ =======================
-  const PACK_KEY = "japan2026.packing.ru-depart.v2";
-  let packState = {};
-  try { packState = JSON.parse(localStorage.getItem(PACK_KEY)) || {}; } catch (e) { packState = {}; }
-
-  function savePackState() {
-    try { localStorage.setItem(PACK_KEY, JSON.stringify(packState)); } catch (e) {}
-  }
-
-  function packingIds() {
-    const ids = [];
-    if (typeof PACKING === "undefined") return ids;
-    PACKING.forEach(g => g.items.forEach(it => {
-      if (it.sub && it.sub.length) it.sub.forEach(s => ids.push(s.id));
-      else if (it.id) ids.push(it.id);
-    }));
-    return ids;
-  }
-
-  function updatePackProgress() {
-    const ids = packingIds();
-    const done = ids.filter(id => packState[id]).length;
-    const left = ids.length - done;
-    const pct = ids.length ? Math.round(done / ids.length * 100) : 0;
-    const bar = $("#packBarFill");
-    const label = $("#packProgressLabel");
-    if (bar) bar.style.width = pct + "%";
-    if (label) {
-      label.textContent = packShowAll
-        ? `${done} из ${ids.length} · ${pct}%`
-        : `Осталось ${left} · выполнено ${done} из ${ids.length}`;
-    }
-  }
-
-  function makePackItem(id, text) {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "cl-item" + (packState[id] ? " done" : "");
-    const box = document.createElement("span");
-    box.className = "cl-box";
-    box.textContent = packState[id] ? "✓" : "";
-    const txt = document.createElement("span");
-    txt.className = "cl-text";
-    txt.textContent = text;
     btn.append(box, txt);
     btn.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
-      packState[id] = !packState[id];
-      btn.classList.toggle("done", !!packState[id]);
-      box.textContent = packState[id] ? "✓" : "";
-      savePackState();
-      updatePackProgress();
-      applyDoneVisibility($("#packingBody"), packShowAll);
+      prepState[id] = !prepState[id];
+      btn.classList.toggle("done", !!prepState[id]);
+      btn.setAttribute("aria-pressed", prepState[id] ? "true" : "false");
+      box.textContent = prepState[id] ? "✓" : "";
+      savePrepState();
+      updatePrepProgress();
+      applyDoneVisibility($("#packingBody"), prepShowAll);
     });
     return btn;
   }
 
-  function renderPacking() {
+  function renderPrep() {
     const wrap = $("#packingBody");
     if (!wrap) return;
-    if (typeof PACKING === "undefined") {
+    const listData = prepList();
+    if (!listData.length) {
       wrap.innerHTML = `<p class="qr-empty">Список не загрузился. Обновите страницу или откройте сайт заново.</p>`;
       return;
     }
     wrap.innerHTML = "";
-    PACKING.forEach((g, gi) => {
+    listData.forEach((g, gi) => {
       const group = el("div", "pack-group fold-group");
       const head = document.createElement("button");
       head.type = "button";
@@ -911,36 +903,45 @@
       head.innerHTML = `<span class="fold-group__label">${g.title}</span><span class="fold-group__chevron">▾</span>`;
       const list = el("div", "pack-group__list fold-group__panel");
       list.hidden = true;
-      g.items.forEach(it => {
+      g.items.forEach((it) => {
         if (it.sub && it.sub.length) {
           list.appendChild(el("div", "cl-subhead", it.text));
           const subwrap = el("div", "cl-sub");
-          it.sub.forEach(s => subwrap.appendChild(makePackItem(s.id, s.text)));
+          it.sub.forEach((s) => subwrap.appendChild(makePrepItem(s.id, s.text)));
           list.appendChild(subwrap);
         } else if (it.id) {
-          list.appendChild(makePackItem(it.id, it.text));
+          list.appendChild(makePrepItem(it.id, it.text));
         }
       });
-      bindGroupFold(group, head, list, `pack-${g.id || gi}`, false);
+      // Билеты всегда свёрнуты; docs/digital — открыты по defaultOpen
+      if (g.id === "tickets") {
+        groupFoldState["prep-tickets"] = false;
+        try { localStorage.setItem(GROUP_FOLD_KEY, JSON.stringify(groupFoldState)); } catch (e) {}
+      }
+      const openByDefault = g.id === "tickets" ? false : g.defaultOpen === true;
+      bindGroupFold(group, head, list, `prep-${g.id || gi}`, openByDefault);
       group.append(head, list);
       wrap.appendChild(group);
     });
-    updatePackProgress();
-    applyDoneVisibility(wrap, packShowAll);
-    syncShowAllBtn($("#packShowAllBtn"), $("#packShowAllHint"), packShowAll);
+    updatePrepProgress();
+    applyDoneVisibility(wrap, prepShowAll);
+    syncShowAllBtn($("#packShowAllBtn"), $("#packShowAllHint"), prepShowAll);
+    if (!storageAvailable()) {
+      flashPrepSave("⚠️ Галочки не сохранятся — откройте не в инкогнито");
+    }
   }
 
-  function setupPackingShowAll() {
+  function setupPrepShowAll() {
     const btn = $("#packShowAllBtn");
     if (!btn || btn.dataset.ready) return;
     btn.dataset.ready = "1";
-    syncShowAllBtn(btn, $("#packShowAllHint"), packShowAll);
+    syncShowAllBtn(btn, $("#packShowAllHint"), prepShowAll);
     btn.addEventListener("click", () => {
-      packShowAll = !packShowAll;
-      saveShowAll(PACK_SHOW_ALL_KEY, packShowAll);
-      syncShowAllBtn(btn, $("#packShowAllHint"), packShowAll);
-      applyDoneVisibility($("#packingBody"), packShowAll);
-      updatePackProgress();
+      prepShowAll = !prepShowAll;
+      saveShowAll(PREP_SHOW_ALL_KEY, prepShowAll);
+      syncShowAllBtn(btn, $("#packShowAllHint"), prepShowAll);
+      applyDoneVisibility($("#packingBody"), prepShowAll);
+      updatePrepProgress();
     });
   }
 
@@ -1006,7 +1007,8 @@
     });
 
     const hash = (location.hash || "").replace("#", "");
-    if (hash) openSection(hash);
+    if (hash === "checklist") openSection("packing");
+    else if (hash) openSection(hash);
   }
 
   /**
@@ -1016,8 +1018,7 @@
   const PHASE_SOFT_KEY = "japan2026.phaseSoft.v1";
   const PHASE_ARCHIVE = [
     { id: "transit", label: "Архив · транзит уже пройден" },
-    { id: "packing", label: "Архив · сборы до вылета" },
-    { id: "checklist", label: "Архив · подготовка до поездки" }
+    { id: "packing", label: "Архив · сборы до вылета" }
   ];
 
   function applyPhaseLayout() {
@@ -1310,10 +1311,9 @@
         html += `<div class="next-day__phase">Фаза транзита (Пекин → KIX). Откройте блок «Через Пекин» ниже или в меню.</div>
           <p class="next-day__phase-actions"><button type="button" class="link-btn" data-open-sec="transit">Открыть транзит</button></p>`;
       } else if (curUtc < transitStart) {
-        html += `<div class="next-day__phase">Пока дома: сборы и чек-лист важнее маршрута по дням. Маршрут — шпаргалка на потом.</div>
+        html += `<div class="next-day__phase">Пока дома: сборы важнее маршрута по дням. Маршрут — шпаргалка на потом.</div>
           <p class="next-day__phase-actions">
-            <button type="button" class="link-btn" data-open-sec="packing">Чек-лист сборов</button>
-            <button type="button" class="link-btn" data-open-sec="checklist">Подготовка</button>
+            <button type="button" class="link-btn" data-open-sec="packing">Открыть сборы</button>
           </p>`;
       }
       html += nextDayCard("Старт · день 1", focus.todayIdx, "today");
@@ -1505,10 +1505,8 @@
     renderTimeline();
     setupTodayOnly();
     renderHomeSos();
-    renderChecklist();
-    setupChecklistShowAll();
-    renderPacking();
-    setupPackingShowAll();
+    renderPrep();
+    setupPrepShowAll();
     renderPhrases();
     renderTips();
     setupEdit();

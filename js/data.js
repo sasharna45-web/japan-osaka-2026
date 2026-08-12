@@ -963,138 +963,124 @@ const DAY_BRIEFS = {
 };
 
 /**
- * Чек-лист перед поездкой в Японию.
- * Галочки — localStorage на этом телефоне. Пункт может иметь sub: [{id,text}].
+ * Единый чек-лист сборов (бывшие PACKING + CHECKLIST).
+ * Галочки: japan2026.prep.v1 (миграция из checklist.v2 + packing.ru-depart.v2).
+ * id стабильные — старые ключи подтягиваются через алиасы в app.js.
  */
-const PACKING = [
+const PREP = [
   {
     id: "docs",
-    title: "📄 Документы",
+    title: "📄 Документы и распечатки",
+    defaultOpen: true,
     items: [
       { id: "pk-passports", text: "Загранпаспорта (оба)" },
-      { id: "pk-vjw", text: "Visit Japan Web (QR-код на телефоне + скриншот)" },
-      { id: "pk-flights", text: "Авиабилеты / посадочные талоны (в приложении + распечатка)" },
-      { id: "pk-airbnb", text: "Ваучер Airbnb и адрес квартиры" },
-      { id: "pk-beijing-hotel", text: "Ваучер отеля Пекин · Beijing Huiqiang (8–9 сент, транзит)" },
-      { id: "pk-shanghai-hotel", text: "Ваучер Elong Anyue у PVG (25–27 сент) · 2 номера" },
-      {
-        text: "Билеты:",
-        sub: [
-          { id: "pk-tix-harukas", text: "✅ Harukas 300 (11 сент · 2=1 Standard · подъём 17:00)" },
-          { id: "pk-tix-usj", text: "✅ USJ ×2 + Express Pass 4 Minions & Hollywood Dream (SNW 11:50)" },
-          { id: "pk-tix-umeda", text: "✅ Umeda Sky Kuchu Teien (22 сент)" }
-        ]
-      },
-      { id: "pk-insurance", text: "Страховка (фото полиса)" },
+      { id: "pk-vjw", text: "Visit Japan Web (QR на телефонах + скриншот)" },
       { id: "pk-pass-photo", text: "Фото паспортов в телефоне" },
-      { id: "pk-print-a4", text: "Все важные документы распечатаны на А4 (на всякий случай)" }
+      { id: "pk-airbnb", text: "Ваучер Airbnb и адрес квартиры" },
+      { id: "pk-beijing-hotel", text: "Ваучер отеля Пекин · Beijing Huiqiang (8–9 сент)" },
+      { id: "pk-shanghai-hotel", text: "Ваучер Elong Anyue у PVG (25–27 сент) · 2 номера" },
+      { id: "pk-flights", text: "Авиабилеты / посадочные (приложение + распечатка)" },
+      { id: "pk-insurance", text: "Страховка: фото полиса + номер ассистанса в телефоне" },
+      { id: "pk-print-a4", text: "Важные документы распечатаны на A4 (на всякий случай)" },
+      { id: "pk-print-flights", text: "Распечатать маршрутные квитанции всех авиабилетов" },
+      { id: "pk-print-view", text: "Распечатать билеты на смотровые (Harukas / Umeda)" },
+      { id: "pk-print-usj", text: "Распечатать USJ (Studio Pass + Express) — QR чётко" }
     ]
   },
   {
-    id: "money",
-    title: "💴 Деньги и связь",
+    id: "digital",
+    title: "📱 Цифровое (eSIM, PASMO, Alipay)",
+    defaultOpen: true,
     items: [
       { id: "pk-cash-usd", text: "Наличные доллары (новыми купюрами)" },
       { id: "pk-cards", text: "Банковские карты" },
-      { id: "pk-yen-kix", text: "Обменять часть денег на йены в KIX" },
+      { id: "pk-yen-kix", text: "Обменять часть денег на йены в KIX (по прилёте)" },
       { id: "pk-esim-jp", text: "Японский eSIM установлен (включить линию в KIX)" },
-      { id: "pk-esim-cn", text: "✅ Китайский eSIM куплен (включить в PVG 25 сент)" },
-      { id: "pk-alipay", text: "Alipay зарегистрирован (осталось пополнить юани)" },
+      { id: "pk-esim-cn", text: "Китайский eSIM куплен (включить в PVG 25 сент)" },
+      { id: "pk-alipay", text: "Alipay зарегистрирован" },
       { id: "pk-wechat", text: "WeChat Pay зарегистрирован" },
       { id: "pk-yunpay", text: "Карта РСХБ Юньпэй открыта" },
       { id: "pk-china-qr", text: "QR на Китай для въездов сделаны" },
       { id: "pk-cny-topup", text: "Пополнить юани (Alipay / Юньпэй) — 1000–1200 CNY" },
-      { id: "pk-icoca", text: "Mobile PASMO на обоих iPhone: пополнить ~15 000 ¥ после прилёта" }
-    ]
-  },
-  {
-    id: "tech",
-    title: "📱 Техника",
-    items: [
-      { id: "pk-phones", text: "Телефоны (оба)" },
-      { id: "pk-cases", text: "Чехлы" },
-      { id: "pk-tablet", text: "Планшет (если берёте)" },
-      { id: "pk-powerbank", text: "Пауэрбанк(и) — желательно два" },
-      { id: "pk-cables", text: "Кабели USB-C / Lightning" },
-      { id: "pk-charger", text: "Зарядное устройство" },
-      { id: "pk-adapter", text: "Переходник на японские розетки (тип A)" },
-      { id: "pk-headphones", text: "Наушники" },
+      { id: "alipay-rita", text: "Часть юаней на кошелёк Риты (раздельный QR в метро)" },
+      { id: "pk-icoca", text: "Mobile PASMO на обоих iPhone: пополнить ~15 000 ¥ после прилёта" },
       { id: "pk-guide-offline", text: "Гид и маршрут доступны офлайн" }
     ]
   },
   {
-    id: "clothes",
-    title: "👕 Одежда",
+    id: "luggage",
+    title: "🧳 Вещи в чемодан",
+    defaultOpen: false,
     items: [
       {
-        text: "Верх",
+        text: "Техника",
         sub: [
-          { id: "pk-tees", text: "5–6 футболок" },
-          { id: "pk-hoodie", text: "Лёгкая олимпийка или худи" },
-          { id: "pk-jacket", text: "Лёгкая куртка (на обратный путь через Владивосток)" }
+          { id: "pk-phones", text: "Телефоны (оба)" },
+          { id: "pk-cases", text: "Чехлы" },
+          { id: "pk-tablet", text: "Планшет (если берёте)" },
+          { id: "pk-powerbank", text: "Пауэрбанк(и) — желательно два" },
+          { id: "pk-cables", text: "Кабели USB-C / Lightning" },
+          { id: "pk-charger", text: "Зарядное устройство" },
+          { id: "pk-adapter", text: "Переходник на японские розетки (тип A)" },
+          { id: "pk-headphones", text: "Наушники" }
         ]
       },
       {
-        text: "Низ",
+        text: "Одежда · верх",
+        sub: [
+          { id: "pk-tees", text: "5–6 футболок" },
+          { id: "pk-hoodie", text: "Лёгкая олимпийка или худи" },
+          { id: "pk-jacket", text: "Лёгкая куртка (обратный путь через Владивосток)" }
+        ]
+      },
+      {
+        text: "Одежда · низ",
         sub: [
           { id: "pk-shorts", text: "2–3 пары шорт" },
           { id: "pk-pants", text: "Лёгкие длинные брюки или джинсы (1 шт)" }
         ]
       },
       {
-        text: "Обувь",
+        text: "Обувь и остальное",
         sub: [
           { id: "pk-sneakers", text: "Основные удобные кроссовки" },
-          { id: "pk-slippers", text: "Шлёпанцы (по желанию)" }
-        ]
-      },
-      {
-        text: "Остальное",
-        sub: [
+          { id: "pk-slippers", text: "Шлёпанцы (по желанию)" },
           { id: "pk-cap", text: "Кепка или панама" },
           { id: "pk-socks", text: "Носки (6–7 пар)" },
           { id: "pk-underwear", text: "Нижнее бельё с запасом" },
           { id: "pk-pj", text: "Пижама" },
           { id: "pk-daypack", text: "Дневной рюкзак" }
         ]
+      },
+      {
+        text: "Гигиена",
+        sub: [
+          { id: "pk-toothbrush", text: "Зубные щётки" },
+          { id: "pk-toothpaste", text: "Зубная паста" },
+          { id: "pk-deo", text: "Дезодорант" },
+          { id: "pk-razor", text: "Бритва (если нужна)" },
+          { id: "pk-sunscreen", text: "Крем от солнца" },
+          { id: "pk-lipbalm", text: "Гигиеническая помада" },
+          { id: "pk-wipes", text: "Влажные салфетки" },
+          { id: "pk-tissues", text: "Обычные салфетки" }
+        ]
+      },
+      {
+        text: "Аптечка",
+        sub: [
+          { id: "pk-meds-personal", text: "Личные лекарства" },
+          { id: "pk-bandages", text: "Пластыри" },
+          { id: "pk-pain", text: "Обезболивающее" },
+          { id: "pk-stomach", text: "Средство от расстройства желудка" },
+          { id: "pk-masks", text: "Маски (по желанию)" }
+        ]
       }
     ]
   },
   {
-    id: "hygiene",
-    title: "🪥 Гигиена",
-    items: [
-      { id: "pk-toothbrush", text: "Зубные щётки" },
-      { id: "pk-toothpaste", text: "Зубная паста" },
-      { id: "pk-deo", text: "Дезодорант" },
-      { id: "pk-razor", text: "Бритва (если нужна)" },
-      { id: "pk-sunscreen", text: "Крем от солнца" },
-      { id: "pk-lipbalm", text: "Гигиеническая помада" },
-      { id: "pk-wipes", text: "Влажные салфетки" },
-      { id: "pk-tissues", text: "Обычные салфетки" }
-    ]
-  },
-  {
-    id: "meds",
-    title: "💊 Аптечка",
-    items: [
-      { id: "pk-meds-personal", text: "Личные лекарства" },
-      { id: "pk-bandages", text: "Пластыри" },
-      { id: "pk-pain", text: "Обезболивающее" },
-      { id: "pk-stomach", text: "Средство от расстройства желудка" },
-      { id: "pk-masks", text: "Маски (по желанию)" }
-    ]
-  },
-  {
-    id: "buy-jp",
-    title: "🛍️ Купить уже в Японии",
-    items: [
-      { id: "pk-buy-umbrella", text: "Зонт" }
-    ]
-  },
-  {
     id: "door",
-    title: "✔️ Перед выходом из дома",
+    title: "✔️ Перед выходом",
+    defaultOpen: false,
     items: [
       { id: "pk-door-charge", text: "Зарядить всю технику" },
       { id: "pk-door-qr", text: "Проверить, что QR-коды открываются без интернета" },
@@ -1102,63 +1088,32 @@ const PACKING = [
       { id: "pk-door-docs", text: "Проверить документы ещё раз" },
       { id: "pk-door-home", text: "Закрыть окна, выключить электроприборы и проверить квартиру" }
     ]
+  },
+  {
+    id: "buy-jp",
+    title: "🛍️ Купить в Японии",
+    defaultOpen: false,
+    items: [
+      { id: "pk-buy-umbrella", text: "Зонт" }
+    ]
+  },
+  {
+    id: "tickets",
+    title: "🎟️ Билеты (уже куплено)",
+    defaultOpen: false,
+    items: [
+      { id: "pk-tix-harukas", text: "✅ Harukas 300 (11 сент · 2=1 Standard · подъём 17:00)" },
+      { id: "pk-tix-usj", text: "✅ USJ ×2 + Express Pass 4 Minions & Hollywood Dream (SNW 11:50)" },
+      { id: "pk-tix-umeda", text: "✅ Umeda Sky Kuchu Teien (22 сент)" },
+      { id: "pk-tix-flights", text: "✅ Авиа: HU7986 / HU473 (NXSTDT) · 9C6566 (BLKALYX) · MU5232+MU8298 (PKM0R3)" }
+    ]
   }
 ];
 
-// Чеклист подготовки к поездке. Группы по этапам; пункт может быть простым
-// (id+text) или с вложенными подпунктами (sub: [{id,text}]).
-// id стабильный — галочки в localStorage не ломаются при правке текста.
-const CHECKLIST = [
-  {
-    step: "Готово", tone: "green",
-    title: "Уже закрыто",
-    items: [
-      { id: "abeno", text: "✅ Abeno Harukas 300: Trip.com 2=1 Standard · 11 сентября · подъём 17:00." },
-      { id: "usj-tix", text: "✅ USJ 15 сент: Studio Pass ×2 + Express Pass 4 Minions & Hollywood Dream (SNW 11:50–12:50 · Mine Cart 11:50–12:20)." },
-      { id: "umeda-sky-tix", text: "✅ Umeda Sky Kuchu Teien: билет на 22 сентября (adult)." },
-      { id: "flights-booked", text: "✅ Авиа: HU7986 / HU473 (PNR NXSTDT) · 9C6566 15:00 (BLKALYX) · MU5232+MU8298 (PKM0R3)." },
-      { id: "esim-jp", text: "✅ Japan eSIM SoftBank: 20 дней / 2 ГБ в сутки ×2. Активировать в KIX 9 сентября (не дома). Срок «до 21 сент» — дедлайн старта; отсчёт 20 дней с активации хватает до вылета 25-го." },
-      { id: "esim-cn", text: "✅ China eSIM 5G: куплен (Trip.com · заказы 1539366590947691 / 1539366313703604). На транзит 25–27 сент · активировать в PVG после прилёта, не раньше." },
-      { id: "cash", text: "Наличные доллары куплены (новые купюры) — обмен на йены гибко (KIX / Осака / Киото)." }
-    ]
-  },
-  {
-    step: "Шаг 2", tone: "yellow",
-    title: "Финансы и приложения — сделать в августе",
-    items: [
-      {
-        text: "Оплата в Китае (статус подготовки):",
-        sub: [
-          { id: "alipay-install", text: "✅ Alipay зарегистрирован." },
-          { id: "wechat-pay", text: "✅ WeChat Pay зарегистрирован." },
-          { id: "yunpay-card", text: "✅ Карта РСХБ Юньпэй открыта." },
-          { id: "china-entry-qr", text: "✅ QR на Китай для въездов сделаны." },
-          { id: "alipay-topup", text: "Осталось: пополнить юани 1000–1200 CNY (Alipay и/или Юньпэй)." },
-          { id: "alipay-rita", text: "После пополнения: часть юаней на кошелёк Риты для раздельного QR в метро." }
-        ]
-      },
-      { id: "insurance", text: "Медицинская страховка: оформить на двоих полис с покрытием не менее $50 000 (включая COVID-19). Территория: «Япония + Китай» или «Весь мир»." }
-    ]
-  },
-  {
-    step: "Шаг 3", tone: "green",
-    title: "Финальная подготовка — сделать в начале сентября",
-    items: [
-      { id: "vjw", text: "Visit Japan Web: заполнить миграционную и таможенную декларации, QR-коды сохранить на оба телефона." },
-      {
-        text: "Бумажные документы (распечатать на A4):",
-        sub: [
-          { id: "doc-flights", text: "Маршрутные квитанции всех авиабилетов." },
-          { id: "doc-hotels", text: "Ваучеры отелей: Пекин Huiqiang (8–9 сент) и Шанхай Elong Anyue PVG (25–27 сент, 2 номера)." },
-          { id: "doc-airbnb", text: "Квитанция на квартиру Airbnb в Осаке." },
-          { id: "doc-ins", text: "Медицинская страховка." },
-          { id: "doc-view", text: "Билеты на смотровые площадки." },
-          { id: "doc-usj", text: "Все билеты в USJ (Studio Pass + Express Pass 4) — QR-коды пропечатаны чётко." }
-        ]
-      }
-    ]
-  }
-];
+/** @deprecated алиас для старых ссылок в коде — тот же PREP */
+const PACKING = PREP;
+/** @deprecated объединён в PREP */
+const CHECKLIST = [];
 
 /**
  * Бюджет на Японию (наличные/карта на месте).

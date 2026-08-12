@@ -18,7 +18,7 @@
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
 
-  <link rel="stylesheet" href="css/styles.css?v=64">
+  <link rel="stylesheet" href="css/styles.css?v=65">
 </head>
 <body class="ios-feel">
 
@@ -30,7 +30,7 @@
       <div class="hero__sun"></div>
     </div>
     <div class="hero__content">
-      <p class="hero__eyebrow">Alexander & Rita · версия 64</p>
+      <p class="hero__eyebrow">Alexander & Rita · версия 65</p>
       <h1 class="hero__title">Япония <span>2026</span></h1>
       <p class="hero__subtitle">Осака · Кансай · 9–25 сентября</p>
       <div class="hero__meta">
@@ -50,7 +50,7 @@
         <a href="#next">Сейчас</a>
         <a href="#route">Маршрут</a>
         <a href="#transit">Пекин</a>
-        <a href="#packing">Чек-лист</a>
+        <a href="#packing">Сборы</a>
         <a href="#budget">Деньги</a>
         <a href="tracker.html">Трекер</a>
         <a href="#home">Дом</a>
@@ -117,8 +117,8 @@
     <section class="section fold" id="packing" data-fold="closed">
       <button type="button" class="fold__btn" aria-expanded="false">
         <span class="fold__text">
-          <span class="fold__title">Чек-лист перед поездкой</span>
-          <span class="fold__sub">Отмечайте пункты — галочки сохраняются на этом телефоне.</span>
+          <span class="fold__title">Сборы</span>
+          <span class="fold__sub">Документы · цифровое · вещи · один список на двоих.</span>
         </span>
         <span class="fold__chevron" aria-hidden="true">▾</span>
       </button>
@@ -205,27 +205,6 @@
       </div>
     </section>
 
-    <section class="section fold" id="checklist" data-fold="closed">
-      <button type="button" class="fold__btn" aria-expanded="false">
-        <span class="fold__text">
-          <span class="fold__title">Чеклист подготовки</span>
-          <span class="fold__sub">Задачи до поездки (eSIM, Alipay, документы).</span>
-        </span>
-        <span class="fold__chevron" aria-hidden="true">▾</span>
-      </button>
-      <div class="fold__panel" hidden>
-        <div class="cl-progress">
-          <div class="cl-progress__bar"><span id="clBarFill"></span></div>
-          <div class="cl-progress__label" id="clProgressLabel">0 из 0 выполнено</div>
-        </div>
-        <div class="cl-toolbar">
-          <button type="button" class="route-toggle is-on" id="clShowAllBtn" aria-pressed="true">Показать все</button>
-          <span class="route-toggle__hint" id="clShowAllHint">Выполненные скрыты</span>
-        </div>
-        <div class="checklist" id="checklist-body"></div>
-      </div>
-    </section>
-
     <section class="section fold" id="phrases" data-fold="closed">
       <button type="button" class="fold__btn" aria-expanded="false">
         <span class="fold__text">
@@ -300,19 +279,19 @@
     <p class="gallery-view__cap" id="galleryCap"></p>
   </div>
 
-  <script src="js/data.js?v=64"></script>
-  <script src="js/photos.js?v=64"></script>
-  <script src="js/app.js?v=64"></script>
+  <script src="js/data.js?v=65"></script>
+  <script src="js/photos.js?v=65"></script>
+  <script src="js/app.js?v=65"></script>
   <script>
     (function () {
-      var VER = "64";
+      var VER = "65";
 
       async function clearOldCaches() {
         try {
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v64"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v65"
               ? caches.delete(k)
               : Promise.resolve();
           }));
