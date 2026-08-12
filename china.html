@@ -18,7 +18,7 @@
   <meta name="apple-mobile-web-app-title" content="Китай 2026">
 
   <link rel="stylesheet" href="vendor/fonts/noto-sc.css">
-  <link rel="stylesheet" href="css/china.css?v=68">
+  <link rel="stylesheet" href="css/china.css?v=69">
 </head>
 <body class="china-page">
 
@@ -27,7 +27,7 @@
       <span class="c-hero__hanzi">上海</span>
     </div>
     <div class="c-hero__content">
-      <p class="c-hero__eyebrow">транзит · отдельный слайд от Японии · версия 68</p>
+      <p class="c-hero__eyebrow">транзит · отдельный слайд от Японии · версия 69</p>
       <h1 class="c-hero__title">Китай <span>Шанхай</span></h1>
       <p class="c-hero__sub">25–27 сентября 2026 · 2 ночи у аэропорта PVG</p>
       <p class="c-hero__lead" id="chinaIntro"></p>
@@ -188,18 +188,18 @@
     </a>
   </nav>
 
-  <script src="js/china-data.js?v=68"></script>
-  <script src="js/china.js?v=68"></script>
+  <script src="js/china-data.js?v=69"></script>
+  <script src="js/china.js?v=69"></script>
   <script>
     (function () {
-      var VER = "68";
+      var VER = "69";
 
       async function clearOldCaches() {
         try {
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v68"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v69"
               ? caches.delete(k)
               : Promise.resolve();
           }));

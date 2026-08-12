@@ -63,7 +63,7 @@ japan-osaka-2026/
 ├── usj.html           # сценарии дня USJ
 ├── tracker.html       # трекер дней и бюджета
 ├── update.html        # сброс кэша на телефоне
-├── sw.js / manifest   # PWA / offline cache (v68)
+├── sw.js / manifest   # PWA / offline cache (v69)
 ├── database.rules.json # Firebase RTDB rules (трекер)
 ├── docs/FIREBASE.md   # как опубликовать rules
 ├── css/               # styles, china, food, usj, tracker

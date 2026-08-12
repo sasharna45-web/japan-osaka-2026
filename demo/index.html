@@ -23,7 +23,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/styles.css?v=demo24">
+  <link rel="stylesheet" href="css/styles.css?v=demo25">
 </head>
 <body class="ios-feel demo-site">
 
@@ -299,9 +299,9 @@
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="js/data.js?v=demo24"></script>
-  <script src="js/photos.js?v=demo24"></script>
-  <script src="js/app.js?v=demo24"></script>
+  <script src="js/data.js?v=demo25"></script>
+  <script src="js/photos.js?v=demo25"></script>
+  <script src="js/app.js?v=demo25"></script>
   <script>
     /* Демо без Service Worker: не трогаем кэш и SW личного гида на том же домене. */
     (function () {
@@ -309,7 +309,7 @@
       if (btn) {
         btn.addEventListener("click", function () {
           var url = new URL(location.href);
-          url.searchParams.set("v", "demo24");
+          url.searchParams.set("v", "demo25");
           url.searchParams.set("fresh", String(Date.now()));
           location.replace(url.toString());
         });
