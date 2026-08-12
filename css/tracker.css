@@ -225,6 +225,16 @@ body.tracker-page {
 
 .t-empty { color: var(--text-dim); }
 
+.t-form-msg {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.35;
+}
+.t-form-msg--bad {
+  color: #ff8a80;
+}
+
 .t-bad { color: var(--red-soft); }
 
 .t-form {

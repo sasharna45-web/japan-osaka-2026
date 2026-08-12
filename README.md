@@ -55,7 +55,7 @@ japan-osaka-2026/
 ├── china.html         # транзит Шанхай
 ├── tracker.html       # трекер дней и бюджета
 ├── update.html        # сброс кэша на телефоне
-├── sw.js / manifest   # PWA / offline cache (v61)
+├── sw.js / manifest   # PWA / offline cache (v62)
 ├── database.rules.json # Firebase RTDB rules (трекер)
 ├── docs/FIREBASE.md   # как опубликовать rules
 ├── css/               # styles, china, tracker

@@ -17,8 +17,8 @@
   <meta name="apple-mobile-web-app-title" content="Трекер 2026">
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
-  <link rel="stylesheet" href="css/styles.css?v=61">
-  <link rel="stylesheet" href="css/tracker.css?v=61">
+  <link rel="stylesheet" href="css/styles.css?v=62">
+  <link rel="stylesheet" href="css/tracker.css?v=62">
 </head>
 <body class="ios-feel tracker-page">
 
@@ -28,7 +28,7 @@
       <div class="hero__sun"></div>
     </div>
     <div class="hero__content">
-      <p class="hero__eyebrow">Alexander & Rita · трекер · версия 61</p>
+      <p class="hero__eyebrow">Alexander & Rita · трекер · версия 62</p>
       <h1 class="hero__title">Трекер <span>2026</span></h1>
       <p class="hero__subtitle">Дни · бюджет · общий прогресс в облаке</p>
       <div class="hero__meta">
@@ -102,6 +102,7 @@
             <input id="exUsdLeft" type="number" inputmode="decimal" min="0" step="1" placeholder="например 825" required>
           </label>
           <p class="t-note" id="exchangeRateHint" hidden></p>
+          <p class="t-form-msg" id="exchangeMsg" hidden></p>
           <button class="t-btn" type="submit">Сохранить обмен</button>
         </form>
         <div class="t-quick">
@@ -119,7 +120,7 @@
         <span class="fold__chevron" aria-hidden="true">▾</span>
       </button>
       <div class="fold__panel">
-        <div id="todayPanel"></div>
+        <div id="todayPanel"><p class="t-empty">Загрузка…</p></div>
       </div>
     </section>
 
@@ -150,6 +151,7 @@
             <input id="expNote" type="text" maxlength="80" placeholder="рамен, JR, Donki…">
           </label>
           <button class="t-btn" type="submit">Сохранить трату</button>
+          <p class="t-form-msg" id="expMsg" hidden></p>
         </form>
         <div class="t-quick">
           <button type="button" class="link-btn" id="quickSoft">Подставить мягкий лимит дня</button>
@@ -228,11 +230,11 @@
 
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
-  <script src="js/tracker-data.js?v=61"></script>
-  <script src="js/tracker.js?v=61"></script>
+  <script src="js/tracker-data.js?v=62"></script>
+  <script src="js/tracker.js?v=62"></script>
   <script>
     (function () {
-      var VER = "61";
+      var VER = "62";
 
       function initFolds() {
         document.querySelectorAll(".fold").forEach(function (fold) {
@@ -253,7 +255,7 @@
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v61"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v62"
               ? caches.delete(k)
               : Promise.resolve();
           }));

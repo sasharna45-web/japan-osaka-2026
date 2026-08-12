@@ -914,6 +914,53 @@
     if (hash) openSection(hash);
   }
 
+  /**
+   * Фазы поездки (A+B): прошедшие блоки не удаляем — помечаем «Архив»
+   * и один раз сворачиваем, чтобы не мешали. Данные и ФИКС не трогаем.
+   */
+  const PHASE_SOFT_KEY = "japan2026.phaseSoft.v1";
+  const PHASE_ARCHIVE = [
+    { id: "transit", label: "Архив · транзит уже пройден" },
+    { id: "packing", label: "Архив · сборы до вылета" },
+    { id: "checklist", label: "Архив · подготовка до поездки" }
+  ];
+
+  function applyPhaseLayout() {
+    const focus = tripFocus();
+    const archive = focus.mode === "during" || focus.mode === "after";
+    let meta = {};
+    try { meta = JSON.parse(localStorage.getItem(PHASE_SOFT_KEY)) || {}; } catch (e) { meta = {}; }
+
+    PHASE_ARCHIVE.forEach(({ id, label }) => {
+      const sec = document.getElementById(id);
+      if (!sec) return;
+      const sub = sec.querySelector(".fold__sub");
+      if (archive) {
+        sec.classList.add("fold--archive");
+        if (sub) {
+          if (!sub.dataset.live) sub.dataset.live = sub.textContent;
+          sub.textContent = label;
+        }
+      } else {
+        sec.classList.remove("fold--archive");
+        if (sub && sub.dataset.live) sub.textContent = sub.dataset.live;
+      }
+    });
+
+    // Один раз при входе в фазу «во время / после» — свернуть архивные блоки
+    if (archive && meta.collapsedFor !== focus.mode) {
+      PHASE_ARCHIVE.forEach(({ id }) => {
+        const sec = document.getElementById(id);
+        if (!sec) return;
+        setSectionOpen(sec, false);
+        foldState[id] = false;
+      });
+      meta.collapsedFor = focus.mode;
+      try { localStorage.setItem(PHASE_SOFT_KEY, JSON.stringify(meta)); } catch (e) {}
+      saveFolds();
+    }
+  }
+
   function bindGroupFold(group, head, panel, key, defaultOpen) {
     const open = groupFoldState[key] !== undefined ? !!groupFoldState[key] : !!defaultOpen;
     group.classList.toggle("is-open", open);
@@ -1139,19 +1186,33 @@
     const focus = tripFocus();
 
     if (focus.mode === "after") {
-      wrap.innerHTML = `<div class="next-day__empty">Поездка уже позади. Хороших воспоминаний 🌸</div>`;
+      wrap.innerHTML = `<div class="next-day__empty">Поездка уже позади. Хороших воспоминаний 🌸<br><a class="link-btn" href="china.html">Слайд «Китай» →</a></div>`;
       return;
     }
 
     let html = "";
     if (focus.mode === "before") {
-      html += `<div class="next-day__countdown">До вылета в Осаку: <b>${focus.daysLeft}</b> ${pluralDays(focus.daysLeft)}</div>`;
+      html += `<div class="next-day__countdown">До прилёта в Осаку: <b>${focus.daysLeft}</b> ${pluralDays(focus.daysLeft)}</div>`;
+      const { y, m, d } = tokyoYmd();
+      const curUtc = Date.UTC(y, m - 1, d);
+      const transitStart = Date.UTC(2026, 8, 7); // 7 сен
+      const tripStart = Date.UTC(2026, 8, 9);
+      if (curUtc >= transitStart && curUtc < tripStart) {
+        html += `<div class="next-day__phase">Фаза транзита (Пекин → KIX). Откройте блок «Через Пекин» ниже или в меню.</div>
+          <p class="next-day__phase-actions"><button type="button" class="link-btn" data-open-sec="transit">Открыть транзит</button></p>`;
+      } else if (curUtc < transitStart) {
+        html += `<div class="next-day__phase">Пока дома: сборы и чек-лист важнее маршрута по дням. Маршрут — шпаргалка на потом.</div>
+          <p class="next-day__phase-actions">
+            <button type="button" class="link-btn" data-open-sec="packing">Чек-лист сборов</button>
+            <button type="button" class="link-btn" data-open-sec="checklist">Подготовка</button>
+          </p>`;
+      }
       html += nextDayCard("Старт · день 1", focus.todayIdx, "today");
       if (focus.tomorrowIdx >= 0) html += nextDayCard("Потом · день 2", focus.tomorrowIdx, "tomorrow");
     } else {
       html += nextDayCard("СЕГОДНЯ", focus.todayIdx, "today");
       if (focus.tomorrowIdx >= 0) html += nextDayCard("ЗАВТРА", focus.tomorrowIdx, "tomorrow");
-      else html += `<div class="next-day__empty">Последний день в Японии — дальше Китай 🇨🇳</div>`;
+      else html += `<div class="next-day__empty">Последний день в Японии — дальше Китай 🇨🇳<br><a class="link-btn" href="china.html">Слайд «Китай» →</a></div>`;
     }
 
     const focusDay = focus.todayIdx >= 0 ? TRIP.days[focus.todayIdx] : null;
@@ -1166,6 +1227,14 @@
     wrap.innerHTML = html;
     wrap.querySelectorAll("[data-open-day]").forEach(btn => {
       btn.addEventListener("click", () => openDayInTimeline(Number(btn.dataset.openDay)));
+    });
+    wrap.querySelectorAll("[data-open-sec]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-open-sec");
+        openSection(id);
+        const sec = document.getElementById(id);
+        if (sec) sec.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
     });
   }
 
@@ -1316,6 +1385,7 @@
   // ======================= INIT =======================
   function init() {
     setupSectionFolds();
+    applyPhaseLayout();
     renderStats();
     renderNextDay();
     renderTransitOut();

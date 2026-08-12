@@ -18,7 +18,7 @@
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
 
-  <link rel="stylesheet" href="css/styles.css?v=61">
+  <link rel="stylesheet" href="css/styles.css?v=62">
 </head>
 <body class="ios-feel">
 
@@ -30,7 +30,7 @@
       <div class="hero__sun"></div>
     </div>
     <div class="hero__content">
-      <p class="hero__eyebrow">Alexander & Rita · версия 61</p>
+      <p class="hero__eyebrow">Alexander & Rita · версия 62</p>
       <h1 class="hero__title">Япония <span>2026</span></h1>
       <p class="hero__subtitle">Осака · Кансай · 9–25 сентября</p>
       <div class="hero__meta">
@@ -48,11 +48,11 @@
       <a href="#top" class="nav__brand">日本</a>
       <div class="nav__links">
         <a href="#next">Сейчас</a>
+        <a href="#route">Маршрут</a>
         <a href="#transit">Пекин</a>
         <a href="#packing">Чек-лист</a>
         <a href="#budget">Деньги</a>
         <a href="tracker.html">Трекер</a>
-        <a href="#route">Маршрут</a>
         <a href="#home">Дом</a>
       </div>
       <button type="button" class="comfort-btn" id="comfortToggle" aria-pressed="false" title="Крупный шрифт">Aa</button>
@@ -70,6 +70,34 @@
       </button>
       <div class="fold__panel">
         <div id="nextDay" class="next-day"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="route" data-fold="open">
+      <button type="button" class="fold__btn" aria-expanded="true">
+        <span class="fold__text">
+          <span class="fold__title">Маршрут по дням</span>
+          <span class="fold__sub">Главная шпаргалка · 17 дней. ФИКС — красные карточки.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel">
+        <div class="route-toolbar">
+          <button type="button" class="route-toggle" id="todayOnlyBtn" aria-pressed="false">
+            Только сегодня
+          </button>
+          <button class="link-btn" id="editToggle" type="button">✏️ Изменить план</button>
+          <span class="route-toggle__hint" id="todayOnlyHint">Показать все 17 дней</span>
+        </div>
+        <p class="legend-fixed">
+          <span class="legend-fixed__mark">⏰ ФИКС</span>
+          Красные карточки — фиксированные пункты.
+        </p>
+        <div class="edit-hint" id="editHint" hidden>
+          Режим редактирования: стрелки ⬆⬇ меняют порядок дней.
+          <button class="link-btn" id="resetPlan" type="button">↺ Сбросить</button>
+        </div>
+        <div class="timeline" id="timeline"></div>
       </div>
     </section>
 
@@ -159,33 +187,6 @@
       </div>
     </section>
 
-    <section class="section fold" id="route" data-fold="open">
-      <button type="button" class="fold__btn" aria-expanded="true">
-        <span class="fold__text">
-          <span class="fold__title">Маршрут по дням</span>
-          <span class="fold__sub">17 дней. Откройте день — потом «Подробнее», если нужно.</span>
-        </span>
-        <span class="fold__chevron" aria-hidden="true">▾</span>
-      </button>
-      <div class="fold__panel">
-        <div class="route-toolbar">
-          <button type="button" class="route-toggle" id="todayOnlyBtn" aria-pressed="false">
-            Только сегодня
-          </button>
-          <button class="link-btn" id="editToggle" type="button">✏️ Изменить план</button>
-          <span class="route-toggle__hint" id="todayOnlyHint">Показать все 17 дней</span>
-        </div>
-        <p class="legend-fixed">
-          <span class="legend-fixed__mark">⏰ ФИКС</span>
-          Красные карточки — фиксированные пункты.
-        </p>
-        <div class="edit-hint" id="editHint" hidden>
-          Режим редактирования: стрелки ⬆⬇ меняют порядок дней.
-          <button class="link-btn" id="resetPlan" type="button">↺ Сбросить</button>
-        </div>
-        <div class="timeline" id="timeline"></div>
-      </div>
-    </section>
 
     <section class="section fold" id="home" data-fold="closed">
       <button type="button" class="fold__btn" aria-expanded="false">
@@ -291,19 +292,19 @@
     <p class="gallery-view__cap" id="galleryCap"></p>
   </div>
 
-  <script src="js/data.js?v=61"></script>
-  <script src="js/photos.js?v=61"></script>
-  <script src="js/app.js?v=61"></script>
+  <script src="js/data.js?v=62"></script>
+  <script src="js/photos.js?v=62"></script>
+  <script src="js/app.js?v=62"></script>
   <script>
     (function () {
-      var VER = "61";
+      var VER = "62";
 
       async function clearOldCaches() {
         try {
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v61"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v62"
               ? caches.delete(k)
               : Promise.resolve();
           }));

@@ -89,6 +89,19 @@
     if (el) el.textContent = text;
   }
 
+  function setFormMsg(id, text, isBad) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (!text) {
+      el.hidden = true;
+      el.textContent = "";
+      return;
+    }
+    el.hidden = false;
+    el.textContent = text;
+    el.classList.toggle("t-form-msg--bad", !!isBad);
+  }
+
   function applyPayload(data) {
     if (!data || typeof data !== "object") return;
     applyingRemote = true;
@@ -164,12 +177,24 @@
   }
 
   function todayIso() {
-    const d = new Date();
-    return [
-      d.getFullYear(),
-      String(d.getMonth() + 1).padStart(2, "0"),
-      String(d.getDate()).padStart(2, "0")
-    ].join("-");
+    // Как в гиде: календарный день Азии/Токио, а не TZ телефона дома
+    try {
+      const parts = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Tokyo",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }).formatToParts(new Date());
+      const get = (t) => parts.find((p) => p.type === t)?.value;
+      return `${get("year")}-${get("month")}-${get("day")}`;
+    } catch (e) {
+      const d = new Date();
+      return [
+        d.getFullYear(),
+        String(d.getMonth() + 1).padStart(2, "0"),
+        String(d.getDate()).padStart(2, "0")
+      ].join("-");
+    }
   }
 
   function activeDay() {
@@ -384,7 +409,7 @@
       <div class="t-day-nav">
         <button type="button" class="t-nav-btn" data-shift="-1" ${day.n <= 1 ? "disabled" : ""}>← Вчера</button>
         <button type="button" class="t-nav-btn" data-today>Сегодня</button>
-        <button type="button" class="t-nav-btn" data-shift="1" ${day.n >= 16 ? "disabled" : ""}>Завтра →</button>
+        <button type="button" class="t-nav-btn" data-shift="1" ${day.n >= TRACKER.days.length ? "disabled" : ""}>Завтра →</button>
       </div>
       <h3 class="t-h">План дня</h3>
       <div class="t-places">${placesHtml}</div>
@@ -508,7 +533,11 @@
       const usdChanged = Number(document.getElementById("exUsdChanged").value);
       const yenGot = Number(document.getElementById("exYenGot").value);
       const usdLeft = Number(document.getElementById("exUsdLeft").value);
-      if (!(usdChanged > 0) || !(yenGot > 0) || usdLeft < 0) return;
+      if (!(usdChanged > 0) || !(yenGot > 0) || !(usdLeft >= 0) || Number.isNaN(usdChanged) || Number.isNaN(yenGot) || Number.isNaN(usdLeft)) {
+        setFormMsg("exchangeMsg", "Проверьте числа: доллары и йены > 0, остаток долларов ≥ 0.", true);
+        return;
+      }
+      setFormMsg("exchangeMsg", "Обмен сохранён — конверт йен теперь по факту.", false);
       state.exchange = {
         usdChanged,
         yenGot,
@@ -580,11 +609,22 @@
       const cat = document.getElementById("expCat").value;
       const amount = Number(document.getElementById("expAmount").value);
       const note = document.getElementById("expNote").value.trim();
-      if (!amount || amount <= 0) return;
+      if (!Number.isFinite(amount) || amount <= 0) {
+        setFormMsg("expMsg", "Сумма должна быть больше 0 ¥.", true);
+        return;
+      }
+      if (!Number.isInteger(day) || day < 1 || day > TRACKER.days.length) {
+        setFormMsg("expMsg", "Выберите день поездки.", true);
+        return;
+      }
       state.expenses.push({ id: uid(), day, cat, amount, note, at: Date.now() });
       state.viewDay = day;
       document.getElementById("expAmount").value = "";
       document.getElementById("expNote").value = "";
+      const warn = hasExchange()
+        ? ""
+        : " Трата учтена по плану (~452k ¥) — после обмена в KIX введите факт, конверт пересчитается.";
+      setFormMsg("expMsg", "Сохранено." + warn, false);
       save();
       renderAll();
       openFold("today");
