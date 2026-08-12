@@ -502,6 +502,32 @@
       a.click();
       URL.revokeObjectURL(a.href);
     });
+
+    (function bindExportHint() {
+      const HINT_KEY = "japan2026.trackerExportHint.v1";
+      const box = document.getElementById("exportHint");
+      const dismiss = document.getElementById("exportHintDismiss");
+      if (!box) return;
+      try {
+        if (localStorage.getItem(HINT_KEY) === "1") return;
+      } catch (e) {}
+      box.hidden = false;
+      if (dismiss) {
+        dismiss.addEventListener("click", () => {
+          box.hidden = true;
+          try { localStorage.setItem(HINT_KEY, "1"); } catch (e) {}
+        });
+      }
+      box.querySelectorAll('a[href="#tools"]').forEach((a) => {
+        a.addEventListener("click", () => {
+          const tools = document.getElementById("tools");
+          if (!tools) return;
+          const btn = tools.querySelector(".fold__btn");
+          const panel = tools.querySelector(".fold__panel");
+          if (btn && panel && panel.hidden) btn.click();
+        });
+      });
+    })();
   }
 
   if (document.readyState === "loading") {

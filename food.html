@@ -17,8 +17,8 @@
   <meta name="apple-mobile-web-app-title" content="Еда 2026">
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
-  <link rel="stylesheet" href="css/styles.css?v=57">
-  <link rel="stylesheet" href="css/food.css?v=57">
+  <link rel="stylesheet" href="css/styles.css?v=60">
+  <link rel="stylesheet" href="css/food.css?v=60">
 </head>
 <body class="ios-feel food-page">
 
@@ -28,14 +28,14 @@
       <div class="hero__sun"></div>
     </div>
     <div class="hero__content">
-      <p class="hero__eyebrow">Alexander & Rita · еда · версия 33</p>
+      <p class="hero__eyebrow">Alexander & Rita · еда · версия 60</p>
       <h1 class="hero__title">Еда <span>2026</span></h1>
       <p class="hero__subtitle">Один день — одна плитка · Кансай</p>
       <div class="hero__meta">
         <span>9–25 сентября</span>
         <span>17 дней</span>
       </div>
-      <button type="button" class="hero__refresh" id="forceRefresh">Обновить</button>
+      <button type="button" class="hero__refresh" id="forceRefresh">Обновить еду</button>
     </div>
   </header>
 
@@ -54,8 +54,8 @@
       <div class="food-switch" aria-label="Выбор дня">
         <button type="button" class="food-switch__arrow" id="foodPrev" aria-label="Предыдущий день">‹</button>
         <div class="food-switch__now" id="foodNow">
-          <div class="food-switch__date" id="foodNowDate">—</div>
-          <div class="food-switch__title" id="foodNowTitle">—</div>
+          <div class="food-switch__date" id="foodNowDate">Загрузка…</div>
+          <div class="food-switch__title" id="foodNowTitle">день</div>
         </div>
         <button type="button" class="food-switch__arrow" id="foodNext" aria-label="Следующий день">›</button>
       </div>
@@ -83,6 +83,7 @@
   <footer class="footer">
     <p class="footer__jp">いただきます</p>
     <p>Приятного аппетита, Александр и Рита</p>
+    <p class="footer__small">Часы работы и цены — ориентировочные, проверяйте перед визитом.</p>
     <a href="#top" class="footer__up">↑ Наверх</a>
   </footer>
 
@@ -109,18 +110,18 @@
     </a>
   </nav>
 
-  <script src="js/food-data.js?v=57"></script>
-  <script src="js/food.js?v=57"></script>
+  <script src="js/food-data.js?v=60"></script>
+  <script src="js/food.js?v=60"></script>
   <script>
     (function () {
-      var VER = "57";
+      var VER = "60";
 
       async function clearOldCaches() {
         try {
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v59"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v60"
               ? caches.delete(k)
               : Promise.resolve();
           }));
