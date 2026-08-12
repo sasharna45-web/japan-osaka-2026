@@ -415,7 +415,7 @@
     const focus = tripFocus();
     if (focus.mode === "during" && focus.todayIdx >= 0) return focus.todayIdx;
     if (focus.mode === "before" && focus.todayIdx >= 0) return focus.todayIdx;
-    if (focus.mode === "after") return dayIndexByN(17);
+    if (focus.mode === "china" || focus.mode === "after") return dayIndexByN(17);
     return 0;
   }
 
@@ -927,7 +927,7 @@
 
   function applyPhaseLayout() {
     const focus = tripFocus();
-    const archive = focus.mode === "during" || focus.mode === "after";
+    const archive = focus.mode === "during" || focus.mode === "china" || focus.mode === "after";
     let meta = {};
     try { meta = JSON.parse(localStorage.getItem(PHASE_SOFT_KEY)) || {}; } catch (e) { meta = {}; }
 
@@ -1065,8 +1065,8 @@
           Консульство РФ в Осаке: <a href="https://osaka.kdmid.ru/" target="_blank" rel="noopener">osaka.kdmid.ru</a>.
         </p>
         <p class="hs-card__text" style="margin-bottom:0">
-          Страховка / ассистанс: <a href="#" id="insuranceAssistLink">добавить ссылку на полис</a>
-          (фото полиса и номер ассистанса — в телефоне).
+          Страховка / ассистанс: фото полиса и номер ассистанса держите в телефоне
+          (и в чек-листе подготовки). Ссылку на полис добавим, когда будет номер договора.
         </p>
       </div>
       <div class="hs-card">
@@ -1130,14 +1130,19 @@
   function tripFocus(now = new Date()) {
     const { y, m, d } = tokyoYmd(now);
     const curUtc = Date.UTC(y, m - 1, d);
-    const startUtc = Date.UTC(2026, 8, 9);
-    const endUtc = Date.UTC(2026, 8, 25);
+    const startUtc = Date.UTC(2026, 8, 9);   // 9 сен — Япония
+    const japanEndUtc = Date.UTC(2026, 8, 25); // 25 сен — вылет из KIX
+    const chinaEndUtc = Date.UTC(2026, 8, 27); // 27 сен — вылет домой из Китая
     const ms = 86400000;
 
     if (curUtc < startUtc) {
       return { mode: "before", daysLeft: Math.round((startUtc - curUtc) / ms), todayIdx: dayIndexByN(1), tomorrowIdx: dayIndexByN(2) };
     }
-    if (curUtc > endUtc) {
+    if (curUtc > japanEndUtc) {
+      // 26–27 сен ещё в пути (Шанхай / Пекин → VVO), не «воспоминания»
+      if (curUtc <= chinaEndUtc) {
+        return { mode: "china", todayIdx: dayIndexByN(17), tomorrowIdx: -1 };
+      }
       return { mode: "after" };
     }
     const n = Math.round((curUtc - startUtc) / ms) + 1; // 9 сент → день 1
@@ -1186,7 +1191,16 @@
     const focus = tripFocus();
 
     if (focus.mode === "after") {
-      wrap.innerHTML = `<div class="next-day__empty">Поездка уже позади. Хороших воспоминаний 🌸<br><a class="link-btn" href="china.html">Слайд «Китай» →</a></div>`;
+      wrap.innerHTML = `<div class="next-day__empty">Вся поездка позади. Хороших воспоминаний 🌸</div>`;
+      return;
+    }
+
+    if (focus.mode === "china") {
+      wrap.innerHTML = `
+        <div class="next-day__empty">
+          Япония позади · впереди транзит через Китай (Шанхай → Пекин → VVO, до 27 сен).
+          <br><a class="link-btn" href="china.html">Открыть слайд «Китай» →</a>
+        </div>`;
       return;
     }
 
