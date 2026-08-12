@@ -1,0 +1,14 @@
+{
+  "rules": {
+    "trips": {
+      "japan-osaka-2026": {
+        ".read": true,
+        ".write": true
+      },
+      "$other": {
+        ".read": false,
+        ".write": false
+      }
+    }
+  }
+}

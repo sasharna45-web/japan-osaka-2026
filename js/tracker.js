@@ -1,16 +1,32 @@
 /**
  * Трекер дней и бюджета Кансай 2026.
- * Состояние в localStorage: japan2026-tracker-v1
- * UI как у гида: folds + sticky budget в hero.
+ * Облако: Firebase Realtime Database /trips/japan-osaka-2026
+ * Резерв: localStorage japan2026-tracker-v1 (offline / без CDN)
  */
 
 (function () {
   "use strict";
 
   const KEY = "japan2026-tracker-v1";
+  const CLOUD_PATH = "trips/japan-osaka-2026";
   const yen = (n) => Math.round(n).toLocaleString("ru-RU") + " ¥";
 
-  const state = load();
+  const firebaseConfig = {
+    apiKey: "AIzaSyAS-YIhFm7jGvaSpiYxK_dpBj44Uw_VdII",
+    authDomain: "japan-travel-2026-53a24.firebaseapp.com",
+    databaseURL: "https://japan-travel-2026-53a24-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "japan-travel-2026-53a24",
+    storageBucket: "japan-travel-2026-53a24.firebasestorage.app",
+    messagingSenderId: "650424762337",
+    appId: "1:650424762337:web:61b6c80dcb3a5c8843dca0"
+  };
+
+  let dbRef = null;
+  let applyingRemote = false;
+  let cloudReady = false;
+  let uiReady = false;
+
+  const state = loadLocal();
 
   function defaultState() {
     return {
@@ -33,7 +49,7 @@
     return TRACKER.budgetYen;
   }
 
-  function load() {
+  function loadLocal() {
     try {
       const raw = localStorage.getItem(KEY);
       if (!raw) return defaultState();
@@ -43,8 +59,104 @@
     }
   }
 
+  function persistable() {
+    return {
+      done: state.done || {},
+      expenses: Array.isArray(state.expenses) ? state.expenses : [],
+      softDaily: state.softDaily || TRACKER.softDailyYen,
+      viewDay: state.viewDay == null ? null : Number(state.viewDay),
+      exchange: state.exchange || null,
+      updatedAt: Date.now()
+    };
+  }
+
+  function saveLocal() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(persistable()));
+    } catch (e) {}
+  }
+
+  function localHasData() {
+    return (
+      Object.keys(state.done || {}).length > 0 ||
+      (state.expenses && state.expenses.length > 0) ||
+      !!state.exchange
+    );
+  }
+
+  function setSyncStatus(text) {
+    const el = document.getElementById("syncStatus");
+    if (el) el.textContent = text;
+  }
+
+  function applyPayload(data) {
+    if (!data || typeof data !== "object") return;
+    applyingRemote = true;
+    // Выбор дня на экране — локальный UX: чужой телефон не переключает вкладку
+    const keepViewDay = state.viewDay;
+    state.done = data.done && typeof data.done === "object" ? data.done : {};
+    state.expenses = Array.isArray(data.expenses) ? data.expenses : [];
+    state.softDaily = data.softDaily || TRACKER.softDailyYen;
+    state.exchange = data.exchange || null;
+    state.viewDay = keepViewDay != null ? keepViewDay : (data.viewDay != null ? Number(data.viewDay) : null);
+    saveLocal();
+    applyingRemote = false;
+    if (uiReady) {
+      renderAll();
+      syncExchangeInputs();
+    }
+  }
+
   function save() {
-    localStorage.setItem(KEY, JSON.stringify(state));
+    saveLocal();
+    if (applyingRemote || !dbRef) return;
+    dbRef.set(persistable()).then(
+      () => setSyncStatus("облако · синхрон"),
+      (err) => {
+        console.warn("Firebase write failed", err);
+        setSyncStatus("offline · только этот телефон");
+      }
+    );
+  }
+
+  function initCloud() {
+    if (typeof firebase === "undefined" || !firebase.initializeApp) {
+      setSyncStatus("offline · только этот телефон");
+      return;
+    }
+    try {
+      if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+      dbRef = firebase.database().ref(CLOUD_PATH);
+    } catch (e) {
+      console.warn("Firebase init failed", e);
+      setSyncStatus("offline · только этот телефон");
+      return;
+    }
+
+    setSyncStatus("облако · подключение…");
+
+    dbRef.on(
+      "value",
+      (snap) => {
+        cloudReady = true;
+        const val = snap.val();
+        if (val == null) {
+          if (localHasData()) {
+            dbRef.set(persistable()).catch(() => {});
+            setSyncStatus("облако · загрузили с телефона");
+          } else {
+            setSyncStatus("облако · пусто, ждём данные");
+          }
+          return;
+        }
+        applyPayload(val);
+        setSyncStatus("облако · синхрон");
+      },
+      (err) => {
+        console.warn("Firebase read failed", err);
+        setSyncStatus("offline · только этот телефон");
+      }
+    );
   }
 
   function uid() {
@@ -379,10 +491,12 @@
   }
 
   function onReady() {
+    uiReady = true;
     fillCatSelect();
     renderResearch();
     state.viewDay = state.viewDay || activeDay().n;
     renderAll();
+    initCloud();
 
     ["exUsdChanged", "exYenGot", "exUsdLeft"].forEach((id) => {
       const el = document.getElementById(id);
@@ -438,12 +552,14 @@
       }
       const shift = e.target.closest("[data-shift]");
       if (shift) {
-        state.viewDay = Math.min(16, Math.max(1, state.viewDay + Number(shift.dataset.shift)));
+        state.viewDay = Math.min(TRACKER.days.length, Math.max(1, state.viewDay + Number(shift.dataset.shift)));
+        saveLocal(); // только экран, не гоняем viewDay в облако
         renderAll();
         return;
       }
       if (e.target.closest("[data-today]")) {
         state.viewDay = activeDay().n;
+        saveLocal();
         renderAll();
       }
     });
@@ -452,6 +568,7 @@
       const btn = e.target.closest("[data-open-day]");
       if (!btn) return;
       state.viewDay = Number(btn.dataset.openDay);
+      saveLocal();
       renderAll();
       openFold("today");
       document.getElementById("today").scrollIntoView({ behavior: "smooth", block: "start" });

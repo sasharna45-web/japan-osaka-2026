@@ -17,8 +17,8 @@
   <meta name="apple-mobile-web-app-title" content="Трекер 2026">
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
-  <link rel="stylesheet" href="css/styles.css?v=60">
-  <link rel="stylesheet" href="css/tracker.css?v=60">
+  <link rel="stylesheet" href="css/styles.css?v=61">
+  <link rel="stylesheet" href="css/tracker.css?v=61">
 </head>
 <body class="ios-feel tracker-page">
 
@@ -28,13 +28,14 @@
       <div class="hero__sun"></div>
     </div>
     <div class="hero__content">
-      <p class="hero__eyebrow">Alexander & Rita · трекер · версия 60</p>
+      <p class="hero__eyebrow">Alexander & Rita · трекер · версия 61</p>
       <h1 class="hero__title">Трекер <span>2026</span></h1>
-      <p class="hero__subtitle">Дни · бюджет после обмена в KIX · Кансай</p>
+      <p class="hero__subtitle">Дни · бюджет · общий прогресс в облаке</p>
       <div class="hero__meta">
         <span>9–25 сентября</span>
         <span>17 дней</span>
         <span id="heroExchangeMeta">обмен ещё не введён</span>
+        <span id="syncStatus">облако · …</span>
       </div>
       <div class="t-budget" id="budgetCard" aria-label="Бюджет">
         <div class="t-budget__nums" id="budgetNums"></div>
@@ -63,9 +64,9 @@
 
   <aside class="t-export-hint" id="exportHint" hidden>
     <p class="t-export-hint__text">
-      Данные трекера только в <strong>этом браузере</strong> (localStorage).
-      Перед поездкой сделайте <a href="#tools">экспорт JSON</a> в разделе «Сервис» —
-      на другом телефоне список сам не появится (пока нет облака).
+      Трекер синхронизируется через <strong>Firebase</strong> между телефонами Александра и Риты.
+      Без сети остаётся копия в этом браузере. Перед поездкой всё равно можно сделать
+      <a href="#tools">экспорт JSON</a> — дополнительная страховка.
     </p>
     <div class="t-export-hint__actions">
       <a class="t-btn t-btn--small" href="#tools">К экспорту</a>
@@ -197,7 +198,7 @@
           <button type="button" class="link-btn" id="exportJson">Экспорт JSON</button>
           <button type="button" class="link-btn" id="resetTracker">Сбросить трекер</button>
         </div>
-        <p class="t-note">Данные только в этом браузере (localStorage), как галочки в гиде. Перед поездкой — экспорт JSON выше. На телефон откройте эту же страницу с GitHub Pages (данные сами не синхронизируются).</p>
+        <p class="t-note">Облако Firebase + резерв localStorage. Экспорт JSON — страховка. Чек-листы гида (index) в облако не синхронизируются.</p>
       </div>
     </section>
   </main>
@@ -225,11 +226,13 @@
     </a>
   </nav>
 
-  <script src="js/tracker-data.js?v=60"></script>
-  <script src="js/tracker.js?v=60"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+  <script src="js/tracker-data.js?v=61"></script>
+  <script src="js/tracker.js?v=61"></script>
   <script>
     (function () {
-      var VER = "60";
+      var VER = "61";
 
       function initFolds() {
         document.querySelectorAll(".fold").forEach(function (fold) {
@@ -250,7 +253,7 @@
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v60"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v61"
               ? caches.delete(k)
               : Promise.resolve();
           }));
