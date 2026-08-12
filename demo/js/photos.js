@@ -140,6 +140,7 @@ const PLACE_PHOTOS = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Don_Quijote%2C_Nanba_-_panoramio.jpg/960px-Don_Quijote%2C_Nanba_-_panoramio.jpg"
   ],
   "Nintendo Kyoto": [
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Nintendo_Museum_Entrance.jpg/960px-Nintendo_Museum_Entrance.jpg"
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Takashimaya-Kyoto-01.jpg/960px-Takashimaya-Kyoto-01.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Takashimaya_Kyoto_honten.jpg/960px-Takashimaya_Kyoto_honten.jpg"
   ]
 };

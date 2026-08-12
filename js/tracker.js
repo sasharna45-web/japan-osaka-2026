@@ -7,6 +7,22 @@
 (function () {
   "use strict";
 
+  if (typeof TRACKER === "undefined" || !TRACKER.days || !TRACKER.days.length) {
+    const fail = () => {
+      const pace = document.getElementById("budgetPace");
+      const sync = document.getElementById("syncStatus");
+      const today = document.getElementById("todayPanel");
+      if (pace) pace.textContent = "Данные трекера не загрузились.";
+      if (sync) sync.textContent = "нет данных";
+      if (today) {
+        today.innerHTML = `<p class="t-note">Трекер не загрузился. Откройте <a href="update.html">update.html</a> или обновите страницу.</p>`;
+      }
+    };
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fail);
+    else fail();
+    return;
+  }
+
   const KEY = "japan2026-tracker-v1";
   const CLOUD_PATH = "trips/japan-osaka-2026";
   const yen = (n) => Math.round(n).toLocaleString("ru-RU") + " ¥";

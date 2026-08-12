@@ -39,7 +39,7 @@ const TRACKER = {
       places: [
         { id: "d1-kix", name: "Прилёт в KIX", emoji: "✈️", time: "12:45", fixed: true },
         { id: "d1-home", name: "Квартира Tanimachi 6-chome", emoji: "🏠", time: "16:00" },
-        { id: "d1-doton", name: "Dotonbori", emoji: "🌃", time: "вечер" }
+        { id: "d1-doton", name: "Dotonbori", emoji: "🌃", time: "~18:30" }
       ]
     },
     {
@@ -228,7 +228,7 @@ const TRACKER = {
           "Ближе к дате сверьте holiday timetable на сайте Awaji West Coast."
         ],
         source: "Awaji Island West Coast — Access Free Shuttle Bus",
-        url: "https://en.awajishima-resort.com/access_freebus/",
+        url: "https://en.awajiisland.pasonagroup.co.jp/access_freebus/",
         asOf: "расписание от 2026-04-01; 21.09.2026 = праздник Silver Week"
       },
       {
@@ -301,7 +301,7 @@ const TRACKER = {
         ],
         source: "Tabelog bands / типичные цены Кансая 2025–2026",
         url: "https://tabelog.com/",
-        asOf: "2026-08 (меню ресторанов меняются; бронируйте и смотрите курс заранее)"
+        asOf: "2026-08 (меню/цены меняются; бронь ресторанов не обязательна — смотрите меню и курс перед заказом)"
       }
     ],
     table: [

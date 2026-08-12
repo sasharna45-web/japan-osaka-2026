@@ -59,13 +59,15 @@ python -m http.server 8000
 japan-osaka-2026/
 ├── index.html         # личный гид (Япония)
 ├── china.html         # транзит Шанхай
+├── food.html          # план еды по дням
+├── usj.html           # сценарии дня USJ
 ├── tracker.html       # трекер дней и бюджета
 ├── update.html        # сброс кэша на телефоне
-├── sw.js / manifest   # PWA / offline cache (v67)
+├── sw.js / manifest   # PWA / offline cache (v68)
 ├── database.rules.json # Firebase RTDB rules (трекер)
 ├── docs/FIREBASE.md   # как опубликовать rules
-├── css/               # styles, china, tracker
-├── js/                # data, app, photos, china-*, tracker-*
+├── css/               # styles, china, food, usj, tracker
+├── js/                # data, app, photos, china-*, food-*, usj-*, tracker-*
 ├── vendor/fonts/      # офлайн Noto JP/SC
 ├── demo/              # публичная копия без личных данных
 └── README.md

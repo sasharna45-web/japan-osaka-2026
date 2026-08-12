@@ -395,30 +395,39 @@
     const focus = tripFocus();
     if (focus.mode === "during" && focus.todayIdx >= 0) return focus.todayIdx;
     if (focus.mode === "before" && focus.todayIdx >= 0) return focus.todayIdx;
-    if (focus.mode === "after") return dayIndexByN(17);
-    return 0;
+    // china / after — не «прибиваем» фильтр к дню 17 Японии
+    return -1;
   }
 
   function applyTodayOnly() {
     const btn = $("#todayOnlyBtn");
     const hint = $("#todayOnlyHint");
+    const focus = tripFocus();
+    const tripOver = focus.mode === "china" || focus.mode === "after";
     const idx = focusDayIndex();
     $$(".day").forEach(dayEl => {
-      if (!todayOnly) {
+      if (!todayOnly || tripOver || idx < 0) {
         dayEl.hidden = false;
         return;
       }
       dayEl.hidden = Number(dayEl.dataset.index) !== idx;
     });
     if (btn) {
-      btn.classList.toggle("is-on", todayOnly);
-      btn.setAttribute("aria-pressed", todayOnly ? "true" : "false");
-      btn.textContent = todayOnly ? "✓ Только сегодня" : "Только сегодня";
+      btn.disabled = tripOver;
+      btn.classList.toggle("is-on", todayOnly && !tripOver);
+      btn.setAttribute("aria-pressed", todayOnly && !tripOver ? "true" : "false");
+      btn.textContent = todayOnly && !tripOver ? "✓ Только сегодня" : "Только сегодня";
     }
     if (hint) {
-      hint.textContent = todayOnly
-        ? "Скрыты остальные дни · нажмите ещё раз, чтобы показать все"
-        : "Показать все 17 дней";
+      if (focus.mode === "china") {
+        hint.textContent = "Фаза Китай · все дни Японии видны · слайд «Китай»";
+      } else if (focus.mode === "after") {
+        hint.textContent = "Поездка позади · все дни видны";
+      } else if (todayOnly) {
+        hint.textContent = "Скрыты остальные дни · нажмите ещё раз, чтобы показать все";
+      } else {
+        hint.textContent = "Показать все 17 дней";
+      }
     }
   }
 
@@ -626,7 +635,7 @@
 
   // ======================= СОВЕТЫ =======================
   const TIPS = [
-    { e: "💳", t: "IC-карта ICOCA", d: "Купите в аэропорту — оплата метро, автобусов и конбини одним касанием." },
+    { e: "💳", t: "Mobile PASMO", d: "На iPhone — оплата метро, JR и конбини одним касанием. Пополните ~15 000 ¥ после прилёта." },
     { e: "📶", t: "eSIM", d: "Установите профиль eSIM дома. Активацию (включить линию) удобнее в KIX на Wi‑Fi аэропорта — так и в чек-листе." },
     { e: "🧾", t: "Tax-free", d: "В крупных магазинах берите паспорт — вернут налог от 5 000 ¥ покупок." },
     { e: "💴", t: "Наличные", d: "Многие мелкие места и рынки — только кэш. Снимайте в 7-Eleven ATM." },
@@ -1051,7 +1060,7 @@
       <div class="hs-card">
         <div class="hs-card__title">🎒 На каждый день</div>
         <p class="hs-card__text" style="margin-bottom:0">
-          ICOCA · пауэрбанк · паспорт (для tax-free) · салфетки · вода · зарядка телефона на 100% перед USJ / дальними днями.
+          PASMO · пауэрбанк · паспорт (для tax-free) · салфетки · вода · зарядка телефона на 100% перед USJ / дальними днями.
         </p>
       </div>
     `;
@@ -1119,6 +1128,10 @@
       return { mode: "before", daysLeft: Math.round((start - cur) / ms), todayIdx: dayIndexByN(1), tomorrowIdx: dayIndexByN(2) };
     }
     if (cur > end) {
+      const chinaEnd = new Date(2026, 8, 27);
+      if (cur <= chinaEnd) {
+        return { mode: "china", todayIdx: dayIndexByN(17), tomorrowIdx: -1 };
+      }
       return { mode: "after" };
     }
     const n = d - 8; // 9 сент → день 1
@@ -1164,6 +1177,11 @@
 
     if (focus.mode === "after") {
       wrap.innerHTML = `<div class="next-day__empty">Поездка уже позади. Хороших воспоминаний 🌸</div>`;
+      return;
+    }
+
+    if (focus.mode === "china") {
+      wrap.innerHTML = `<div class="next-day__empty">Фаза Китай / Шанхай (26–27 сен).<br><a class="link-btn" href="china.html">Открыть слайд «Китай» →</a></div>`;
       return;
     }
 

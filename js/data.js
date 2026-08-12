@@ -174,7 +174,7 @@ const TRIP = {
           hours: "10:00–20:00",
           price: "—",
           tips: "После Nintendo — Pokemon Center мимоходом, не открывайте «ещё три магазина». Крупный обмен — не якорь дня: если курс в Киото заметно лучше Осаки — можно зайти в обменник у вокзала по пути; иначе меняйте в Осаке.",
-          tags: ["nintendo", "game", "shopping"]
+          tags: ["nintendo", "games", "shopping"]
         }
       ],
       options: [
