@@ -415,30 +415,39 @@
     const focus = tripFocus();
     if (focus.mode === "during" && focus.todayIdx >= 0) return focus.todayIdx;
     if (focus.mode === "before" && focus.todayIdx >= 0) return focus.todayIdx;
-    if (focus.mode === "china" || focus.mode === "after") return dayIndexByN(17);
-    return 0;
+    // china / after — не «прибиваем» фильтр к дню 17 Японии
+    return -1;
   }
 
   function applyTodayOnly() {
     const btn = $("#todayOnlyBtn");
     const hint = $("#todayOnlyHint");
+    const focus = tripFocus();
+    const tripOver = focus.mode === "china" || focus.mode === "after";
     const idx = focusDayIndex();
     $$(".day").forEach(dayEl => {
-      if (!todayOnly) {
+      if (!todayOnly || tripOver || idx < 0) {
         dayEl.hidden = false;
         return;
       }
       dayEl.hidden = Number(dayEl.dataset.index) !== idx;
     });
     if (btn) {
-      btn.classList.toggle("is-on", todayOnly);
-      btn.setAttribute("aria-pressed", todayOnly ? "true" : "false");
-      btn.textContent = todayOnly ? "✓ Только сегодня" : "Только сегодня";
+      btn.disabled = tripOver;
+      btn.classList.toggle("is-on", todayOnly && !tripOver);
+      btn.setAttribute("aria-pressed", todayOnly && !tripOver ? "true" : "false");
+      btn.textContent = todayOnly && !tripOver ? "✓ Только сегодня" : "Только сегодня";
     }
     if (hint) {
-      hint.textContent = todayOnly
-        ? "Скрыты остальные дни · нажмите ещё раз, чтобы показать все"
-        : "Показать все 17 дней";
+      if (focus.mode === "china") {
+        hint.textContent = "Фаза Китай · все дни Японии видны · слайд «Китай»";
+      } else if (focus.mode === "after") {
+        hint.textContent = "Поездка позади · все дни видны";
+      } else if (todayOnly) {
+        hint.textContent = "Скрыты остальные дни · нажмите ещё раз, чтобы показать все";
+      } else {
+        hint.textContent = "Показать все 17 дней";
+      }
     }
   }
 
@@ -767,7 +776,9 @@
 
     markTruthy(state, oldPack);
 
-    if (oldCl) {
+    // Пустой объект {} считаем «как будто ключа не было» → дефолты «уже куплено»
+    const clHasMarks = oldCl && Object.keys(oldCl).some((k) => !!oldCl[k]);
+    if (clHasMarks) {
       Object.keys(oldCl).forEach((k) => {
         if (!oldCl[k]) return;
         state[k] = true;
@@ -779,7 +790,6 @@
         }
       });
     } else {
-      // Как старый loadChecklistState без ключа: дефолты «уже закрыто»
       Object.assign(state, PREP_DONE_DEFAULT);
     }
 
@@ -1321,7 +1331,7 @@
     } else {
       html += nextDayCard("СЕГОДНЯ", focus.todayIdx, "today");
       if (focus.tomorrowIdx >= 0) html += nextDayCard("ЗАВТРА", focus.tomorrowIdx, "tomorrow");
-      else html += `<div class="next-day__empty">Последний день в Японии — дальше Китай 🇨🇳<br><a class="link-btn" href="china.html">Слайд «Китай» →</a></div>`;
+      else html += `<div class="next-day__empty">Последний день в Японии (вылет 15:00 KIX → Шанхай). Вечером — слайд «Китай» 🇨🇳<br><a class="link-btn" href="china.html">Открыть слайд «Китай» →</a></div>`;
     }
 
     const focusDay = focus.todayIdx >= 0 ? TRIP.days[focus.todayIdx] : null;

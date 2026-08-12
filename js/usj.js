@@ -8,7 +8,19 @@
   const KEY = "japan2026.usjZone.v2";
   const $ = (sel, root = document) => root.querySelector(sel);
 
-  if (typeof USJ_PLAN === "undefined" || !USJ_PLAN.zones) return;
+  if (typeof USJ_PLAN === "undefined" || !USJ_PLAN.zones) {
+    const fail = () => {
+      const title = document.getElementById("usjNowTitle");
+      const tile = document.getElementById("usjTile");
+      if (title) title.textContent = "Данные не загрузились";
+      if (tile) {
+        tile.innerHTML = `<p class="usj-note">Справочник USJ не загрузился. Откройте <a href="update.html">update.html</a> или обновите страницу.</p>`;
+      }
+    };
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fail);
+    else fail();
+    return;
+  }
 
   const zones = USJ_PLAN.zones;
   const SPECIAL = ["route", "all", "events"];

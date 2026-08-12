@@ -218,7 +218,16 @@
   }
 
   function init() {
-    if (typeof CHINA === "undefined") return;
+    if (typeof CHINA === "undefined") {
+      const main = document.querySelector("main");
+      if (main) {
+        main.insertAdjacentHTML(
+          "afterbegin",
+          `<p class="c-note" style="padding:16px">Слайд Китая не загрузился. Откройте <a href="update.html">update.html</a> или обновите страницу.</p>`
+        );
+      }
+      return;
+    }
     document.body.classList.add("china-slide-in");
     setupFolds();
     renderIntro();

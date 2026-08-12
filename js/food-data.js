@@ -144,7 +144,7 @@ const FOOD_PLAN = {
       skip: "EXPOCITY / Nifrel ради еды не открываем."
     },
     {
-      n: 15, iso: "2026-09-23", date: "23 сен", weekday: "Ср", title: "Harvest Hill + море",
+      n: 15, iso: "2026-09-23", date: "23 сен", weekday: "Ср", title: "Sylvanian / Harvest Hill + море",
       meals: [
         { slot: "Обед", when: "Harvest Hill", what: "Кафе на ферме / зона барбекю — лёгкий обед на месте." },
         { slot: "Вечер", when: "после пляжа или дома", what: "Вода/перекус с собой. Тяжёлый ужин в городе не обязателен." }

@@ -8,7 +8,21 @@
   const KEY = "japan2026.foodDay.v1";
   const $ = (sel, root = document) => root.querySelector(sel);
 
-  if (typeof FOOD_PLAN === "undefined" || !FOOD_PLAN.days || !FOOD_PLAN.days.length) return;
+  if (typeof FOOD_PLAN === "undefined" || !FOOD_PLAN.days || !FOOD_PLAN.days.length) {
+    const fail = () => {
+      const date = document.getElementById("foodNowDate");
+      const title = document.getElementById("foodNowTitle");
+      const tile = document.getElementById("foodTile");
+      if (date) date.textContent = "Нет данных";
+      if (title) title.textContent = "обновите страницу";
+      if (tile) {
+        tile.innerHTML = `<p class="food-plan__intro">План еды не загрузился. Откройте <a href="update.html">update.html</a> или обновите страницу.</p>`;
+      }
+    };
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fail);
+    else fail();
+    return;
+  }
 
   const days = FOOD_PLAN.days;
 
