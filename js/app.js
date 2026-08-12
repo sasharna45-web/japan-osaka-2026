@@ -765,10 +765,18 @@
     });
   }
 
-  /** OR-слияние старых галочек → japan2026.prep.v1 (один раз). */
+  /** OR-слияние старых галочек → japan2026.prep.v1.
+   *  Пустой prep.v1 {} (баг старой миграции) лечим один раз. */
   function migratePrepState() {
     const existing = readJsonKey(PREP_KEY);
-    if (existing) return existing;
+    const hasMarks = existing && Object.keys(existing).some((k) => !!existing[k]);
+    if (hasMarks) return existing;
+
+    const HEAL_KEY = "japan2026.prepEmptyHealed.v1";
+    let healed = false;
+    try { healed = localStorage.getItem(HEAL_KEY) === "1"; } catch (e) {}
+    // Пустой объект уже лечили — не навязываем дефолты снова (юзер мог всё снять)
+    if (existing && healed) return existing;
 
     const state = {};
     const oldPack = readJsonKey(OLD_PACK_KEY) || {};
@@ -776,7 +784,6 @@
 
     markTruthy(state, oldPack);
 
-    // Пустой объект {} считаем «как будто ключа не было» → дефолты «уже куплено»
     const clHasMarks = oldCl && Object.keys(oldCl).some((k) => !!oldCl[k]);
     if (clHasMarks) {
       Object.keys(oldCl).forEach((k) => {
@@ -793,7 +800,10 @@
       Object.assign(state, PREP_DONE_DEFAULT);
     }
 
-    try { localStorage.setItem(PREP_KEY, JSON.stringify(state)); } catch (e) {}
+    try {
+      localStorage.setItem(PREP_KEY, JSON.stringify(state));
+      localStorage.setItem(HEAL_KEY, "1");
+    } catch (e) {}
     return state;
   }
 

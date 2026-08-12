@@ -18,7 +18,13 @@
 **https://sasharna45-web.github.io/japan-osaka-2026/tracker.html**
 
 Локально: откройте `tracker.html` или `http://localhost:8000/tracker.html`.
-Данные (галочки и траты) хранятся в браузере, как чек-листы гида.
+
+**Синхронизация:** галочки, траты и обмен пишутся в **Firebase Realtime Database**
+(`/trips/japan-osaka-2026`) и дублируются в localStorage на случай offline.
+Экспорт JSON в разделе «Сервис» остаётся страховкой. Чек-листы гида (сборы на index)
+в облако не синхронизируются — только трекер.
+
+Правила доступа и Publish: [`docs/FIREBASE.md`](docs/FIREBASE.md), `database.rules.json`.
 
 ## Как открыть
 
@@ -55,7 +61,7 @@ japan-osaka-2026/
 ├── china.html         # транзит Шанхай
 ├── tracker.html       # трекер дней и бюджета
 ├── update.html        # сброс кэша на телефоне
-├── sw.js / manifest   # PWA / offline cache (v66)
+├── sw.js / manifest   # PWA / offline cache (v67)
 ├── database.rules.json # Firebase RTDB rules (трекер)
 ├── docs/FIREBASE.md   # как опубликовать rules
 ├── css/               # styles, china, tracker

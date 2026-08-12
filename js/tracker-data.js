@@ -252,9 +252,9 @@ const TRACKER = {
           "Синкансен Shin-Osaka → Himeji быстрее (~25–35 мин), но дороже (свободное место ≈ 3 220 ¥+).",
           "Для дневной поездки обычно выгоднее Special Rapid с Osaka Station."
         ],
-        source: "Ekitan / Visit Himeji travel notes (IC fare)",
-        url: "https://ekitan.com/en/article/osaka-to-himeji-shinkansen",
-        asOf: "2026 (IC ≈1 460–1 490 ¥; спишется с Mobile PASMO / IC)"
+        source: "japan-guide.com · Osaka–Himeji access (Special Rapid)",
+        url: "https://www.japan-guide.com/e/e3504.html",
+        asOf: "2026-08-12 (Special Rapid ≈1 460 ¥; IC / Mobile PASMO)"
       },
       {
         id: "tickets",
