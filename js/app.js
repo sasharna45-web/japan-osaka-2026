@@ -634,7 +634,58 @@
 
   // ======================= ЧЕКЛИСТ ПОДГОТОВКИ =======================
   const CL_KEY = "japan2026.checklist.v2";
+  const CL_SHOW_ALL_KEY = "japan2026.checklistShowAll.v1";
+  const PACK_SHOW_ALL_KEY = "japan2026.packingShowAll.v1";
   const CL_DONE_DEFAULT = { abeno: true, cash: true, "esim-jp": true, "esim-cn": true }; // уже закрыто по факту
+
+  function loadShowAll(key) {
+    try {
+      const v = localStorage.getItem(key);
+      if (v === null) return false; // по умолчанию — только невыполненные
+      return v === "1";
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function saveShowAll(key, showAll) {
+    try { localStorage.setItem(key, showAll ? "1" : "0"); } catch (e) {}
+  }
+
+  /** Скрыть выполненные пункты/пустые группы (данные и галочки не трогаем). */
+  function applyDoneVisibility(root, showAll) {
+    if (!root) return;
+    root.classList.toggle("cl-hide-done", !showAll);
+    root.querySelectorAll(".cl-subhead").forEach((head) => {
+      const sub = head.nextElementSibling;
+      if (!sub || !sub.classList.contains("cl-sub")) return;
+      const items = [...sub.querySelectorAll(".cl-item")];
+      const allDone = items.length > 0 && items.every((i) => i.classList.contains("done"));
+      const hide = !showAll && allDone;
+      head.hidden = hide;
+      sub.hidden = hide;
+    });
+    root.querySelectorAll(".cl-group, .pack-group").forEach((group) => {
+      const items = [...group.querySelectorAll(".cl-item")];
+      if (!items.length) return;
+      const allDone = items.every((i) => i.classList.contains("done"));
+      group.hidden = !showAll && allDone;
+    });
+  }
+
+  function syncShowAllBtn(btn, hint, showAll) {
+    if (btn) {
+      // «Вкл» = режим фильтра (только оставшееся)
+      btn.classList.toggle("is-on", !showAll);
+      btn.setAttribute("aria-pressed", showAll ? "false" : "true");
+      btn.textContent = showAll ? "Только оставшееся" : "Показать все";
+    }
+    if (hint) {
+      hint.textContent = showAll
+        ? "Сейчас видны все · нажмите, чтобы скрыть выполненные"
+        : "Выполненные скрыты";
+    }
+  }
 
   function storageAvailable() {
     try {
@@ -685,6 +736,8 @@
   }
 
   let clState = loadChecklistState();
+  let clShowAll = loadShowAll(CL_SHOW_ALL_KEY);
+  let packShowAll = loadShowAll(PACK_SHOW_ALL_KEY);
 
   function collectClIds() {
     const ids = [];
@@ -698,10 +751,13 @@
   function updateClProgress() {
     const ids = collectClIds();
     const done = ids.filter(id => clState[id]).length;
+    const left = ids.length - done;
     const pct = ids.length ? Math.round(done / ids.length * 100) : 0;
     const bar = $("#clBarFill");
     const label = $("#clProgressLabel");
-    const text = `${done} из ${ids.length} выполнено · ${pct}%`;
+    const text = clShowAll
+      ? `${done} из ${ids.length} выполнено · ${pct}%`
+      : `Осталось ${left} · выполнено ${done} из ${ids.length}`;
     if (bar) bar.style.width = pct + "%";
     if (label) {
       label.textContent = text;
@@ -726,6 +782,7 @@
       box.textContent = next ? "✓" : "";
       updateClProgress();
       saveChecklistState();
+      applyDoneVisibility($("#checklist-body"), clShowAll);
     };
 
     btn.addEventListener("click", toggle);
@@ -759,9 +816,25 @@
       wrap.appendChild(group);
     });
     updateClProgress();
+    applyDoneVisibility(wrap, clShowAll);
+    syncShowAllBtn($("#clShowAllBtn"), $("#clShowAllHint"), clShowAll);
     if (!storageAvailable()) {
       flashClSave("⚠️ Галочки не сохранятся — откройте не в инкогнито");
     }
+  }
+
+  function setupChecklistShowAll() {
+    const btn = $("#clShowAllBtn");
+    if (!btn || btn.dataset.ready) return;
+    btn.dataset.ready = "1";
+    syncShowAllBtn(btn, $("#clShowAllHint"), clShowAll);
+    btn.addEventListener("click", () => {
+      clShowAll = !clShowAll;
+      saveShowAll(CL_SHOW_ALL_KEY, clShowAll);
+      syncShowAllBtn(btn, $("#clShowAllHint"), clShowAll);
+      applyDoneVisibility($("#checklist-body"), clShowAll);
+      updateClProgress();
+    });
   }
 
   // ======================= ЧЕК-ЛИСТ ПЕРЕД ПОЕЗДКОЙ =======================
@@ -786,11 +859,16 @@
   function updatePackProgress() {
     const ids = packingIds();
     const done = ids.filter(id => packState[id]).length;
+    const left = ids.length - done;
     const pct = ids.length ? Math.round(done / ids.length * 100) : 0;
     const bar = $("#packBarFill");
     const label = $("#packProgressLabel");
     if (bar) bar.style.width = pct + "%";
-    if (label) label.textContent = `${done} из ${ids.length} · ${pct}%`;
+    if (label) {
+      label.textContent = packShowAll
+        ? `${done} из ${ids.length} · ${pct}%`
+        : `Осталось ${left} · выполнено ${done} из ${ids.length}`;
+    }
   }
 
   function makePackItem(id, text) {
@@ -812,6 +890,7 @@
       box.textContent = packState[id] ? "✓" : "";
       savePackState();
       updatePackProgress();
+      applyDoneVisibility($("#packingBody"), packShowAll);
     });
     return btn;
   }
@@ -847,6 +926,22 @@
       wrap.appendChild(group);
     });
     updatePackProgress();
+    applyDoneVisibility(wrap, packShowAll);
+    syncShowAllBtn($("#packShowAllBtn"), $("#packShowAllHint"), packShowAll);
+  }
+
+  function setupPackingShowAll() {
+    const btn = $("#packShowAllBtn");
+    if (!btn || btn.dataset.ready) return;
+    btn.dataset.ready = "1";
+    syncShowAllBtn(btn, $("#packShowAllHint"), packShowAll);
+    btn.addEventListener("click", () => {
+      packShowAll = !packShowAll;
+      saveShowAll(PACK_SHOW_ALL_KEY, packShowAll);
+      syncShowAllBtn(btn, $("#packShowAllHint"), packShowAll);
+      applyDoneVisibility($("#packingBody"), packShowAll);
+      updatePackProgress();
+    });
   }
 
   // ======================= ВЫКИДУШКИ (сворачиваемые блоки) =======================
@@ -1411,7 +1506,9 @@
     setupTodayOnly();
     renderHomeSos();
     renderChecklist();
+    setupChecklistShowAll();
     renderPacking();
+    setupPackingShowAll();
     renderPhrases();
     renderTips();
     setupEdit();

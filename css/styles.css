@@ -1049,6 +1049,17 @@ a { color: inherit; text-decoration: none; }
 }
 .cl-progress__label { font-size: 13px; color: var(--text-dim); margin-top: 8px; }
 
+.cl-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: -6px 0 16px;
+}
+.cl-hide-done .cl-item.done {
+  display: none !important;
+}
+
 .checklist { display: flex; flex-direction: column; gap: 18px; }
 
 .cl-group {

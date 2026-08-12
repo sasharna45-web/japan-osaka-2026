@@ -17,8 +17,8 @@
   <meta name="apple-mobile-web-app-title" content="Трекер 2026">
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
-  <link rel="stylesheet" href="css/styles.css?v=63">
-  <link rel="stylesheet" href="css/tracker.css?v=63">
+  <link rel="stylesheet" href="css/styles.css?v=64">
+  <link rel="stylesheet" href="css/tracker.css?v=64">
 </head>
 <body class="ios-feel tracker-page">
 
@@ -28,7 +28,7 @@
       <div class="hero__sun"></div>
     </div>
     <div class="hero__content">
-      <p class="hero__eyebrow">Alexander & Rita · трекер · версия 63</p>
+      <p class="hero__eyebrow">Alexander & Rita · трекер · версия 64</p>
       <h1 class="hero__title">Трекер <span>2026</span></h1>
       <p class="hero__subtitle">Дни · бюджет · общий прогресс в облаке</p>
       <div class="hero__meta">
@@ -230,11 +230,11 @@
 
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
-  <script src="js/tracker-data.js?v=63"></script>
-  <script src="js/tracker.js?v=63"></script>
+  <script src="js/tracker-data.js?v=64"></script>
+  <script src="js/tracker.js?v=64"></script>
   <script>
     (function () {
-      var VER = "63";
+      var VER = "64";
 
       function initFolds() {
         document.querySelectorAll(".fold").forEach(function (fold) {
@@ -255,7 +255,7 @@
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v63"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v64"
               ? caches.delete(k)
               : Promise.resolve();
           }));
