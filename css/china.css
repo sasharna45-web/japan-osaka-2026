@@ -608,6 +608,13 @@ body.china-page::before {
   margin-bottom: 6px;
 }
 .c-footer__note { font-size: 12px; margin-top: 8px; opacity: .75; }
+.footer__ver {
+  margin-top: 18px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  opacity: 0.28;
+  user-select: none;
+}
 .c-footer__back {
   display: none;
 }

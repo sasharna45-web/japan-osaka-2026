@@ -1412,6 +1412,13 @@ a { color: inherit; text-decoration: none; }
 }
 .footer__jp { font-family: "Noto Serif JP", serif; font-size: 30px; color: var(--red); margin-bottom: 8px; }
 .footer__small { font-size: 12px; margin-top: 10px; opacity: .7; }
+.footer__ver {
+  margin-top: 18px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  opacity: 0.28;
+  user-select: none;
+}
 .footer__up {
   display: inline-block;
   margin-top: 20px;
