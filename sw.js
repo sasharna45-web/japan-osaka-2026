@@ -1,5 +1,5 @@
 /* Offline-first PWA for japan-osaka-2026 */
-const CACHE = "japan2026-offline-v70";
+const CACHE = "japan2026-offline-v71";
 const PRECACHE = [
   './index.html',
   './tracker.html',

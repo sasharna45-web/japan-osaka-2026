@@ -978,7 +978,7 @@ const PREP = [
       { id: "pk-pass-photo", text: "Фото паспортов в телефоне" },
       { id: "pk-airbnb", text: "Ваучер Airbnb и адрес квартиры" },
       { id: "pk-beijing-hotel", text: "Ваучер отеля Пекин · Beijing Huiqiang (8–9 сент)" },
-      { id: "pk-shanghai-hotel", text: "Ваучер Elong Anyue у PVG (25–27 сент) · 2 номера" },
+      { id: "pk-shanghai-hotel", text: "Ваучер Elong Anyue у PVG (25–27 сент) · 1 номер на двоих" },
       { id: "pk-flights", text: "Авиабилеты / посадочные (приложение + распечатка)" },
       { id: "pk-insurance", text: "Страховка: фото полиса + номер ассистанса в телефоне" },
       { id: "pk-print-a4", text: "Важные документы распечатаны на A4 (на всякий случай)" },
