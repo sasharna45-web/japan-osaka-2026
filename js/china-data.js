@@ -4,7 +4,7 @@
  *
  * Факты поездки:
  *  25 сент 15:00–16:30  KIX T2 → PVG T2  Spring 9C6566 (PNR BLKALYX)
- *  25–27 сент           Elong Anyue Hotel (PVG), 2 ночи · 2 номера
+ *  25–27 сент           Elong Anyue Hotel (PVG), 2 ночи · 1 номер на двоих
  *  27 сент 08:30–10:30  PVG T1 → PKX   MU5232 (PNR PKM0R3)
  *  27 сент 13:30–18:00  PKX → VVO   MU8298 / KN877 (PNR PKM0R3)
  */
@@ -14,8 +14,8 @@ const CHINA = {
     name: "Elong Anyue Hotel",
     branch: "Shanghai Pudong International Airport Branch",
     nameZh: "艺龙安悦酒店（上海浦东国际机场店）",
-    nights: "25–27 сентября · 2 ночи · 2 номера (queen)",
-    tip: "Отель у PVG — под ранний вылет 27-го. Два номера. Китайское название — в заметках для DiDi/ресепшена.",
+    nights: "25–27 сентября · 2 ночи · 1 номер на двоих (queen)",
+    tip: "Отель у PVG — под ранний вылет 27-го. Один queen на двоих. Китайское название — в заметках для DiDi/ресепшена.",
     mapsQuery: "Elong Anyue Hotel Shanghai Pudong International Airport"
   },
 
@@ -41,7 +41,7 @@ const CHINA = {
         },
         {
           t: "До отеля",
-          d: "Elong Anyue Hotel (ветка у PVG) · 2 номера. Шаттл отеля / указатели / короткий DiDi. В центр сегодня не едем."
+          d: "Elong Anyue Hotel (ветка у PVG) · 1 номер на двоих. Шаттл отеля / указатели / короткий DiDi. В центр сегодня не едем."
         },
         {
           t: "Вечер",

@@ -17,8 +17,8 @@
   <meta name="apple-mobile-web-app-title" content="USJ 2026">
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
-  <link rel="stylesheet" href="css/styles.css?v=70">
-  <link rel="stylesheet" href="css/usj.css?v=70">
+  <link rel="stylesheet" href="css/styles.css?v=71">
+  <link rel="stylesheet" href="css/usj.css?v=71">
 </head>
 <body class="ios-feel usj-page">
 
@@ -103,7 +103,7 @@
     <p class="footer__jp">楽しんで</p>
     <p>Очереди и шоу — только в app USJ</p>
     <p class="footer__small">Часы работы и цены — ориентировочные, проверяйте перед визитом. Расписание ивентов и очереди — в app USJ в день визита.</p>
-    <p class="footer__ver">70</p>
+    <p class="footer__ver">71</p>
     <a href="#top" class="footer__up">↑ Наверх</a>
   </footer>
 
@@ -130,18 +130,18 @@
     </a>
   </nav>
 
-  <script src="js/usj-data.js?v=70"></script>
-  <script src="js/usj.js?v=70"></script>
+  <script src="js/usj-data.js?v=71"></script>
+  <script src="js/usj.js?v=71"></script>
   <script>
     (function () {
-      var VER = "70";
+      var VER = "71";
 
       async function clearOldCaches() {
         try {
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v70"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v71"
               ? caches.delete(k)
               : Promise.resolve();
           }));
