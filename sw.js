@@ -5,6 +5,7 @@
  * - Runtime cache strategy: cache-first for fonts/images, network-first for navigations
  * - Restrict runtime caching to safe resource types
  * - Cache name bumped to v72
+ * - Added js/sw-register.js and Firebase CDN SDKs to precache (variant 1)
  */
 const CACHE = "japan2026-offline-v72";
 const PRECACHE = [
@@ -33,7 +34,12 @@ const PRECACHE = [
   './js/tracker.js',
   './js/usj-data.js',
   './js/usj.js',
-  './vendor/fonts/noto-jp.css'
+  './js/sw-register.js',
+  // Fonts: keep only the CSS file; individual .woff2 files will be cached runtime
+  './vendor/fonts/noto-jp.css',
+  // Firebase SDKs (CDN) — precache external to guarantee tracker offline
+  'https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js',
+  'https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js'
 ];
 
 self.addEventListener("install", (event) => {
@@ -55,9 +61,9 @@ self.addEventListener("activate", (event) => {
 function isRuntimeCacheable(req) {
   // Only GETs
   if (req.method !== 'GET') return false;
-  // Only same-origin
+  // Allow same-origin and the Firebase CDN (we precached them)
   const url = new URL(req.url);
-  if (url.origin !== self.location.origin) return false;
+  if (url.origin !== self.location.origin && !url.hostname.endsWith('gstatic.com')) return false;
   // Avoid caching API endpoints or firebase internal calls (if any)
   if (url.pathname.startsWith('/__/') || url.pathname.startsWith('/api/') || url.pathname.includes('/firebase')) return false;
   // Only cache common static resource types
@@ -69,9 +75,8 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return; // only handle GET
   const url = new URL(req.url);
-  if (url.origin !== self.location.origin) return; // only same-origin
 
-  // Navigation requests: network-first, fallback to cache (index.html)
+  // Navigation requests: network-first, fallback to matching cached URL then index.html
   if (req.mode === 'navigate' || req.destination === 'document') {
     event.respondWith(
       fetch(req).then((res) => {
@@ -79,7 +84,13 @@ self.addEventListener('fetch', (event) => {
         const copy = res.clone();
         if (res.ok) caches.open(CACHE).then(cache => cache.put(req, copy));
         return res;
-      }).catch(() => caches.match('./index.html'))
+      }).catch(() => {
+        // If network fails, try to serve the exact requested URL from cache first
+        return caches.match(req.url, { ignoreSearch: true }).then(cached => {
+          if (cached) return cached;
+          return caches.match('./index.html');
+        });
+      })
     );
     return;
   }
@@ -95,7 +106,7 @@ self.addEventListener('fetch', (event) => {
           const copy = res.clone();
           caches.open(CACHE).then(cache => cache.put(req, copy));
           return res;
-        }).catch(() => Promise.reject())
+        }).catch(() => Promise.reject()); // do not return HTML for assets
       })
     );
     return;
