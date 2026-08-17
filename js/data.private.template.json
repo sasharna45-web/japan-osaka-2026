@@ -1,0 +1,53 @@
+{
+  "note": "Template for private trip data. This file is a JSON template — do NOT commit real personal data to public repos. Replace or move your real data as needed.",
+  "TRIP": {
+    "title": "Япония 2026",
+    "subtitle": "Осака и Кансай",
+    "travelers": "Имена",
+    "base": "Osaka · Tanimachi 6-chome",
+    "dateFrom": "2026-09-09",
+    "dateTo": "2026-09-25",
+    "home": {
+      "title": "База · Tanimachi 6-chome",
+      "en": "(demo) address",
+      "ja": "〒542-0000 例: 大阪府大阪市...",
+      "maps": "Tanimachi 6-chome, Osaka",
+      "tip": "Полезная подсказка",
+      "lat": 34.6752,
+      "lng": 135.5192
+    },
+    "days": [
+      {
+        "n": 1,
+        "date": "9 сентября",
+        "weekday": "Ср",
+        "title": "Прибытие",
+        "goal": "Короткое описание",
+        "intro": "Краткое введение",
+        "load": 2,
+        "color": "#e63946",
+        "places": [
+          {
+            "name": "Пример места",
+            "emoji": "📍",
+            "time": "12:45",
+            "fixed": true,
+            "who": "both",
+            "desc": "Описание места",
+            "how": "Как добраться",
+            "duration": "≈ 2 ч",
+            "lat": 34.4342,
+            "lng": 135.2441,
+            "hours": "10:00-18:00",
+            "price": "—",
+            "tips": "Полезный совет",
+            "tags": ["culture"]
+          }
+        ],
+        "options": [
+          {"emoji":"🐙","title":"Еда","desc":"Такояки + окономияки"}
+        ]
+      }
+    ]
+  }
+}
