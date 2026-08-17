@@ -17,23 +17,157 @@
   <meta name="apple-mobile-web-app-title" content="USJ 2026">
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
-  <link rel="stylesheet" href="css/styles.css?v=72">
-  <link rel="stylesheet" href="css/usj.css?v=72">
+  <link rel="stylesheet" href="css/styles.css?v=71">
+  <link rel="stylesheet" href="css/usj.css?v=71">
 </head>
 <body class="ios-feel usj-page">
 
-  ...
+  <header class="hero hero--usj" id="top">
+    <div class="hero__bg" aria-hidden="true">
+      <span class="hero__kanji">遊</span>
+      <div class="hero__sun"></div>
+    </div>
+    <div class="hero__content">
+      <p class="hero__eyebrow">Alexander & Rita · USJ</p>
+      <h1 class="hero__title">USJ <span>гид</span></h1>
+      <p class="hero__subtitle">ONE PIECE + HHN · маршрут · зоны</p>
+      <div class="hero__meta">
+        <span>15 сен · HHN</span>
+        <span>SNW 11:50</span>
+        <span>Express 4</span>
+      </div>
+      <button type="button" class="hero__refresh" id="forceRefresh">Обновить USJ</button>
+    </div>
+  </header>
+
+  <nav class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__brand">日本</a>
+      <div class="nav__links">
+        <a href="?zone=route#route">Маршрут</a>
+        <a href="?zone=all#route">Зоны</a>
+        <a href="?zone=events#route">Ивенты</a>
+        <a href="#pass">Билет</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="section section--tight" id="idea">
+      <div class="usj-idea" id="usjIdea"></div>
+    </section>
+
+    <section class="section section--tight" id="route">
+      <div class="usj-switch" aria-label="Раздел">
+        <button type="button" class="usj-switch__arrow" id="usjPrev" aria-label="Назад">‹</button>
+        <div class="usj-switch__now">
+          <div class="usj-switch__date" id="usjNowLabel">Парк</div>
+          <div class="usj-switch__title" id="usjNowTitle">Загрузка…</div>
+        </div>
+        <button type="button" class="usj-switch__arrow" id="usjNext" aria-label="Дальше">›</button>
+      </div>
+
+      <div class="usj-chips" id="usjChips" role="tablist" aria-label="USJ"></div>
+
+      <article class="usj-tile" id="usjTile" aria-live="polite"></article>
+    </section>
+
+    <section class="section fold" id="food" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Еда в парке</span>
+          <span class="fold__sub">Кратко · полный план во вкладке Еда.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div id="usjFoodGuide"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="pass" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Ваш билет</span>
+          <span class="fold__sub">Express Pass 4 и слоты · что закрыто навсегда.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div id="usjPass"></div>
+      </div>
+    </section>
+  </main>
 
   <footer class="footer">
     <p class="footer__jp">楽しんで</p>
     <p>Очереди и шоу — только в app USJ</p>
-    <p class="footer__small">Часы работы и цены — ориентировочные, проверяйте перед визитом. Расписание ивентов и очер�[...]
-    <p class="footer__ver">72</p>
+    <p class="footer__small">Часы работы и цены — ориентировочные, проверяйте перед визитом. Расписание ивентов и очереди — в app USJ в день визита.</p>
+    <p class="footer__ver">71</p>
     <a href="#top" class="footer__up">↑ Наверх</a>
   </footer>
 
-  <script src="js/usj-data.js?v=72"></script>
-  <script src="js/usj.js?v=72"></script>
-  <script src="js/sw-register.js?v=72"></script>
+  <nav class="country-dock country-dock--jp country-dock--5" aria-label="Навигация">
+    <a class="country-dock__btn" href="index.html">
+      <span class="country-dock__flag">🇯🇵</span>
+      <span class="country-dock__label">Гид</span>
+    </a>
+    <a class="country-dock__btn" href="food.html">
+      <span class="country-dock__flag">🍜</span>
+      <span class="country-dock__label">Еда</span>
+    </a>
+    <a class="country-dock__btn is-active" href="usj.html">
+      <span class="country-dock__flag">🎢</span>
+      <span class="country-dock__label">USJ</span>
+    </a>
+    <a class="country-dock__btn" href="tracker.html">
+      <span class="country-dock__flag">📊</span>
+      <span class="country-dock__label">Трекер</span>
+    </a>
+    <a class="country-dock__btn" href="china.html">
+      <span class="country-dock__flag">🇨🇳</span>
+      <span class="country-dock__label">Китай</span>
+    </a>
+  </nav>
+
+  <script src="js/usj-data.js?v=71"></script>
+  <script src="js/usj.js?v=71"></script>
+  <script>
+    (function () {
+      var VER = "71";
+
+      async function clearOldCaches() {
+        try {
+          if (!window.caches) return;
+          var keys = await caches.keys();
+          await Promise.all(keys.map(function (k) {
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v71"
+              ? caches.delete(k)
+              : Promise.resolve();
+          }));
+        } catch (e) {}
+      }
+
+      function registerSW() {
+        if ("serviceWorker" in navigator) {
+          navigator.serviceWorker.register("./sw.js?v=" + VER).catch(function () {});
+        }
+      }
+
+      var btn = document.getElementById("forceRefresh");
+      if (btn) {
+        btn.addEventListener("click", function () {
+          clearOldCaches().then(function () {
+            var url = new URL(location.href);
+            url.searchParams.set("v", VER);
+            url.searchParams.set("fresh", String(Date.now()));
+            location.replace(url.toString());
+          });
+        });
+      }
+
+      clearOldCaches().then(registerSW);
+    })();
+  </script>
 </body>
 </html>

@@ -7,7 +7,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Япония 2026 — Осака и Кансай</title>
-  <meta name="description" content="Персональный путеводитель Александра и Риты по Осак�� и региону Кансай, 9–25 сентября 2026.[...]">
+  <meta name="description" content="Персональный путеводитель Александра и Риты по Осаке и региону Кансай, 9–25 сентября 2026.">
 
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
@@ -18,7 +18,7 @@
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
 
-  <link rel="stylesheet" href="css/styles.css?v=72">
+  <link rel="stylesheet" href="css/styles.css?v=71">
 </head>
 <body class="ios-feel">
 
@@ -43,15 +43,234 @@
     </div>
   </header>
 
-  ...
+  <nav class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="#top" class="nav__brand">日本</a>
+      <div class="nav__links">
+        <a href="#next">Сейчас</a>
+        <a href="#route">Маршрут</a>
+        <a href="#transit">Пекин</a>
+        <a href="#packing">Сборы</a>
+        <a href="#budget">Деньги</a>
+        <a href="tracker.html">Трекер</a>
+        <a href="#home">Дом</a>
+      </div>
+      <button type="button" class="comfort-btn" id="comfortToggle" aria-pressed="false" title="Крупный шрифт">Aa</button>
+    </div>
+  </nav>
+
+  <main>
+    <section class="section section--tight fold" id="next" data-fold="open">
+      <button type="button" class="fold__btn" aria-expanded="true">
+        <span class="fold__text">
+          <span class="fold__title">Сейчас</span>
+          <span class="fold__sub">Подстраивается под фазу: дома · транзит · в Японии · после.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel">
+        <div id="nextDay" class="next-day"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="route" data-fold="open">
+      <button type="button" class="fold__btn" aria-expanded="true">
+        <span class="fold__text">
+          <span class="fold__title">Маршрут по дням</span>
+          <span class="fold__sub">Главная шпаргалка · 17 дней. ФИКС — красные карточки.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel">
+        <div class="route-toolbar">
+          <button type="button" class="route-toggle" id="todayOnlyBtn" aria-pressed="false">
+            Только сегодня
+          </button>
+          <button class="link-btn" id="editToggle" type="button">✏️ Изменить план</button>
+          <span class="route-toggle__hint" id="todayOnlyHint">Показать все 17 дней</span>
+        </div>
+        <p class="legend-fixed">
+          <span class="legend-fixed__mark">⏰ ФИКС</span>
+          Красные карточки — фиксированные пункты.
+        </p>
+        <div class="edit-hint" id="editHint" hidden>
+          Режим редактирования: стрелки ⬆⬇ меняют порядок дней.
+          <button class="link-btn" id="resetPlan" type="button">↺ Сбросить</button>
+        </div>
+        <div class="timeline" id="timeline"></div>
+      </div>
+    </section>
+
+    <section class="section section--tight fold" id="transit" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Через Пекин → Осака</span>
+          <span class="fold__sub">7–9 сентября · сутки в Пекине по пути в Японию.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div id="transitBody"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="packing" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Сборы</span>
+          <span class="fold__sub">Документы · цифровое · вещи · один список на двоих.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div class="cl-progress">
+          <div class="cl-progress__bar"><span id="packBarFill"></span></div>
+          <div class="cl-progress__label" id="packProgressLabel">0 из 0</div>
+        </div>
+        <div class="cl-toolbar">
+          <button type="button" class="route-toggle is-on" id="packShowAllBtn" aria-pressed="true">Показать все</button>
+          <span class="route-toggle__hint" id="packShowAllHint">Выполненные скрыты</span>
+        </div>
+        <div class="packing" id="packingBody"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="budget" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Деньги</span>
+          <span class="fold__sub">$3225 · в йены $2825 · резерв $400 · 18 000 ¥/день на двоих.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div id="budgetBody"></div>
+        <p class="budget-tracker-link">
+          <a class="link-btn" href="tracker.html">📊 Открыть трекер дней и бюджета</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="section fold" id="nearby" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Рядом с домом</span>
+          <span class="fold__sub">7-Eleven, аптеки и зарядка у Tanimachi 6-chome.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div class="nearby-filters" id="nearbyFilters"></div>
+        <div class="nearby-grid" id="nearbyGrid"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="weather" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Погода и что надеть</span>
+          <span class="fold__sub">Сентябрь в Кансае + план Б на дождь.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div id="weatherBody"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="filters-section" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Что вам интересно?</span>
+          <span class="fold__sub">Выберите тему — подсветим места в маршруте.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div class="filters" id="filters"></div>
+      </div>
+    </section>
+
+
+    <section class="section fold" id="home" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Дом и экстренное</span>
+          <span class="fold__sub">Адрес для такси и важные номера.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div class="home-sos" id="homeSos"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="phrases" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Японские фразы</span>
+          <span class="fold__sub">Метро, кафе, магазины, помощь.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div class="phrase-tabs" id="phraseTabs"></div>
+        <div class="phrase-grid" id="phraseGrid"></div>
+      </div>
+    </section>
+
+    <section class="section fold" id="tips" data-fold="closed">
+      <button type="button" class="fold__btn" aria-expanded="false">
+        <span class="fold__text">
+          <span class="fold__title">Полезные советы</span>
+          <span class="fold__sub">Мелочи, которые сделают поездку комфортнее.</span>
+        </span>
+        <span class="fold__chevron" aria-hidden="true">▾</span>
+      </button>
+      <div class="fold__panel" hidden>
+        <div class="tips-grid" id="tipsGrid"></div>
+      </div>
+    </section>
+  </main>
 
   <footer class="footer">
     <p class="footer__jp">よい旅を</p>
     <p>Хорошего путешествия, Александр и Рита ❤️</p>
     <p class="footer__small">Часы работы и цены — ориентировочные, проверяйте перед визитом.</p>
-    <p class="footer__ver">72</p>
+    <p class="footer__ver">71</p>
     <a href="#top" class="footer__up">↑ Наверх</a>
   </footer>
+
+  <div class="modal" id="placeModal" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__card" role="dialog" aria-modal="true">
+      <button class="modal__close" data-close aria-label="Закрыть">✕</button>
+      <div class="modal__body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <nav class="country-dock country-dock--jp country-dock--5" aria-label="Страна">
+    <a class="country-dock__btn is-active" href="index.html">
+      <span class="country-dock__flag">🇯🇵</span>
+      <span class="country-dock__label">Гид</span>
+    </a>
+    <a class="country-dock__btn" href="food.html">
+      <span class="country-dock__flag">🍜</span>
+      <span class="country-dock__label">Еда</span>
+    </a>
+    <a class="country-dock__btn" href="usj.html">
+      <span class="country-dock__flag">🎢</span>
+      <span class="country-dock__label">USJ</span>
+    </a>
+    <a class="country-dock__btn" href="tracker.html">
+      <span class="country-dock__flag">📊</span>
+      <span class="country-dock__label">Трекер</span>
+    </a>
+    <a class="country-dock__btn" href="china.html">
+      <span class="country-dock__flag">🇨🇳</span>
+      <span class="country-dock__label">Китай</span>
+    </a>
+  </nav>
 
   <div class="gallery-view" id="galleryView" hidden>
     <button type="button" class="gallery-view__close" id="galleryClose" aria-label="Закрыть">✕</button>
@@ -61,9 +280,45 @@
     <p class="gallery-view__cap" id="galleryCap"></p>
   </div>
 
-  <script src="js/data.js?v=72"></script>
-  <script src="js/photos.js?v=72"></script>
-  <script src="js/app.js?v=72"></script>
-  <script src="js/sw-register.js?v=72"></script>
+  <script src="js/data.js?v=71"></script>
+  <script src="js/photos.js?v=71"></script>
+  <script src="js/app.js?v=71"></script>
+  <script>
+    (function () {
+      var VER = "71";
+
+      async function clearOldCaches() {
+        try {
+          if (!window.caches) return;
+          var keys = await caches.keys();
+          await Promise.all(keys.map(function (k) {
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v71"
+              ? caches.delete(k)
+              : Promise.resolve();
+          }));
+        } catch (e) {}
+      }
+
+      function registerSW() {
+        if ("serviceWorker" in navigator) {
+          navigator.serviceWorker.register("./sw.js?v=" + VER).catch(function () {});
+        }
+      }
+
+      var btn = document.getElementById("forceRefresh");
+      if (btn) {
+        btn.addEventListener("click", function () {
+          clearOldCaches().then(function () {
+            var url = new URL(location.href);
+            url.searchParams.set("v", VER);
+            url.searchParams.set("fresh", String(Date.now()));
+            location.replace(url.toString());
+          });
+        });
+      }
+
+      clearOldCaches().then(registerSW);
+    })();
+  </script>
 </body>
 </html>
