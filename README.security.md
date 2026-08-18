@@ -1,3 +1,4 @@
 README.security.md
 
-Note: update.html was updated to reference v72 to match the registered service worker and avoid redirect loops. Ensure demo pages also reflect the intended behavior and version.
+Cache/version: keep `update.html`, page `?v=`, footer `__ver`, and `sw.js` CACHE on the **same** number (currently v73).
+Do not half-bump: a mismatched `update.html` redirect causes a loop on phones.
