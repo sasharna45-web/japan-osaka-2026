@@ -7,7 +7,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <title>Трекер · Япония 2026</title>
-  <meta name="description" content="Трекер дней и бюджета Кансай: чек-листы, траты в йенах, бюджет $3225 → в йены $2825, резерв $400.">
+  <meta name="description" content="Трекер дней и бюджета Кансай: чек-листы, траты в йенах, бюджет $3225 → в йены $2225, резерв $1000.">
 
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
@@ -17,8 +17,8 @@
   <meta name="apple-mobile-web-app-title" content="Трекер 2026">
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
-  <link rel="stylesheet" href="css/styles.css?v=77">
-  <link rel="stylesheet" href="css/tracker.css?v=77">
+  <link rel="stylesheet" href="css/styles.css?v=78">
+  <link rel="stylesheet" href="css/tracker.css?v=78">
 </head>
 <body class="ios-feel tracker-page">
 
@@ -85,21 +85,21 @@
       </button>
       <div class="fold__panel">
         <p class="t-note" id="exchangeHint">
-          План до поездки: из $3225 поменять ровно $2825, оставить $400 долларами.
+          План до поездки: из $3225 поменять сначала $2225, оставить $1000 долларами.
           После обмена в аэропорту впишите реальные цифры с чека — трекер будет считать от них.
         </p>
         <form class="t-form" id="exchangeForm">
           <label>
             <span>Сколько долларов поменял</span>
-            <input id="exUsdChanged" type="number" inputmode="decimal" min="1" step="1" placeholder="например 2400" required>
+            <input id="exUsdChanged" type="number" inputmode="decimal" min="1" step="1" placeholder="например 2225" required>
           </label>
           <label>
             <span>Сколько йен получил</span>
-            <input id="exYenGot" type="number" inputmode="numeric" min="1" step="1" placeholder="например 378000" required>
+            <input id="exYenGot" type="number" inputmode="numeric" min="1" step="1" placeholder="например 356000" required>
           </label>
           <label>
             <span>Сколько долларов осталось</span>
-            <input id="exUsdLeft" type="number" inputmode="decimal" min="0" step="1" placeholder="например 825" required>
+            <input id="exUsdLeft" type="number" inputmode="decimal" min="0" step="1" placeholder="например 1000" required>
           </label>
           <p class="t-note" id="exchangeRateHint" hidden></p>
           <p class="t-form-msg" id="exchangeMsg" hidden></p>
@@ -206,7 +206,7 @@
   </main>
 
   <footer class="footer">
-    <p class="footer__ver">77</p>
+    <p class="footer__ver">78</p>
   </footer>
 
     <nav class="country-dock country-dock--jp country-dock--5" aria-label="Страна">
@@ -234,11 +234,11 @@
 
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
-  <script src="js/tracker-data.js?v=77"></script>
-  <script src="js/tracker.js?v=77"></script>
+  <script src="js/tracker-data.js?v=78"></script>
+  <script src="js/tracker.js?v=78"></script>
   <script>
     (function () {
-      var VER = "77";
+      var VER = "78";
 
       function initFolds() {
         document.querySelectorAll(".fold").forEach(function (fold) {
@@ -259,7 +259,7 @@
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v77"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v78"
               ? caches.delete(k)
               : Promise.resolve();
           }));

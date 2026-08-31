@@ -11,7 +11,7 @@
   "expenses": [{ "id": "...", "day": 4, "cat": "food", "amount": 1800, "note": "", "at": 0 }],
   "softDaily": 18000,
   "viewDay": 4,
-  "exchange": { "usdChanged": 2825, "yenGot": 452000, "usdLeft": 400, "at": 0 },
+  "exchange": { "usdChanged": 2225, "yenGot": 356000, "usdLeft": 1000, "at": 0 },
   "updatedAt": 0
 }
 ```
