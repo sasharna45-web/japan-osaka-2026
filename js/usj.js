@@ -23,7 +23,7 @@
   }
 
   const zones = USJ_PLAN.zones;
-  const SPECIAL = ["route", "all", "events"];
+  const SPECIAL = ["route", "halloween", "all", "events"];
   const KIND = {
     ride: "Райд",
     show: "Шоу / 4D",
@@ -42,6 +42,7 @@
     const hash = (location.hash || "").replace(/^#/, "");
     // Старые закладки #park → все зоны
     if (hash === "park" && !params.get("zone") && !params.get("z")) return "all";
+    if (hash === "halloween" || hash === "hhn") return "halloween";
     if (hash === "events" && !params.get("zone") && !params.get("z")) return "events";
     const q = params.get("zone") || params.get("z");
     if (q && isValid(q)) return q;
@@ -60,7 +61,7 @@
     const url = new URL(location.href);
     url.searchParams.set("zone", key);
     url.searchParams.delete("plan");
-    const hash = key === "events" ? "events" : key === "all" ? "zones" : key === "route" ? "route" : "route";
+    const hash = key === "halloween" ? "halloween" : key === "events" ? "events" : key === "all" ? "zones" : key === "route" ? "route" : "route";
     history.replaceState(null, "", url.pathname + url.search + "#" + hash);
   }
 
@@ -70,7 +71,7 @@
   }
 
   function tabKeys() {
-    return ["route", "all", "events", ...zones.map((z) => z.key)].filter((k) => k !== "route" || USJ_PLAN.route);
+    return ["route", "halloween", "all", "events", ...zones.map((z) => z.key)].filter((k) => k !== "route" || USJ_PLAN.route);
   }
 
   function renderIdea() {
@@ -90,9 +91,10 @@
     const wrap = $("#usjChips");
     if (!wrap) return;
     const chips = [
-      ...(USJ_PLAN.route ? [{ key: "route", title: "📍 Маршрут" }] : []),
-      { key: "all", title: "Все зоны" },
-      { key: "events", title: "Ивенты" },
+      ...(USJ_PLAN.route ? [{ key: "route", title: "📍 Маршрут дня" }] : []),
+      { key: "halloween", title: "🧟 Halloween 2026" },
+      { key: "all", title: "🏰 Все зоны" },
+      { key: "events", title: "🍁 Ивенты осени" },
       ...zones.map((z) => ({ key: z.key, title: z.emoji + " " + z.name.replace(/^The |^SUPER /, "").slice(0, 22) }))
     ];
     wrap.innerHTML = chips.map((c) => `
@@ -173,6 +175,33 @@
     `;
   }
 
+  function renderHalloweenPanel() {
+    const h = USJ_PLAN.halloween;
+    if (!h) return "";
+    return `
+      <header class="usj-tile__head">
+        <p class="usj-tile__score">${h.badge || "Halloween 2026"}</p>
+        <h2 class="usj-tile__title">${h.title}</h2>
+        <p class="usj-tile__best">${h.lead}</p>
+      </header>
+      <div class="usj-hhn-grid">
+        ${(h.items || []).map((item) => `
+          <div class="usj-hhn-card${item.highlight ? " usj-hhn-card--highlight" : ""}${item.isWarning ? " usj-hhn-card--warn" : ""}">
+            <div class="usj-hhn-card__head">
+              <span class="usj-hhn-card__emoji">${item.emoji}</span>
+              <div>
+                <h3 class="usj-hhn-card__name">${item.name}</h3>
+                <span class="usj-hhn-card__time">${item.time} · <b>${item.status}</b></span>
+              </div>
+            </div>
+            <p class="usj-hhn-card__desc">${item.desc}</p>
+            ${item.advice ? `<div class="usj-hhn-card__advice">💡 <b>Совет:</b> ${item.advice}</div>` : ""}
+          </div>
+        `).join("")}
+      </div>
+    `;
+  }
+
   function renderEventsPanel() {
     const ev = USJ_PLAN.events;
     if (!ev) return "";
@@ -180,7 +209,6 @@
       <section class="usj-events-panel">
         <h2 class="usj-zone__name">${ev.title}</h2>
         <p class="usj-zone__blurb">${ev.lead}</p>
-        <p class="usj-tap-hint">Нажмите плашку — откроется подробное описание.</p>
         <div class="usj-guide-cards">
           ${(ev.items || []).map((e) => `
             <button type="button" class="usj-tap usj-guide-card" aria-expanded="false">
@@ -212,33 +240,66 @@
         <h2 class="usj-tile__title">${r.title}</h2>
         <p class="usj-tile__best">${r.bestFor}</p>
         ${r.note ? `<p class="usj-tile__focus">${r.note}</p>` : ""}
-        <p class="usj-tap-hint">Нажмите шаг — откроются детали.</p>
       </header>
-      <ol class="usj-timeline">
-        ${(r.timeline || []).map((step) => `
-          <li>
-            <button type="button" class="usj-tap usj-step" aria-expanded="false">
-              <div class="usj-tap__bar">
-                <div class="usj-step__t">${step.t}</div>
-                <div class="usj-tap__main">
-                  <div class="usj-step__what">${step.what}</div>
-                  <p class="usj-tap__preview">${previewText(step.detail, 70)}</p>
+
+      ${r.blueprint ? `
+        <div class="usj-blueprint">
+          <div class="usj-blueprint__title">🗺️ Итоговая схема дня</div>
+          <div class="usj-blueprint__list">
+            ${r.blueprint.map((b) => `
+              <div class="usj-blueprint__item">
+                <div class="usj-blueprint__icon">${b.icon}</div>
+                <div class="usj-blueprint__body">
+                  <div class="usj-blueprint__meta"><b>${b.phase}</b> <span class="usj-blueprint__time">${b.time}</span></div>
+                  <div class="usj-blueprint__text">${b.text}</div>
                 </div>
-                <span class="usj-tap__chev" aria-hidden="true">▾</span>
               </div>
-              <div class="usj-tap__panel" hidden>
-                <p class="usj-step__detail">${step.detail}</p>
-              </div>
-            </button>
-          </li>
-        `).join("")}
-      </ol>
-      ${(r.skip || []).length ? `
-        <div class="usj-skip">
-          <div class="usj-skip__title">Не сегодня</div>
-          <ul>${r.skip.map((s) => `<li>${s}</li>`).join("")}</ul>
+            `).join("")}
+          </div>
         </div>
       ` : ""}
+
+      ${(r.skip || []).length ? `
+        <div class="usj-skip">
+          <div class="usj-skip__title">🚫 Что смело пропускаем (не тратим силы)</div>
+          <ul class="usj-skip__list">
+            ${r.skip.map((s) => `
+              <li><b>${s.name}</b> — ${s.reason}</li>
+            `).join("")}
+          </ul>
+        </div>
+      ` : ""}
+
+      <div class="usj-phases-head">
+        <h3 class="usj-phases-title">📋 Пошаговый план по фазам дня</h3>
+        <p class="usj-tap-hint">Нажмите на любой блок — откроются подробности и советы.</p>
+      </div>
+
+      <div class="usj-phases">
+        ${(r.phases || []).map((phase, idx) => `
+          <button type="button" class="usj-tap usj-phase-card${idx === 0 || idx === 1 ? " is-open" : ""}" aria-expanded="${idx === 0 || idx === 1 ? "true" : "false"}">
+            <div class="usj-tap__bar">
+              <span class="usj-phase-card__emoji">${phase.emoji}</span>
+              <div class="usj-tap__main">
+                <div class="usj-phase-card__time">${phase.time}</div>
+                <h4 class="usj-phase-card__title">${phase.title}</h4>
+                <div class="usj-phase-card__badges">
+                  ${(phase.badges || []).map((b) => `<span class="usj-badge ${b.includes('Express') ? 'usj-badge--express' : b.includes('HHN') ? 'usj-badge--season' : ''}">${b}</span>`).join("")}
+                </div>
+                <p class="usj-tap__preview">${previewText(phase.lead, 80)}</p>
+              </div>
+              <span class="usj-tap__chev" aria-hidden="true">▾</span>
+            </div>
+            <div class="usj-tap__panel"${idx === 0 || idx === 1 ? "" : " hidden"}>
+              <p class="usj-phase-card__lead">${phase.lead}</p>
+              <ul class="usj-phase-card__steps">
+                ${(phase.steps || []).map((s) => `<li>${s}</li>`).join("")}
+              </ul>
+              ${phase.tip ? `<div class="usj-phase-card__tip">💡 <b>Лайфхак:</b> ${phase.tip}</div>` : ""}
+            </div>
+          </button>
+        `).join("")}
+      </div>
     `;
   }
 
@@ -249,22 +310,29 @@
     if (!tile) return;
 
     if (active === "route") {
-      if (label) label.textContent = "Без Flying Dinosaur";
-      if (title) title.textContent = "Маршрут дня";
+      if (label) label.textContent = "Ваш день";
+      if (title) title.textContent = "Маршрут и тайминги";
       tile.innerHTML = renderRoutePanel();
+      return;
+    }
+
+    if (active === "halloween" || active === "hhn") {
+      if (label) label.textContent = "15 сен · с 18:00";
+      if (title) title.textContent = "Halloween Horror Nights";
+      tile.innerHTML = renderHalloweenPanel();
       return;
     }
 
     if (active === "events") {
       if (label) label.textContent = "15 сен 2026";
-      if (title) title.textContent = "Ивенты и сезон";
+      if (title) title.textContent = "Все ивенты осени";
       tile.innerHTML = renderEventsPanel();
       return;
     }
 
     if (active === "all") {
       if (label) label.textContent = zones.length + " зон";
-      if (title) title.textContent = "Весь парк";
+      if (title) title.textContent = "Справочник всех зон";
       tile.innerHTML = zones.map(zoneBlock).join("");
       return;
     }
