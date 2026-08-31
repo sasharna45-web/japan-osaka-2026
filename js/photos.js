@@ -72,10 +72,12 @@ const PLACE_PHOTOS = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Kobe_Port_Tower_and_Harborland_at_night_20190202-2.jpg/960px-Kobe_Port_Tower_and_Harborland_at_night_20190202-2.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Kobe_Port_Tower_and_Harborland_at_night_20190202-3.jpg/960px-Kobe_Port_Tower_and_Harborland_at_night_20190202-3.jpg"
   ],
-  "Замок Химэдзи": [
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Ch%C3%A2teau_de_Himeji02.jpg/960px-Ch%C3%A2teau_de_Himeji02.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Himeji_Castle_also_known_as_the_White_Heron_castle_%28%22Shirasagijo%22%29_%2853621201074%29.jpg/960px-Himeji_Castle_also_known_as_the_White_Heron_castle_%28%22Shirasagijo%22%29_%2853621201074%29.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Himeji_castle_in_may_2015.jpg/960px-Himeji_castle_in_may_2015.jpg"
+  "Водопад Миноо (Minoh Waterfall)": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Minoo_Falls_2008.jpg/960px-Minoo_Falls_2008.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Minoo_Falls_2019.jpg/960px-Minoo_Falls_2019.jpg"
+  ],
+  "Храм Кацуодзи (Katsuo-ji)": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Katsuo-ji_Temple_Minoh_Osaka_Japan.jpg/960px-Katsuo-ji_Temple_Minoh_Osaka_Japan.jpg"
   ],
   "Umeda Sky Building": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/20100715_Osaka_Umeda_Sky_Building_escalator_1855.jpg/960px-20100715_Osaka_Umeda_Sky_Building_escalator_1855.jpg",

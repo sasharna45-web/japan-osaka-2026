@@ -45,7 +45,7 @@
   function renderStats() {
     const days = TRIP.days.length;
     const places = TRIP.days.reduce((s, d) => s + d.places.length, 0);
-    const cities = new Set(["Осака", "Киото", "Нара", "Кобе", "Химэдзи", "Авадзи"]).size;
+    const cities = new Set(["Осака", "Киото", "Нара", "Кобе", "Миноо", "Авадзи"]).size;
     const stats = [
       { b: days, s: "дней" },
       { b: places, s: "локаций" },

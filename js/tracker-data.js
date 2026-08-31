@@ -131,11 +131,12 @@ const TRACKER = {
     },
     {
       n: 10, iso: "2026-09-18", date: "18 сентября", weekday: "Пт",
-      title: "Химэдзи",
-      goal: "Замок и сад · до Silver Week",
-      soft: 22000,
+      title: "Миноо + Кацуодзи",
+      goal: "Водопад и храм Дарум · до Silver Week",
+      soft: 18000,
       places: [
-        { id: "d10-castle", name: "Замок Химэдзи + сад Koko-en", emoji: "🦢", time: "~09:00", est: 5200, estNote: "комбо 2 600 ¥ × 2 · наличные у автомата/окошка" }
+        { id: "d10-minoh", name: "Водопад Миноо + Momiji tempura", emoji: "🍁", time: "~10:00", est: 1000, estNote: "кленовые сладости ~500 ¥ × 2 · вход в парк 0 ¥" },
+        { id: "d10-katsuo", name: "Храм Дарум (Кацуодзи)", emoji: "🔴", time: "~12:30", est: 2000, estNote: "вход 500 ¥ × 2 + дарумы-омикудзи ~1 000 ¥" }
       ]
     },
     {
@@ -245,22 +246,22 @@ const TRACKER = {
         asOf: "проверено 2026-08 (официальные тарифы на сайте)"
       },
       {
-        id: "jr-himeji",
-        title: "JR Осака → Химэдзи",
+        id: "hankyu-minoh",
+        title: "Поезд в Миноо + Кацуодзи",
         facts: [
-          "JR Special Rapid (新快速) Osaka → Himeji: ≈ 60–65 мин, IC-тариф около 1 460–1 490 ¥ в одну сторону → туда-обратно ≈ 2 920–2 980 ¥/чел.",
-          "Синкансен Shin-Osaka → Himeji быстрее (~25–35 мин), но дороже (свободное место ≈ 3 220 ¥+).",
-          "Для дневной поездки обычно выгоднее Special Rapid с Osaka Station."
+          "Hankyu от Osaka-Umeda до Minoo (пересадка на Ishibashi): ≈ 30–35 мин, ≈ 280 ¥/чел в одну сторону (IC/PASMO).",
+          "От водопада Миноо до храма Кацуодзи: такси ≈ 10 мин (≈ 1 500–2 000 ¥ за машину).",
+          "Обратно: автобус Hankyu от Katsuo-ji до станции Minoh-kayano (конечная красной линии метро Midosuji, ≈ 400 ¥/чел, ~20 мин) или такси к Minoo."
         ],
-        source: "japan-guide.com · Osaka–Himeji access (Special Rapid)",
-        url: "https://www.japan-guide.com/e/e3504.html",
-        asOf: "2026-08-12 (Special Rapid ≈1 460 ¥; IC / Mobile PASMO)"
+        source: "Hankyu Railway · Katsuo-ji access",
+        url: "https://katsuo-ji-temple.or.jp/access/",
+        asOf: "2026-08 (актуальные маршруты Hankyu / Metro Midosuji)"
       },
       {
         id: "tickets",
         title: "Входы · цены и часы",
         facts: [
-          "Химэдзи + Koko-en комбо: 2 600 ¥ взрослый (с 1 марта 2026); дети до 18 бесплатно. 18 сен (с 1 сен): замок 9:00–16:00, вход до 15:00. Без зарубежной карты: комбо наличными у автомата/окошка у входа. Онлайн Shirasagi (Visa/MC) не используем.",
+          "Кацуодзи: 500 ¥ взр. (8:00–17:00, пн-пт); парк и водопад Миноо — бесплатно. Дарума-омикудзи ~500 ¥.",
           "Осакский замок (башня): взрослый 1 200 ¥ (с 1 апр. 2025); 9:00–18:00, вход до 17:30. WEB/QR рекомендован в уикенд.",
           "Kaiyukan: динамическая цена взр. 2 700–3 500 ¥; обычно 10:00–20:00, last entry 19:00. На 11.09 смотрите календарь на kaiyukan.com.",
           "Tempozan Ferris Wheel: ≈ 1 000 ¥/чел (офиц. сайт), часто 10:00–22:00 (продажи до −15 мин).",
@@ -273,18 +274,18 @@ const TRACKER = {
           "Nijigen no Mori: вход на территорию парка бесплатно; платные только аттракционы (если берёте).",
           "Hello Kitty Smile: общий билет Smile+Apple House+Show Box shop ≈ 2 000 ¥ взр. (по обзорам/планам 2025–2026); уточните на месте/офиц. странице."
         ],
-        source: "Visit Himeji, Kaiyukan, Tempozan, Todai-ji, Tenryu-ji, Nijigen no Mori",
-        url: "https://visit-himeji.com/en/travel-info/himeji-castle-koko-en-garden-ticket-set/",
-        asOf: "2026 (Himeji с 2026-03-01; остальное — актуальные офиц. тарифы на дату проверки)"
+        source: "Kaiyukan, Tempozan, Todai-ji, Tenryu-ji, Katsuo-ji, Nijigen no Mori",
+        url: "https://katsuo-ji-temple.or.jp/",
+        asOf: "2026 (актуальные офиц. тарифы на дату проверки)"
       },
       {
         id: "events",
         title: "Фестивали / тайфуны / толпы",
         facts: [
-          "Silver Week 2026: 19–23 сентября (сб–ср) — Respect for the Aged Day 21-го, Citizens' Holiday 22-го, Autumnal Equinox 23-го. Толпы на дальних выездах и в ТЦ. Химэдзи специально на пт 18-го (до каникул); Кобе на вс 20-го.",
+          "Silver Week 2026: 19–23 сентября (сб–ср) — Respect for the Aged Day 21-го, Citizens' Holiday 22-го, Autumnal Equinox 23-го. Толпы на дальних выездах и в ТЦ. Миноо и Кацуодзи в пт 18-го (до каникул в лесу спокойно); Кобе на вс 20-го.",
           "Kishiwada Danjiri Matsuri: 18–20 сентября 2026 (пробный 18-го, основные 19–20). Очень людно в Кишиваде (юг Осаки) — на Hard Off Yao / Умеда влияет слабо, но поезда Nankai/южные линии могут быть плотнее.",
           "Сентябрь — пик сезона тайфунов в Японии. Кансай умеренный риск: возможны дожди, задержки JR/автобусов/паромов на 1–2 дня. Держите зонты и запасной «крытый» день.",
-          "Перед Авадзи/Химэдзи сверьте JMA + сайты объектов."
+          "Перед Авадзи/выездами сверьте JMA + сайты объектов."
         ],
         source: "Nippon.com holidays / Fest in Japan / JMA",
         url: "https://www.nippon.com/en/japan-data/h02302/",
