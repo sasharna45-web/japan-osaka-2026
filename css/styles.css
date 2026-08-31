@@ -1343,9 +1343,9 @@ a { color: inherit; text-decoration: none; }
   gap: 12px;
 }
 .usj-step {
-  display: grid;
-  grid-template-columns: 72px 1fr;
-  gap: 10px;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
   padding: 12px 14px;
   background: var(--bg-soft);
   border: 1px solid var(--line);

@@ -18,7 +18,7 @@
   <meta name="apple-mobile-web-app-title" content="Китай 2026">
 
   <link rel="stylesheet" href="vendor/fonts/noto-sc.css">
-  <link rel="stylesheet" href="css/china.css?v=75">
+  <link rel="stylesheet" href="css/china.css?v=76">
 </head>
 <body class="china-page">
 
@@ -163,7 +163,7 @@
     <p class="c-footer__hanzi">一路平安</p>
     <p>Хорошей дороги через Шанхай</p>
     <p class="c-footer__note">Этот слайд отделён от японского маршрута специально — чтобы ничего не смешать.</p>
-    <p class="footer__ver">75</p>
+    <p class="footer__ver">76</p>
   </footer>
 
     <nav class="country-dock country-dock--cn country-dock--5" aria-label="Страна">
@@ -189,18 +189,18 @@
     </a>
   </nav>
 
-  <script src="js/china-data.js?v=75"></script>
-  <script src="js/china.js?v=75"></script>
+  <script src="js/china-data.js?v=76"></script>
+  <script src="js/china.js?v=76"></script>
   <script>
     (function () {
-      var VER = "75";
+      var VER = "76";
 
       async function clearOldCaches() {
         try {
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v75"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v76"
               ? caches.delete(k)
               : Promise.resolve();
           }));
