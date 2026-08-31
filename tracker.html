@@ -17,8 +17,8 @@
   <meta name="apple-mobile-web-app-title" content="Трекер 2026">
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
-  <link rel="stylesheet" href="css/styles.css?v=74">
-  <link rel="stylesheet" href="css/tracker.css?v=74">
+  <link rel="stylesheet" href="css/styles.css?v=75">
+  <link rel="stylesheet" href="css/tracker.css?v=75">
 </head>
 <body class="ios-feel tracker-page">
 
@@ -234,11 +234,11 @@
 
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
-  <script src="js/tracker-data.js?v=74"></script>
-  <script src="js/tracker.js?v=74"></script>
+  <script src="js/tracker-data.js?v=75"></script>
+  <script src="js/tracker.js?v=75"></script>
   <script>
     (function () {
-      var VER = "74";
+      var VER = "75";
 
       function initFolds() {
         document.querySelectorAll(".fold").forEach(function (fold) {
@@ -259,7 +259,7 @@
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v74"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v75"
               ? caches.delete(k)
               : Promise.resolve();
           }));

@@ -73,11 +73,12 @@ const PLACE_PHOTOS = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Kobe_Port_Tower_and_Harborland_at_night_20190202-3.jpg/960px-Kobe_Port_Tower_and_Harborland_at_night_20190202-3.jpg"
   ],
   "Водопад Миноо (Minoh Waterfall)": [
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Minoo_Falls_2008.jpg/960px-Minoo_Falls_2008.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Minoo_Falls_2019.jpg/960px-Minoo_Falls_2019.jpg"
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Minoh_Falls_Minoh_Osaka_pref_Japan01s5.jpg/960px-Minoh_Falls_Minoh_Osaka_pref_Japan01s5.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Mino_Otaki.jpg/960px-Mino_Otaki.jpg"
   ],
   "Храм Кацуодзи (Katsuo-ji)": [
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Katsuo-ji_Temple_Minoh_Osaka_Japan.jpg/960px-Katsuo-ji_Temple_Minoh_Osaka_Japan.jpg"
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Katsuo-ji_01.jpg/960px-Katsuo-ji_01.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Daruma_Dolls_Osaka.JPG/960px-Daruma_Dolls_Osaka.JPG"
   ],
   "Umeda Sky Building": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/20100715_Osaka_Umeda_Sky_Building_escalator_1855.jpg/960px-20100715_Osaka_Umeda_Sky_Building_escalator_1855.jpg",
