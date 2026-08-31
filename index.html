@@ -18,7 +18,7 @@
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
 
-  <link rel="stylesheet" href="css/styles.css?v=76">
+  <link rel="stylesheet" href="css/styles.css?v=77">
 </head>
 <body class="ios-feel">
 
@@ -237,7 +237,7 @@
     <p class="footer__jp">よい旅を</p>
     <p>Хорошего путешествия, Александр и Рита ❤️</p>
     <p class="footer__small">Часы работы и цены — ориентировочные, проверяйте перед визитом.</p>
-    <p class="footer__ver">76</p>
+    <p class="footer__ver">77</p>
     <a href="#top" class="footer__up">↑ Наверх</a>
   </footer>
 
@@ -280,19 +280,19 @@
     <p class="gallery-view__cap" id="galleryCap"></p>
   </div>
 
-  <script src="js/data.js?v=76"></script>
-  <script src="js/photos.js?v=76"></script>
-  <script src="js/app.js?v=76"></script>
+  <script src="js/data.js?v=77"></script>
+  <script src="js/photos.js?v=77"></script>
+  <script src="js/app.js?v=77"></script>
   <script>
     (function () {
-      var VER = "76";
+      var VER = "77";
 
       async function clearOldCaches() {
         try {
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v76"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v77"
               ? caches.delete(k)
               : Promise.resolve();
           }));

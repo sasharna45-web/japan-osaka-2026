@@ -50,7 +50,7 @@ const PLACE_PHOTOS = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/USJ_5years.JPG/960px-USJ_5years.JPG"
   ],
   "Super Nintendo World": [
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/USJ_5years.JPG/960px-USJ_5years.JPG"
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Kinopio%27s_cafe_exterior_at_Super_Nintendo_World_%28Universal_Studios_Japan%29.png/960px-Kinopio%27s_cafe_exterior_at_Super_Nintendo_World_%28Universal_Studios_Japan%29.png"
   ],
   "Arashiyama · бамбуковый лес": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Arashiyama%2C_Part_II_-_Arashiyama7534.jpg/960px-Arashiyama%2C_Part_II_-_Arashiyama7534.jpg",
@@ -71,6 +71,9 @@ const PLACE_PHOTOS = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Kobe_Port_Tower_and_Harborland_at_night_20190202-1.jpg/960px-Kobe_Port_Tower_and_Harborland_at_night_20190202-1.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Kobe_Port_Tower_and_Harborland_at_night_20190202-2.jpg/960px-Kobe_Port_Tower_and_Harborland_at_night_20190202-2.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Kobe_Port_Tower_and_Harborland_at_night_20190202-3.jpg/960px-Kobe_Port_Tower_and_Harborland_at_night_20190202-3.jpg"
+  ],
+  "Теппаньяки: говядина Kobe": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Kobe_steak_preparation%2C_in_kobe%2C_02.jpg/960px-Kobe_steak_preparation%2C_in_kobe%2C_02.jpg"
   ],
   "Водопад Миноо (Minoh Waterfall)": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Minoh_Falls_Minoh_Osaka_pref_Japan01s5.jpg/960px-Minoh_Falls_Minoh_Osaka_pref_Japan01s5.jpg",
@@ -94,7 +97,6 @@ const PLACE_PHOTOS = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Den-Den_Town%2C_Nipponbashi%2C_Osaka_-_Jul_12%2C_2023.jpg/960px-Den-Den_Town%2C_Nipponbashi%2C_Osaka_-_Jul_12%2C_2023.jpg"
   ],
   "America-mura": [
-    "https://upload.wikimedia.org/wikipedia/commons/a/ad/Americamura.JPG",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/JP-osaka-amerikamura.jpg/960px-JP-osaka-amerikamura.jpg"
   ],
   "Kuromon Ichiba": [
@@ -108,16 +110,17 @@ const PLACE_PHOTOS = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Yodobashi_Camera_Multimedia_Umeda_on_20th_November_2019.jpg/960px-Yodobashi_Camera_Multimedia_Umeda_on_20th_November_2019.jpg",
     "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Yodobashi_Camera_multimedia_umeda_-_panoramio.jpg/960px-Yodobashi_Camera_multimedia_umeda_-_panoramio.jpg"
   ],
+  "Capcom Store & Cafe Umeda": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/DAIMARU_UMEDA_MISE.jpg/960px-DAIMARU_UMEDA_MISE.jpg"
+  ],
+  "Sylvanian Families (Grand Front Osaka)": [
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/131214_Grand_Front_Osaka_Japan01s5.jpg/960px-131214_Grand_Front_Osaka_Japan01s5.jpg"
+  ],
   "Pokemon Center Osaka": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Osaka_Pok%C3%A9mon_Center.jpg/960px-Osaka_Pok%C3%A9mon_Center.jpg"
   ],
   "HEP Five": [
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/HEP_FIVE_Ferris_Wheel._Osaka%2C_Kansai_region%2C_Island_of_Honshu%2C_Japan.jpg/960px-HEP_FIVE_Ferris_Wheel._Osaka%2C_Kansai_region%2C_Island_of_Honshu%2C_Japan.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/9/9f/HEP_Five_Ferris_wheel%2C_October_2005.jpg"
-  ],
-  "Сад Koko-en": [
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Koko-en%2C_Himeji.jpg/960px-Koko-en%2C_Himeji.jpg",
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Raised_garden_beds_in_the_Garden_of_Seedlings%2C_K%C5%8Dko-en%2C_Himeji%2C_2016.jpg/960px-Raised_garden_beds_in_the_Garden_of_Seedlings%2C_K%C5%8Dko-en%2C_Himeji%2C_2016.jpg"
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/HEP_FIVE_Ferris_Wheel._Osaka%2C_Kansai_region%2C_Island_of_Honshu%2C_Japan.jpg/960px-HEP_FIVE_Ferris_Wheel._Osaka%2C_Kansai_region%2C_Island_of_Honshu%2C_Japan.jpg"
   ],
   "Expo '70 Commemorative Park": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/131116_Expo_Commemoration_Park_Suita_Osaka_pref_Japan01s3.jpg/960px-131116_Expo_Commemoration_Park_Suita_Osaka_pref_Japan01s3.jpg",
@@ -125,9 +128,8 @@ const PLACE_PHOTOS = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/131116_Expo_Commemoration_Park_Suita_Osaka_pref_Japan15s5.jpg/960px-131116_Expo_Commemoration_Park_Suita_Osaka_pref_Japan15s5.jpg"
   ],
   "Tower of the Sun": [
-    "https://upload.wikimedia.org/wikipedia/en/8/8e/Tower_of_the_Sun_-_frontal_view.jpg",
-    "https://upload.wikimedia.org/wikipedia/ja/a/a3/131116_Tower_of_the_Sun_Expo_Commemoration_Park_Suita_Osaka_pref_Japan01s3.jpg",
-    "https://upload.wikimedia.org/wikipedia/ja/9/91/131116_Tower_of_the_Sun_Expo_Commemoration_Park_Suita_Osaka_pref_Japan02s3.jpg"
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/131116_Expo_Commemoration_Park_Suita_Osaka_pref_Japan01s3.jpg/960px-131116_Expo_Commemoration_Park_Suita_Osaka_pref_Japan01s3.jpg",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/131116_Expo_Commemoration_Park_Suita_Osaka_pref_Japan04s3.jpg/960px-131116_Expo_Commemoration_Park_Suita_Osaka_pref_Japan04s3.jpg"
   ],
   "Nishikinohama Beach": [
     "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Nishikinohama_Park_%281%29.jpg/960px-Nishikinohama_Park_%281%29.jpg",

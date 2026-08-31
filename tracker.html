@@ -17,8 +17,8 @@
   <meta name="apple-mobile-web-app-title" content="Трекер 2026">
 
   <link rel="stylesheet" href="vendor/fonts/noto-jp.css">
-  <link rel="stylesheet" href="css/styles.css?v=76">
-  <link rel="stylesheet" href="css/tracker.css?v=76">
+  <link rel="stylesheet" href="css/styles.css?v=77">
+  <link rel="stylesheet" href="css/tracker.css?v=77">
 </head>
 <body class="ios-feel tracker-page">
 
@@ -206,7 +206,7 @@
   </main>
 
   <footer class="footer">
-    <p class="footer__ver">73</p>
+    <p class="footer__ver">77</p>
   </footer>
 
     <nav class="country-dock country-dock--jp country-dock--5" aria-label="Страна">
@@ -234,11 +234,11 @@
 
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
-  <script src="js/tracker-data.js?v=76"></script>
-  <script src="js/tracker.js?v=76"></script>
+  <script src="js/tracker-data.js?v=77"></script>
+  <script src="js/tracker.js?v=77"></script>
   <script>
     (function () {
-      var VER = "76";
+      var VER = "77";
 
       function initFolds() {
         document.querySelectorAll(".fold").forEach(function (fold) {
@@ -259,7 +259,7 @@
           if (!window.caches) return;
           var keys = await caches.keys();
           await Promise.all(keys.map(function (k) {
-            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v76"
+            return k.indexOf("japan2026-offline-") === 0 && k !== "japan2026-offline-v77"
               ? caches.delete(k)
               : Promise.resolve();
           }));

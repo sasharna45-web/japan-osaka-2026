@@ -99,6 +99,18 @@ body.china-page::before {
 }
 .country-dock__btn:active { transform: scale(.98); }
 
+.country-dock--5 {
+  width: min(480px, calc(100% - 16px));
+  gap: 4px;
+  padding: 6px;
+}
+.country-dock--5 .country-dock__btn {
+  min-height: 44px;
+  padding: 4px 4px;
+  font-size: 10px;
+}
+.country-dock--5 .country-dock__flag { font-size: 16px; }
+
 /* Hero */
 .c-hero {
   position: relative;
